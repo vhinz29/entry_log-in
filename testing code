@@ -1,0 +1,785 @@
+from tkinter import *
+import tkinter
+from tkinter import ttk
+import tkinter as tk
+from tkinter import messagebox
+from datetime import date
+import datetime
+from time import sleep
+import random
+import string
+from openpyxl import Workbook, load_workbook
+from operator import itemgetter
+import operator
+import string
+from PIL import Image, ImageTk, ImageFont, ImageDraw
+
+# global datas, win1, win2, datas_refresh,photo_temp, get_pics
+# datas, win1, win2, datas_refresh ,photo_temp, get_pics = '','', [], '', [], []
+#
+#
+# global view_count
+# view_count = 1
+#
+#
+#
+# wb = load_workbook("entry_login1.xlsx")
+#
+# ws = wb['entry_log']
+# ws1 = wb['entry_log1']
+# ws2 = wb['entry_log2']
+# ws3 = wb['alert_status']
+# ws4 = wb['alert_records']
+# ws5 = wb['data_records']
+#
+# entry_login = ws
+# entry_login1 = ws1
+# entry_login2 = ws2
+# entry_login3 = ws3
+# entry_login4 = ws4
+# entry_login5 = ws5
+#
+# window = Tk()
+# window.resizable(0,0)
+# window.title('PNP I.D System')
+# # tkinter to the center
+# # window.geometry("900x500")
+# app_width = 1200
+# app_height = 630
+# screen_width = window.winfo_screenwidth()
+# screen_height = window.winfo_screenheight()
+#
+# x = (screen_width / 2) - (app_width / 2)
+# y = (screen_height / 2) - 50 - (app_height / 2)
+# window.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+#
+# icon = PhotoImage(file= 'mevin_pics1.png')
+# window.iconphoto(True,icon)
+# window['bg']='#F0F0F0'
+# bg_color ='#F0F0F0'
+# fg_color ='black'
+#
+#
+# photo_temp =[]
+# for data_log in range(2, entry_login5.max_row + 1):
+#     alert_status = entry_login5.cell(data_log, 7).value
+#     photo_temp1 = []
+#     for data_log1 in range(2, entry_login5.max_column + 1):
+#         if alert_status == 'red':
+#             photo_id = entry_login5.cell(data_log, data_log1).value
+#             photo_temp1.append(photo_id)
+#     if photo_temp1 != []:
+#         photo_temp.append(list(photo_temp1))
+#
+# # temp_split = []
+# # temp_split1 =''
+# # for x in photo_temp:
+# #     temp_split1 += str(' '.join(x)) + ' ' + ' ' + ' ' + ' ' + ' '
+#
+# # temp_split = temp_split1
+#
+# temp_split = ''
+# temp_split1 =''
+# for x in photo_temp:
+#     for y in x:
+#         temp = list(y)
+#         temp_split1 += ''.join(temp) + ' '
+#
+#     temp_split1 += ' ' + ' '
+#         # temp_split.append(list(temp_split1))
+#     # temp_split.insert(0 ,temp_split1)
+# temp_split = list(temp_split1)
+#
+# # print('temp split ',temp_split)
+# # print(len(temp_split))
+#
+# window.mainloop()
+
+get_entry_date = '30-01-2024'
+# num1 = int(get_entry_date[0:2])
+# num2 = int(get_entry_date[3:5])
+# num3 = int(get_entry_date[6:11])
+# print('get entry date ',num1 ,type(num1))
+# print('get entry date ',num2 ,type(num2))
+# print('get entry date ',num3 ,type(num3))
+get_date = date(int(get_entry_date[6:11]), int(get_entry_date[3:5]), int(get_entry_date[0:2]))
+get_date = get_date.strftime("%d-%m-%Y")
+print('get date ',get_date)
+
+
+
+import random
+import pandas as pd
+import numpy as np
+from datetime import date
+import datetime
+from time import sleep
+import numpy
+
+# first = ['vhinz' ,'mariel' ,'allen' ,'angel' ,'mishallen' ,'purita' ,'manuel' ,'ronald' ,'noel' ,'maricel' ,'melannie']
+# last = ['diaz' 'gamboa' ,'navarra' ,'dejesus', 'perez' ,'joverez' ,'baldecasa' ,'tipan' ,'mangwelito', 'ramirez' ,'delacruz']
+# id = ['1','2','3','4','5','6','8','9','0']
+# alert = ['green','red','green']
+
+# first_name = []
+# last_name = []
+# id_no = []
+# email_ad = []
+# alert_status = []
+# time_log = []
+# ids = ''
+# first_name1 = ''
+# for x in range(30):
+#     first_name.append(random.choice(first))
+#     last_name.append(random.choice(last))
+#     for x in range(5):
+#         ids += str(random.choice(id))
+#     id_no.append(ids)
+#     ids = ''
+#     email_value = ''
+#     first_name1 = first_name[-1]
+#     email_value = str(first_name1[0]) +'_'+ str(last_name[-1]) +str('@gmail.com')
+#     email_ad.append(email_value)
+#     current = datetime.datetime.today()
+#     current = current.strftime("%Y/%m/%d %H:%M:%S")
+#     time_log.append(current)
+#     alert_status.append(random.choice(alert))
+#
+#
+# mydataset = {
+#     'ID No': id_no,
+#     'First Name': first_name,
+#     'Last Name': last_name,
+#     'Email Add': email_ad,
+#     'Time': time_log,
+#     'Alert Status': alert_status
+# }
+#
+# myvar = pd.DataFrame(mydataset )
+# print(myvar)
+
+
+first = ['vhinz' ,'mariel' ,'allen' ,'angel' ,'mishallen' ,'purita' ,'manuel' ,'ronald' ,'noel' ,'maricel' ,'melannie']
+last = ['diaz' 'gamboa' ,'navarra' ,'dejesus', 'perez' ,'joverez' ,'baldecasa' ,'tipan' ,'mangwelito', 'ramirez' ,'delacruz']
+id = ['1','2','3','4','5','6','8','9','0']
+alert = ['green','red','green']
+info = []
+info1 = []
+
+for x in range(30):
+    ids = ''
+    email_value = ''
+    first_name = ''
+    last_name = ''
+    for x in range(5):
+        ids += str(random.choice(id))
+
+    first_name = list(random.choice(first))
+    last_name = random.choice(last)
+    email_value = str(first_name[0]) + '_' + str(last_name) + str('@gmail.com')
+    current = datetime.datetime.today()
+    current = current.strftime("%Y/%m/%d %H:%M:%S")
+    alert_status = random.choice(alert)
+    info.append(ids)
+    info.append(''.join(first_name))
+    info.append(last_name)
+    info.append(email_value)
+    info.append(current)
+    info.append(alert_status)
+    info1.append(list(info))
+    info.clear()
+
+
+# print(info1)
+# print(info1)
+count = 0
+count1 = 0
+count2 = len(info) // 6
+
+for x in range(0, count2):
+    if count % 2 == 0:
+        for x in range(5):
+            # print('even ',info[count1])
+            count1 += 1
+        # my_tree.insert(parent='', index='end', iid=count , text='',
+        #                values=(info[count1-5] ,info[count1-4] ,info[count1-3] ,info[count1-2] ,info[count1-1] ,info[count1]), tags=('evenrow',))
+        count1 += 1
+    else:
+        for x in range(5):
+            # print('odd',info[count1])
+            count1 += 1
+        # my_tree.insert(parent='', index='end', iid=count, text='',
+        #                values=(info[count1 - 5], info[count1 - 4], info[count1 - 3], info[count1 - 2], info[count1 - 1],
+        #                        info[count1]), tags=('oddrow',))
+        count1 += 1
+    count += 1
+
+print('/n')
+
+# num = 101
+# value = ['0','19','12','5','100']
+# temp = []
+# while num >= 0:
+#     if str(num) in value:
+#         temp.append(num)
+#     num -= 1
+# print(temp)
+
+# import random
+# from calendar import monthrange
+# from calendar import monthrange
+#
+# # days = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+# #            '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31' ]
+# months = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+# year= ['2023']
+# hours = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
+# minutes = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+#            '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39',
+#            '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59']
+# seconds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+#            '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39',
+#            '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59', '60']
+#
+# dates1 = []
+#
+#
+# for x in range(1 ,11):
+#     temp_days ,temp_months, temp_hours ,temp_minutes, temp_seconds, days, dates = '', '', '','','',[],[]
+#
+#
+#     temp_months = random.choice(months)
+#     get_months = int(temp_months)
+#     temp_months = list(temp_months)
+#     if len(temp_months) == 1:
+#         temp_months.insert(0, '0')
+#
+#     get_days = monthrange(2023, get_months)
+#     get_days1 = get_days[1]
+#     print('get days one ',get_months ,get_days1)
+#     for x in range(1 ,get_days1 + 1):
+#         days.append(str(x))
+#     print('days ',days)
+#     temp_days = (random.choice(days))
+#     temp_days = list(temp_days)
+#     if len(temp_days) == 1:
+#         temp_days.insert(0, '0')
+#
+#     temp_hours = random.choice(hours)
+#     temp_hours = list(temp_hours)
+#     if len(temp_hours) == 1:
+#         temp_hours.insert(0, '0')
+#
+#     temp_minutes = random.choice(minutes)
+#     temp_minutes = list(temp_minutes)
+#     if len(temp_minutes) == 1:
+#         temp_minutes.insert(0, '0')
+#
+#     temp_seconds = random.choice(seconds)
+#     temp_seconds = list(temp_seconds)
+#     if len(temp_seconds) == 1:
+#         temp_seconds.insert(0, '0')
+#
+#
+#     dates.insert(0,str(''.join(temp_hours)) + ':' + str(''.join(temp_minutes)) + ':' + str(''.join(temp_seconds)) +' '+
+#                  str(''.join(temp_days)) +'/'+ str(''.join(temp_months)) +'/'+ str(''.join(year)))
+#
+#     dates1.append(dates)
+#
+#
+# for x in dates1:
+#     print(x)
+
+from tkinter import *
+import time
+from PIL import Image, ImageTk, ImageFont, ImageDraw
+
+global pic, photo1, counts, stop
+pic, photo1, counts, count, stop = '', [], 0, 0, 'play'
+
+window = Tk()
+window.resizable(0,0)
+window.title('Entry I.D System')
+# window.geometry("400x400")
+app_width = 925
+app_height = 600
+screen_width = window.winfo_screenwidth()
+screen_height = window.winfo_screenheight()
+
+x = (screen_width / 2) - (app_width / 2)
+y = (screen_height / 2) - 50 - (app_height / 2)
+window.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+photo_img1 = ['family_photo.png' ,'me_&_kids.png' ,'me_&_kids_four.png' ,'me_&_kids_three.png', 'me_&_kids_two.png','me_&_pamangkin.png',
+             'mel_grad.png', 'vhinz_&_dad.png', 'vhinz_bday.png' ,'vhinz_beach.png','vhinz_call_center.png',
+             'vhinz_call_center1.png','vhinz_call_center2.png' ,'vhinz_call_center3.png' ,'vhinz_call_center4.png' ,'vhinz_call_center5.png' ,
+             'vhinz_call_center6.png' ,'vhinz_call_center7.png' ,'vhinz_call_center8.png' ,'vhinz_call_center9.png' ,'vhinz_call_center10.png' ,
+             'vhinz_call_center11.png' ,'vhinz_call_center12.png' ,'vhinz_call_center13.png','vhinz_grad.png' , 'vhinz_jog.png', 'vhinz_jog1.png' ,
+             'vhinz_selfie.png', 'vhinz_selfie2.png' ,'vhinz_selfie3.png' ,'vhinz_selfie4.png', 'vhinz_selfie5.png', 'vhinz_selfie6.png']
+photo_img = ['family_photo.png' ,'me_&_kids.png', 'vhinz_selfie.png']
+photo_img2 = ['family_photo.png' ,'me_&_kids.png']
+
+def pic_even():
+    global photo1, counts
+    # time.sleep(.5)
+    counts += 1
+
+    if counts >= len(photo_img1) -1:
+        button.config(state='disable')
+        label.config(image=photo1[counts])
+        label.place(x=20, y=ypos)
+
+    else:
+        # label.place_forget()
+        label.config(image=photo1[counts])
+        label.place(x=20, y=ypos)
+        button.config(state='normal')
+        button1.config(state='normal')
+    print('pic even', counts)
+    label1.config(text=str(1) + str(' - ') + str(counts + 1), font=('arial', 6))
+
+
+
+def pic_odd():
+    global photo1, counts
+
+    # time.sleep(.5)
+    # label.place_forget()
+    counts -= 1
+    if counts <= 0:
+        button1.config(state='disable')
+        label.config(image=photo1[counts])
+        label.place(x=20, y=ypos)
+
+    else:
+
+        label.config(image=photo1[counts])
+        label.place(x=20, y=ypos)
+        button1.config(state='normal')
+        button.config(state='normal')
+
+    print('pic add ', counts)
+    label1.config(text=str(1) + str(' - ') + str(counts + 1), font=('arial', 6))
+
+def next():
+    global photo1, count, stop
+    print('count ', len(photo1), count)
+
+    if stop =='stop':
+        pass
+
+    elif stop == 'play':
+        if count == len(photo1)-1:
+            label2 = Label(image=photo1[count])
+            label2.place(x=500, y=ypos)
+            # my_canvas.create_image(0, 0, image=photo1[count], anchor='nw')
+            count = 0
+        else:
+            label2 = Label(window, image=photo1[count])
+            label2.place(x=500, y=ypos)
+
+            # my_canvas.create_image(0, 0, image=photo1[count], anchor='nw')
+            count += 1
+
+        label3.config(text=str(1) + str(' - ') + str(count + 1), font=('arial', 7))
+        window.after(300,next)
+
+def stop_next():
+    global stop
+    stop = 'stop'
+    print('stop next ',stop)
+
+
+
+def play_next():
+    global stop
+    stop = 'play'
+    print('play next ',stop)
+    next()
+
+
+xpos = 10
+ypos = 10
+img1 = []
+# count = 1
+count1 = 0
+
+for x in photo_img1:
+    # print(x)
+    img = Image.open(x)
+    resize_img = img.resize((400, 200))
+    photo = ImageTk.PhotoImage(resize_img)
+    photo1.append(photo)
+#     print('photo1 ',photo1)
+#     label = Label(window, image=photo1[-1])
+#     label.place(x=xpos, y=ypos)
+#
+#     xpos += 120
+#     if count % 8 == 0:
+#         ypos += 80
+#         xpos = 10
+#     count += 1
+#     count1 += 1
+
+# show image one
+print('photo one ',len(photo1))
+label1 = Label(window,text=str(1) +str(' - ') + str('1') ,font=('arial', 7))
+label1.place(x=200, y=220)
+
+label = Label(window,image=photo1[0])
+label.place(x=20, y=ypos)
+
+button = Button(window, text ='>>', width =10, command= pic_even)
+button.place(x=340,y=250)
+
+button1 = Button(window, text ='<<', width =10, command= pic_odd,state='disable')
+button1.place(x=20,y=250)
+
+# show image two
+
+label2 = Label(window, image=photo1[0])
+label2.place(x=500, y=ypos)
+
+label3 = Label(window, text=str(1) + str(' - ') + str(1), font=('arial', 7))
+label3.place(x=680, y=220)
+
+button2 = Button(window, text ='stop', width =10, command= stop_next)
+button2.place(x=820,y=250)
+
+button3 = Button(window, text ='play', width =10, command= play_next)
+button3.place(x=500,y=250)
+
+
+# my_canvas = Canvas(window , width= 500, height= 600)
+# my_canvas.place(x= 500,y=10)
+# my_canvas.create_image(0,0 ,image =photo1[0], anchor='nw')
+delimiter = chr(92)
+for x in photo_img1:
+    source_path = str(r"C:\Users\Utente\security_id_system") +delimiter + str(x)
+    print('source path ',source_path)
+    target_path = str(r"C:\Users\Utente\security_id_system") +delimiter + str(x)
+    desire_image = (450,220)
+    image = Image.open(source_path)
+    resize_img = image.resize(desire_image)
+    resize_img.save(target_path)
+
+# source_path = r"C:\Users\Utente\security_id_system\family_photo.png"
+# target_path = r"C:\Users\Utente\security_id_system\family_photo.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\me_&_kids.png"
+# target_path = r"C:\Users\Utente\security_id_system\me_&_kids.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\me_&_kids_four.png"
+# target_path = r"C:\Users\Utente\security_id_system\me_&_kids_four.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\me_&_kids_two.png"
+# target_path = r"C:\Users\Utente\security_id_system\me_&_kids_two.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\me_&_pamangkin.png"
+# target_path = r"C:\Users\Utente\security_id_system\me_&_pamangkin.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+#
+# source_path = r"C:\Users\Utente\security_id_system\mel_grad.png"
+# target_path = r"C:\Users\Utente\security_id_system\mel_grad.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_&_dad.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_&_dad.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_bday.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_bday.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_&_dad.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_&_dad.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_beach.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_beach.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_call_center.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_call_center.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_call_center1.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_call_center1.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_call_center2.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_call_center2.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_call_center3.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_call_center3.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_call_center4.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_call_center4.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_call_center5.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_call_center5.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_call_center6.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_call_center6.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_call_center7.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_call_center7.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_call_center8.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_call_center8.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_call_center9.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_call_center9.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_call_center10.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_call_center10.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_call_center11.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_call_center11.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_call_center12.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_call_center12.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_call_center13.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_call_center13.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_grad.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_grad.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_jog.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_jog.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_jog1.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_jog1.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+#
+# source_path = r"C:\Users\Utente\security_id_system\vhinz_selfie.png"
+# target_path = r"C:\Users\Utente\security_id_system\vhinz_selfie.png"
+# desire_image = (450,220)
+# image = Image.open(source_path)
+# resize_img = image.resize(desire_image)
+# resize_img.save(target_path)
+
+
+
+window.mainloop()
+
+
+from datetime import date
+import datetime
+from time import sleep
+import time
+
+global count
+count = 1
+def my_funtion(x):
+    global count
+    if x ==  1:
+        return 1
+    elif x ==  2:
+        return 2
+    else:
+        print(x)
+        count += 1
+        return my_funtion(x - 1) +  my_funtion(x - 2)
+
+
+print(my_funtion(5))
+
+
+current = datetime.datetime.today()
+current = current.strftime("%H:%M:%S")
+get_time = list(current)
+print('time ',list(current))
+print(int(''.join(get_time[0:2])))
+
+if int(''.join(get_time[0:2])) >= 0 and int(''.join(get_time[0:2])) < 12:
+    print('Good Morning')
+
+elif int(''.join(get_time[0:2])) >= 12 and int(''.join(get_time[0:2])) < 18:
+    print('Good Afternoon')
+
+elif int(''.join(get_time[0:2])) >= 18 and int(''.join(get_time[0:2])) < 24:
+    print('Good Evening')
+
+
+value = ['2024', '2022' ,'2023','2021']
+value.sort()
+print(value)
+
+# from tkinter import *
+# import tkinter
+# from tkinter import ttk
+# import tkinter as tk
+#
+# window = Tk()
+# # window.resizable(0,0)
+# window.title('Entry I.D System')
+# # window.geometry("400x400")
+# app_width = 400
+# app_height = 540
+# screen_width = window.winfo_screenwidth()
+# screen_height = window.winfo_screenheight()
+#
+# x = (screen_width / 2) - (app_width / 2)
+# y = (screen_height / 2) - 50 - (app_height / 2)
+# window.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+#
+# global counter
+# counter = 0
+#
+# def check_buttons(values):
+#     global get_value
+#     get_value = values
+#     print('value of buttons ',values)
+#     check_buttons1()
+#
+#
+# def check_buttons1():
+#     global get_value,counter
+#     print('check buttons ',get_value)
+#     if get_value == 'Play':
+#         counter += 1
+#         label.config(text=str(get_value) +' '+ str(counter))
+#         # window.after(1000, lambda: check_buttons(get_value))
+#         window.after(1000, check_buttons1)
+#
+#     elif get_value == 'Stop':
+#         label.config(text=str(get_value) +' '+ str(counter))
+#
+#
+#
+# label = Label(window,font=('arial', 15))
+# label.place(x=170, y=250)
+#
+# check_login = Button(window, text='Play',font=('arial', 12), fg='black'  ,width=15, command=lambda: check_buttons('Play'))
+# check_login.pack(pady=50)
+#
+# check_login1 = Button(window, text='Stop',font=('arial', 12), fg='black'  ,width=15, command=lambda: check_buttons('Stop'))
+# check_login1.pack(pady = 30)
+#
+# window.mainloop()
+
+# graph_count = ['2021','2022','2023']
+#
+# graph_count2 = []
+# for x in range(0, len(graph_count)):
+#     graph_count1 = []
+#     graph_count1.append(graph_count[x])
+#     for y in range(0, 12):
+#         graph_count1.append(0)
+#     # print(graph_count1)
+#     graph_count2.append(list(graph_count1))
+#
+# for x in graph_count2:
+#     print(x)
+#
+# print('melvin')
+
+
+a = [5,6,7,8,9]
+b = list(map(lambda x: x+2, a))
+c = [x + 2 for x in a]
+print(b)
+print(c)
+
