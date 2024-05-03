@@ -1,0 +1,153 @@
+from tkinter import *
+import tkinter
+from tkinter import ttk
+import tkinter as tk
+from openpyxl import Workbook, load_workbook
+from openpyxl import load_workbook
+import pandas as pd
+
+wb = load_workbook("entry_login1.xlsx")
+
+ws = wb['entry_log']
+ws1 = wb['entry_log1']
+ws2 = wb['entry_log2']
+ws3 = wb['alert_status']
+
+entry_login = ws
+entry_login1 = ws1
+entry_login2 = ws2
+entry_login3 = ws3
+
+def super_malls():
+    super = []
+    super2 = []
+    count = 1
+    count1 = 1
+    for data_log in range(1, entry_login.max_column + 1):
+        get_entry_headings = entry_login.cell(1, data_log, ).value
+
+        if data_log <=2:
+            super.append(get_entry_headings)
+
+        elif data_log % 2 == 0:
+            temp = str(get_entry_headings) + str(count)
+            # print(data_log, temp)
+            super.append(temp)
+            count += 1
+        else:
+            temp1 = str(get_entry_headings) + str(count1)
+            # print(data_log, temp1)
+            super.append(temp1)
+            count1 += 1
+
+    # print('\n')
+
+    # print(entry_login1.max_column)
+    for data_log in range(2, entry_login.max_row + 1):
+        super1 = []
+        for data_log1 in range(1, entry_login.max_column + 1):
+            get_entry_id = entry_login.cell(data_log, 1).value
+            get_entry_login = entry_login.cell(data_log, 3).value
+            get_entry_data = entry_login.cell(data_log, data_log1).value
+            super1.append(get_entry_data)
+        super2.append(list(super1))
+    #     print('')
+    # print('supers malls row and column ',entry_login.max_row ,entry_login.max_column)
+    # print(super2)
+    return super, super2
+
+def fast_food():
+    fast = []
+    fast2 = []
+    count = 1
+    count1 = 1
+    for data_log in range(1, entry_login1.max_column + 1):
+        get_entry_headings = entry_login1.cell( 1 ,data_log,).value
+        # print(get_entry_headings , end=' ')
+        if data_log <= 2:
+            fast.append(get_entry_headings)
+
+        elif data_log % 2 == 0:
+            temp = str(get_entry_headings) + str(count)
+            # print(data_log, temp)
+            fast.append(temp)
+            count += 1
+        else:
+            temp1 = str(get_entry_headings) + str(count1)
+            # print(data_log, temp1)
+            fast.append(temp1)
+            count1 += 1
+    # print('\n')
+
+    # print(entry_login1.max_column)
+    for data_log in range(2, entry_login1.max_row + 1):
+        fast1 = []
+        for data_log1 in range(1, entry_login1.max_column + 1):
+            get_entry_id = entry_login1.cell(data_log, 1).value
+            get_entry_login = entry_login1.cell(data_log, 3).value
+            get_entry_data = entry_login1.cell(data_log, data_log1).value
+            fast1.append(get_entry_data)
+        fast2.append(list(fast1))
+        # print('')
+
+    # print('fast food row and column ',entry_login1.max_row ,entry_login1.max_column)
+    # print(fast2)
+    return fast, fast2
+
+def computer_shop():
+    com = []
+    com2 = []
+    count = 1
+    count1 = 1
+    # print(entry_login2.max_column)
+    for data_log in range(1, entry_login2.max_column + 1):
+        get_entry_headings = entry_login2.cell( 1 ,data_log,).value
+        if data_log <= 2:
+            com.append(get_entry_headings)
+
+        elif data_log % 2 == 0:
+            temp = str(get_entry_headings) + str(count)
+            # print(data_log, temp)
+            com.append(temp)
+            count += 1
+        else:
+            temp1 = str(get_entry_headings) + str(count1)
+            # print(data_log, temp1)
+            com.append(temp1)
+            count1 += 1
+    # print('\n')
+
+    # print(entry_login2.max_column)
+    for data_log in range(2, entry_login2.max_row + 1):
+        com1 = []
+        for data_log1 in range(1, entry_login2.max_column + 1):
+            get_entry_id = entry_login2.cell(data_log, 1).value
+            get_entry_login = entry_login2.cell(data_log, 3).value
+            get_entry_data = entry_login2.cell(data_log, data_log1).value
+            com1.append(get_entry_data)
+        com2.append(list(com1))
+        # print('')
+
+    # print('computer shop row and column ',entry_login2.max_row ,entry_login2.max_column)
+    # print(com2)
+    return com, com2
+
+def get_datas_id():
+    datas = []
+    for data_log in range(2, entry_login3.max_row + 1):
+        get_entry_idno = entry_login3.cell(data_log ,1).value
+        get_entry_sm = entry_login3.cell(data_log ,2).value
+        get_entry_ff = entry_login3.cell(data_log, 3).value
+        get_entry_cs = entry_login3.cell(data_log, 4).value
+        # print(get_entry_idno ,get_entry_alert)
+        temp = []
+        temp.append(str(get_entry_idno))
+        temp.append(str(get_entry_sm))
+        temp.append(str(get_entry_ff))
+        temp.append(str(get_entry_cs))
+        datas.append(list(temp))
+
+    return datas
+
+
+# window.mainloop()
