@@ -1,0 +1,3597 @@
+from tkinter import *
+import tkinter
+from tkinter import ttk
+import tkinter as tk
+from tkinter import messagebox
+from datetime import date
+import datetime
+from time import sleep
+import random
+import string
+from openpyxl import Workbook, load_workbook
+from operator import itemgetter
+import operator
+import string
+import time
+from PIL import Image, ImageTk, ImageFont, ImageDraw
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+
+global datas, win1, win2, datas_refresh,photo_temp, get_pics
+datas, win1, win2, datas_refresh ,photo_temp, get_pics = '','', [], '', [], []
+
+
+global view_count
+view_count = 1
+
+wb = load_workbook("entry_login1.xlsx")
+
+# ws = wb['entry_log']
+# ws1 = wb['entry_log1']
+# ws2 = wb['entry_log2']
+# ws3 = wb['alert_status']
+# ws4 = wb['alert_records']
+ws5 = wb['data_records']
+ws6 = wb['case_records']
+
+# entry_login = ws
+# entry_login1 = ws1
+# entry_login2 = ws2
+# entry_login3 = ws3
+# entry_login4 = ws4
+entry_login5 = ws5
+entry_login6 = ws6
+
+window = Tk()
+# window.resizable(0,0)
+window.title('PNP I.D System')
+# tkinter to the center
+# window.geometry("900x500")
+app_width = 1200
+app_height = 640
+screen_width = window.winfo_screenwidth()
+screen_height = window.winfo_screenheight()
+
+x = (screen_width / 2) - (app_width / 2)
+y = (screen_height / 2) - 50 - (app_height / 2)
+window.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+
+icon = PhotoImage(file= 'mevin_pics1.png')
+window.iconphoto(True,icon)
+# window['bg']='#F0F0F0'
+window['bg']='#d9d9d9'
+bg_color ='#d9d9d9'
+fg_color ='black'
+
+img_but = Image.open('button_icon1.png')
+resize_img = img_but.resize((90,35))
+photo_but = ImageTk.PhotoImage(resize_img)
+
+
+# photo_image_main = ['family_photo.png' ,'me_&_kids.png' ,'me_&_kids_four.png' ,'me_&_kids_three.png', 'me_&_kids_two.png','me_&_pamangkin.png',
+#              'mel_grad.png', 'vhinz_&_dad.png', 'vhinz_bday.png' ,'vhinz_beach.png','vhinz_call_center.png',
+#              'vhinz_call_center1.png','vhinz_call_center2.png' ,'vhinz_call_center3.png' ,'vhinz_call_center4.png' ,'vhinz_call_center5.png' ,
+#              'vhinz_call_center6.png' ,'vhinz_call_center7.png' ,'vhinz_call_center8.png' ,'vhinz_call_center9.png' ,'vhinz_call_center10.png' ,
+#              'vhinz_call_center11.png' ,'vhinz_call_center12.png' ,'vhinz_call_center13.png','vhinz_grad.png' , 'vhinz_jog.png', 'vhinz_jog1.png' ,
+#              'vhinz_selfie.png', 'vhinz_selfie2.png' ,'vhinz_selfie3.png' ,'vhinz_selfie4.png', 'vhinz_selfie5.png', 'vhinz_selfie6.png']
+
+def update_record():
+    global datas
+    print('update record')
+    # for x in datas:
+    #     print(x[0] ,x[1] ,x[12])
+    # current = ''
+    # current = datetime.datetime.today()
+    # current = current.strftime("%Y/%m/%d %H:%M:%S")
+    # tm_entry.delete(0, END)
+    select = my_tree.focus()
+    if select.isnumeric() == True:
+        pick_count = int(my_tree.selection()[0]) + 2
+        get_select_value = my_tree.item(select, 'values')
+        # tm_entry.insert(0, current)
+        # print('selected data ',pick_count ,select)
+        # print('get select value ', get_select_value)
+        question = messagebox.askquestion(title='PNP I.D System', message="Update Record")
+        if question == 'yes':
+            # id_no = get_info[2]
+            for data_log in range(2, entry_login5.max_row + 1):
+                id_count = entry_login5.cell(data_log, 1).value
+                id_number = entry_login5.cell(data_log, 2).value
+                id_first = entry_login5.cell(data_log, 3).value
+                id_last = entry_login5.cell(data_log, 4).value
+                id_email = entry_login5.cell(data_log, 5).value
+                id_dates = entry_login5.cell(data_log, 6).value
+                id_alert = entry_login5.cell(data_log, 7).value
+                id_gender = entry_login5.cell(data_log, 8).value
+                id_phone = entry_login5.cell(data_log, 9).value
+                id_street = entry_login5.cell(data_log, 10).value
+                id_city = entry_login5.cell(data_log, 11).value
+                id_country = entry_login5.cell(data_log, 12).value
+                id_picture = entry_login5.cell(data_log, 13).value
+                # print(data_log)
+                # if str(data_log) == str(pick_count):
+                if str(id_number) == str(get_select_value[1]):
+                    print('id count ',id_number ,get_select_value[1] ,pick_count, data_log)
+                    entry_login5.cell(data_log, 1).value = dc_entry.get()
+                    entry_login5.cell(data_log, 2).value = id_entry.get()
+                    entry_login5.cell(data_log, 3).value = fn_entry.get()
+                    entry_login5.cell(data_log, 4).value = ln_entry.get()
+                    entry_login5.cell(data_log, 5).value = ea_entry.get()
+                    entry_login5.cell(data_log, 6).value = rd_entry.get()
+                    entry_login5.cell(data_log, 7).value = as_entry.get()
+                    entry_login5.cell(data_log, 8).value = gd_entry.get()
+                    entry_login5.cell(data_log, 9).value = cp_entry.get()
+                    entry_login5.cell(data_log, 10).value = st_entry.get()
+                    entry_login5.cell(data_log, 11).value = ct_entry.get()
+                    entry_login5.cell(data_log, 12).value = cy_entry.get()
+                    entry_login5.cell(data_log, 13).value = pc_entry.get()
+
+
+            for data_log in range(2, entry_login6.max_row + 1):
+                id_number = entry_login6.cell(data_log, 1).value
+                if str(id_number) == str(get_select_value[1]):
+                    entry_login6.cell(data_log, 2).value = fn_entry.get()
+                    entry_login6.cell(data_log, 3).value = ln_entry.get()
+
+            for x in datas:
+                if str(x[1]) == str(get_select_value[1]):
+                    x[0] = dc_entry.get()
+                    x[1] = id_entry.get()
+                    x[2] = fn_entry.get()
+                    x[3] = ln_entry.get()
+                    x[4] = ea_entry.get()
+                    x[5] = rd_entry.get()
+                    x[6] = as_entry.get()
+                    x[7] = gd_entry.get()
+                    x[8] = cp_entry.get()
+                    x[9] = st_entry.get()
+                    x[10] = ct_entry.get()
+                    x[11] = cy_entry.get()
+                    x[12] = pc_entry.get()
+
+            # get_info = get_data()
+            # datas = get_info[1]
+            # datas = datas
+            wb.save('entry_login1.xlsx')
+            load_data()
+        else:
+            pass
+
+    else:
+        pass
+def add_entry():
+    global add_idno1
+    add_idno1 = ''
+    print('add entry')
+    info = []
+    current = ''
+    # print('entry log in row number ',entry_login5.max_row)
+    # print('entry log in column number ', entry_login5.max_column)
+    clear_entry()
+    add_info = get_data()
+    add_idno = get_info[2]
+    # print('row of idno ', len(add_idno))
+    # print('row of idno ',len(set(add_idno)))
+    add_idno1 = random.choice(add_idno)
+    add_alert = random.choice(['red','green','green','green'])
+    # add_row = entry_login5.max_row
+    add_count = []
+    current = datetime.datetime.today()
+    current = current.strftime("%H:%M:%S %d/%m/%Y")
+    for data_log in range(2, entry_login5.max_row + 1):
+        id_count = entry_login5.cell(data_log, 1).value
+        if str(id_count) not in ['None', '']:
+            # print('id count ',id_count)
+            add_count.append(int(id_count))
+
+    add_row = int(add_count[-1]) + 1
+    dc_entry.insert(0, add_row)
+    id_entry.insert(0, add_idno1)
+    rd_entry.insert(0, current)
+    as_entry.insert(0, add_alert)
+    # if id_entry.get() != '' and fn_entry.get() != '' and ln_entry.get() != '' and ea_entry.get() != '' and as_entry.get() != '':
+    #     # tm_entry.insert(0, current)
+    add_button.config(command=add_entry1)
+
+
+def add_entry1():
+    global add_idno1,datas
+    # print('add entry one' ,type(add_idno1) ,type(id_entry.get()))
+    if id_entry.get() != str(add_idno1):
+        add_button.config(command=add_entry)
+        add_entry()
+
+    elif id_entry.get() == str(add_idno1) and fn_entry.get() != '' and ln_entry.get() != '' and ea_entry.get() != '' :
+        question = messagebox.askquestion(title='PNP I.D System', message="Add Record")
+        if question == 'yes':
+            clear_data()
+            add_row = entry_login5.max_row
+            loop = 0
+            for data_log in range(2, entry_login5.max_row + 1):
+                id_count = entry_login5.cell(data_log, 1).value
+                if str(id_count) in [None ,'None' ,'']:
+                    loop += 1
+                    if loop == 1:
+                        # print('id count ',data_log)
+                        entry_login5.cell(data_log , 1).value = dc_entry.get()
+                        entry_login5.cell(data_log , 2).value = id_entry.get()
+                        entry_login5.cell(data_log , 3).value = fn_entry.get()
+                        entry_login5.cell(data_log , 4).value = ln_entry.get()
+                        entry_login5.cell(data_log , 5).value = ea_entry.get()
+                        entry_login5.cell(data_log , 6).value = rd_entry.get()
+                        entry_login5.cell(data_log, 7).value = as_entry.get()
+                        entry_login5.cell(data_log, 8).value = gd_entry.get()
+                        entry_login5.cell(data_log, 9).value = cp_entry.get()
+                        entry_login5.cell(data_log, 10).value = st_entry.get()
+                        entry_login5.cell(data_log, 11).value = ct_entry.get()
+                        entry_login5.cell(data_log, 12).value = cy_entry.get()
+                        entry_login5.cell(data_log, 13).value = pc_entry.get()
+
+
+            if loop == 0:
+                entry_login5.cell(add_row + 1, 1).value = dc_entry.get()
+                entry_login5.cell(add_row + 1, 2).value = id_entry.get()
+                entry_login5.cell(add_row + 1, 3).value = fn_entry.get()
+                entry_login5.cell(add_row + 1, 4).value = ln_entry.get()
+                entry_login5.cell(add_row + 1, 5).value = ea_entry.get()
+                entry_login5.cell(add_row + 1, 6).value = rd_entry.get()
+                entry_login5.cell(add_row + 1, 7).value = as_entry.get()
+                entry_login5.cell(add_row + 1, 8).value = gd_entry.get()
+                entry_login5.cell(add_row + 1, 9).value = cp_entry.get()
+                entry_login5.cell(add_row + 1, 10).value = st_entry.get()
+                entry_login5.cell(add_row + 1, 11).value = ct_entry.get()
+                entry_login5.cell(add_row + 1, 12).value = cy_entry.get()
+                entry_login5.cell(add_row + 1, 13).value = pc_entry.get()
+
+
+            temp_data1 = []
+            for data_log in range(2, entry_login5.max_row + 1):
+                id_count = entry_login5.cell(data_log, 1).value
+                temp_data = []
+                if id_count not in [None]:
+                    for data_log1 in range(1, entry_login5.max_column + 1):
+                        # print(entry_login5.cell(data_log, data_log1).value )
+                        temp = entry_login5.cell(data_log, data_log1).value
+                        temp_data.append(temp)
+                    temp_data1.append(list(temp_data))
+                # else:
+                #     entry_login5.delete_rows(data_log)
+
+            datas = temp_data1
+
+            my_tree.tag_configure('oddrow', background='white')
+            my_tree.tag_configure('evenrow', background='lightblue')
+            count = 0
+
+            for data in datas:
+                if count % 2 == 0:
+                    my_tree.insert(parent='', index='end', iid=count, text='',
+                                   values=data, tags=('evenrow',))
+
+                else:
+                    my_tree.insert(parent='', index='end', iid=count, text='',
+                                   values=data, tags=('oddrow',))
+                count += 1
+
+            count_people.config(text=str(1) + ' - ' + str(len(datas)))
+            add_button.config(command=add_entry)
+            wb.save('entry_login1.xlsx')
+        else:
+            # clear_entry()
+            pass
+
+    elif id_entry.get() == str(add_idno1):
+        if fn_entry.get() == '' or ln_entry.get() == '' or ea_entry.get() == '' :
+            messagebox.showinfo("Add Entry", "Incomplete Information")
+    # else:
+    #     # messagebox.showinfo("Add Entry", "Incomplete Information")
+    #     add_button.config(command=add_entry)
+    #     add_entry()
+    #     # clear_entry()
+
+def remove_entry():
+    global datas
+    print('remove entry')
+    select = my_tree.focus()
+    if select.isnumeric() == True:
+        remove_count = int(my_tree.selection()[0]) + 2
+        # print('delete record number ', select ,remove_count)
+
+        question = messagebox.askquestion(title='PNP I.D System', message="Delete Record")
+        if question == 'yes':
+            my_tree.delete(select)
+            datas.remove(datas[int(select)])
+            entry_login5.delete_rows(remove_count)
+
+            clear_entry()
+            # clear_data()
+            load_data()
+            wb.save('entry_login1.xlsx')
+        else:
+            pass
+    else:
+        pass
+
+def remove_many():
+    global datas
+    print('remove many')
+    remove_num = my_tree.selection()
+    # print('remove many ', remove_num)
+    temp1 = list(reversed(sorted(remove_num)))
+    temp = get_reverse(remove_num,1000 ,0)
+
+    # print('temp one ', temp1 )
+    # print('temp ',temp)
+    if ''.join(temp1).isnumeric() == True :
+        # x = my_tree.selection()
+        question = messagebox.askquestion(title='PNP I.D System', message="Delete Many Record")
+        if question == 'yes':
+            for record in temp:
+                my_tree.delete(record)
+            # for x in range(0 ,len(datas)):
+            #     if x in temp:
+            #         print(datas[x])
+            for record in temp:
+                datas.remove(datas[int(record)])
+                entry_login5.delete_rows(record + 2)
+
+            clear_entry()
+            load_data()
+            wb.save('entry_login1.xlsx')
+        else:
+            pass
+
+def remove_all():
+    print('remove all')
+    for record in my_tree.get_children():
+        my_tree.delete(record)
+    datas.clear()
+
+def ups():
+    print('ups')
+    clear_entry()
+    rows = my_tree.selection()
+    for row in rows:
+        my_tree.move(row, my_tree.parent(row), my_tree.index(row)-1)
+
+def downs():
+    print('down')
+    clear_entry()
+    rows = my_tree.selection()
+    for row in reversed(rows):
+        my_tree.move(row, my_tree.parent(row), my_tree.index(row)+1)
+
+def clear_data():
+    print('clear_data')
+    for record in my_tree.get_children():
+        my_tree.delete(record)
+
+    count_people.config(text='')
+
+def refresh_records():
+    global datas, datas_refresh
+    print('sorting count')
+
+    temp_id = []
+    counts = 2
+    for data_log in range(2, entry_login5.max_row + 1):
+        id_count = entry_login5.cell(data_log, 1).value
+        if str(id_count) not in [None ,'None' ,'']:
+            temp_id.append(str(id_count))
+            entry_login5.cell(counts, 1).value = str(counts - 1)
+            counts += 1
+            # print('id count ',id_count)
+
+    # count = 1
+    temp_data1 = []
+    for data_log in range(2, entry_login5.max_row + 1):
+        id_count = entry_login5.cell(data_log, 1).value
+        id_number = entry_login5.cell(data_log, 2).value
+        if str(id_count) not in [None, 'None', '']:
+            temp_data = []
+            for data_log1 in range(1, entry_login5.max_column + 1):
+                # print(entry_login5.cell(data_log, data_log1).value )
+                temp = entry_login5.cell(data_log, data_log1).value
+                temp_data.append(temp)
+            temp_data1.append(list(temp_data))
+            # count += 1
+
+    datas = temp_data1
+    datas_refresh = datas
+    clear_data()
+    load_data()
+    wb.save('entry_login1.xlsx')
+
+    # return temp_data1
+
+def load_records():
+    global datas, datas_refresh
+    print('load records')
+    datas = datas_refresh
+    load_data()
+
+def load_data():
+    print('load data')
+    global datas
+    count = 0
+    clear_data()
+
+    for data in datas:
+        if data[0] not in [None]:
+            if count % 2 == 0:
+                my_tree.insert(parent='', index='end', iid=count, text='',
+                               values=(data), tags=('evenrow',))
+
+            else:
+                my_tree.insert(parent='', index='end', iid=count, text='',
+                               values=(data), tags=('oddrow',))
+            count += 1
+
+    count_people.config(text=str(1) + ' - ' + str(len(datas)))
+
+def clear_entry():
+    # print('clear records')
+    dc_entry.delete(0, END)
+    id_entry.delete(0, END)
+    fn_entry.delete(0, END)
+    ln_entry.delete(0, END)
+    ea_entry.delete(0, END)
+    rd_entry.delete(0, END)
+    as_entry.delete(0, END)
+    gd_entry.delete(0, END)
+    cp_entry.delete(0, END)
+    st_entry.delete(0, END)
+    ct_entry.delete(0, END)
+    cy_entry.delete(0, END)
+    pc_entry.delete(0, END)
+def insert_entry(values):
+    # print('insert entry')
+    dc_entry.insert(0, values[0])
+    id_entry.insert(0, values[1])
+    fn_entry.insert(0, values[2])
+    ln_entry.insert(0, values[3])
+    ea_entry.insert(0, values[4])
+    rd_entry.insert(0, values[5])
+    as_entry.insert(0, values[6])
+    gd_entry.insert(0, values[7])
+    cp_entry.insert(0, values[8])
+    st_entry.insert(0, values[9])
+    ct_entry.insert(0, values[10])
+    cy_entry.insert(0, values[11])
+    pc_entry.insert(0, values[12])
+
+
+def select_records(e):
+    global view_profile_values
+    view_profile_values = ''
+    # print('select record')
+    clear_entry()
+    select = my_tree.focus()
+    if select.isnumeric() == True:
+        values = my_tree.item(select, 'values')
+        insert_entry(values)
+        view_profile_values = values
+    else:
+        pass
+
+def get_reverse(value,num ,num1):
+    # print('get reverse value ')
+    temp = []
+    while num >= num1:
+        if str(num) in value:
+            temp.append(num)
+        num -= 1
+    return temp
+
+def sort_records():
+    global datas
+    print('sort records')
+    temp = []
+    temp1 = []
+    loop = 0
+    for x in range(0 ,len(datas)):
+        temp.append(datas[x][1])
+    temp = sorted(temp)
+    # temp = list(temp)
+    # print(len(temp))
+    # print(len(set(temp)))
+    while loop <= len(temp) -1:
+        for x in range(0 ,len(datas)):
+            if temp[loop] == datas[x][1]:
+                temp1.append(datas[x])
+        loop += 1
+
+    datas = temp1
+    # for x in range(0,len(temp1)):
+    #     datas[x] = temp1[x]
+    count_people.config(text=str(1) + ' - ' + str(len(datas)))
+    load_data()
+
+def reverse_records():
+    global datas
+    print('reverse records')
+    temp = []
+    temp1 = []
+    temp2 = []
+    loop = 0
+    for x in range(0, len(datas)):
+        temp2.append(datas[x][1])
+    temp = get_reverse(temp2,100000 ,89999)
+    while loop <= len(temp) - 1:
+        for x in range(0, len(datas)):
+            if str(temp[loop]) == datas[x][1]:
+                temp1.append(datas[x])
+        loop += 1
+
+    datas = temp1
+    # for x in range(0, len(temp1)):
+    #     datas[x] = temp1[x]
+    count_people.config(text=str(1) + ' - ' + str(len(datas)))
+    load_data()
+
+
+def sort_last():
+    global datas
+    print('Last Name')
+    temp1 = []
+    temp2 = []
+    loop = 0
+    for x in range(0, len(datas)):
+        temp = []
+        temp.append(datas[x][1])
+        temp.append(datas[x][3])
+        temp1.append(list(temp))
+
+    # print(temp1)
+    sort_lname = sorted(temp1, key=operator.itemgetter(0))
+    sort_lname = sorted(sort_lname, key=operator.itemgetter(1))
+    # print('sort ', sort_lname)
+    # print('row number', len(sort_lname))
+
+    while loop <= len(sort_lname) - 1:
+        for x in range(0, len(datas)):
+            if sort_lname[loop][0] == datas[x][1] and sort_lname[loop][1] == datas[x][3]:
+                temp2.append(datas[x])
+
+        loop += 1
+
+    datas = temp2
+    count_people.config(text=str(1) + ' - ' + str(len(datas)))
+    load_data()
+
+
+def reverse_last():
+    global datas
+    print('Last Name')
+    temp1 = []
+    temp2 = []
+    loop = 0
+    for x in range(0, len(datas)):
+        temp = []
+        temp.append(datas[x][1])
+        temp.append(datas[x][3])
+        temp1.append(list(temp))
+
+    # print(temp1)
+    sort_lname = sorted(temp1, key=operator.itemgetter(0) ,reverse=True)
+    sort_lname = sorted(sort_lname, key=operator.itemgetter(1), reverse=True)
+    # print('sort ', sort_lname)
+    # print('row number', len(sort_lname))
+
+    while loop <= len(sort_lname) - 1:
+        for x in range(0, len(datas)):
+            if sort_lname[loop][0] == datas[x][1] and sort_lname[loop][1] == datas[x][3]:
+                temp2.append(datas[x])
+
+        loop += 1
+
+    datas = temp2
+    count_people.config(text=str(1) + ' - ' + str(len(datas)))
+    load_data()
+
+def sort_first():
+    global datas
+    print('Sort First Name')
+    temp1 = []
+    temp2 = []
+    loop = 0
+    for x in range(0, len(datas)):
+        temp = []
+        temp.append(datas[x][1])
+        temp.append(datas[x][2])
+        temp1.append(list(temp))
+
+    # print(temp1)
+    sort_fname = sorted(temp1, key=operator.itemgetter(0))
+    sort_fname = sorted(sort_fname, key=operator.itemgetter(1))
+    # print('sort ', sort_fname)
+    # print('row number',len(sort_fname))
+
+    while loop <= len(sort_fname) - 1:
+        for x in range(0, len(datas)):
+            if sort_fname[loop][0] == datas[x][1] and sort_fname[loop][1] == datas[x][2]:
+                temp2.append(datas[x])
+
+        loop += 1
+
+    datas = temp2
+    count_people.config(text=str(1) + ' - ' + str(len(datas)))
+    load_data()
+
+def reverse_first():
+    global datas
+    print('Reverse First Name')
+    temp1 = []
+    temp2 = []
+    loop = 0
+    for x in range(0, len(datas)):
+        temp = []
+        temp.append(datas[x][1])
+        temp.append(datas[x][2])
+        temp1.append(list(temp))
+
+    # print(temp1)
+    # sort_fname = sorted(temp1, key=operator.itemgetter(1))
+    reverse_fname = sorted(temp1, key=operator.itemgetter(0), reverse=True)
+    reverse_fname = sorted(reverse_fname, key=operator.itemgetter(1), reverse=True)
+    # print('sort ', reverse_fname)
+    # print('row number', len(reverse_fname))
+
+    while loop <= len(reverse_fname) - 1:
+        for x in range(0, len(datas)):
+            if reverse_fname[loop][0] == datas[x][1] and reverse_fname[loop][1] == datas[x][2]:
+                temp2.append(datas[x])
+
+        loop += 1
+
+    datas = temp2
+    count_people.config(text=str(1) + ' - ' + str(len(datas)))
+    load_data()
+
+def range_view():
+    print('range view')
+    global win1,  get_range
+    win1 = []
+    get_range  = []
+
+    window2 = Toplevel()
+    win1.append(window2)
+    window2.resizable(0, 0)
+    window2.title('Entry I.D System')
+    app_width = 600
+    app_height = 400
+    screen_width = window2.winfo_screenwidth()
+    screen_height = window2.winfo_screenheight()
+
+    x = (screen_width / 2) - 300 - (app_width / 2)
+    y = (screen_height / 2) - 50 - (app_height / 2)
+    window2.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+
+    label = Label(window2, text="View of Range", font=('arial', 15))
+    label.place(x=240,y=10)
+
+    range_first = Label(window2, text='First Range',font=('arial', 8))
+    range_first.place(x=188 ,y=70)
+
+    range_entry = Entry(window2, font=('arial', 20), width=15, border=2)
+    range_entry.place(x=190, y=90)
+    get_range.append(range_entry)
+
+    range_second = Label(window2, text='Second Range', font=('arial', 8))
+    range_second.place(x=188, y=140)
+
+    range_entry1 = Entry(window2, font=('arial', 20), width=15, border=2)
+    range_entry1.place(x=190, y=160)
+    get_range.append(range_entry1)
+
+    range_button = Button(window2, text='Enter', font=('arial', 12),width=20 ,command=range_view2)
+    range_button.place(x=210,y =230)
+
+
+    r = StringVar()
+    # r = IntVar()
+    r.set(None)
+
+    check_first = Radiobutton(window2, text='First Name : A - Z', font=('arial', 8),
+                              variable=r, value='first name', command=lambda: range_view1(r.get()))
+    check_first.place(x=10, y=300)
+
+    check_last = Radiobutton(window2, text='Second Name: A - Z ', font=('arial', 8),
+                               variable=r, value='last name', command=lambda: range_view1(r.get()))
+    check_last.place(x=10, y=330)
+
+    check_idno = Radiobutton(window2, text='ID Number  : 90000 - 99999', font=('arial', 8),
+                               variable=r, value='id no', command=lambda: range_view1(r.get()))
+    check_idno.place(x=10, y=360)
+
+    check_name = Radiobutton(window2, text='Search Name', font=('arial', 8),
+                             variable=r, value='search name', command=lambda: range_view1(r.get()))
+    check_name.place(x=230, y=300)
+
+    check_search_idno = Radiobutton(window2, text='Search ID Number', font=('arial', 8),
+                             variable=r, value='search idno', command=lambda: range_view1(r.get()))
+    check_search_idno.place(x=230, y=330)
+
+    check_search_month = Radiobutton(window2, text='Search Month', font=('arial', 8),
+                                    variable=r, value='search month', command=lambda: range_view1(r.get()))
+    check_search_month.place(x=230, y=360)
+
+    check_search_phone = Radiobutton(window2, text='Search Phone #', font=('arial', 8),
+                                     variable=r, value='search phone', command=lambda: range_view1(r.get()))
+    check_search_phone.place(x=420, y=300)
+
+    check_search_location = Radiobutton(window2, text='Search Location', font=('arial', 8),
+                                     variable=r, value='search location', command=lambda: range_view1(r.get()))
+    check_search_location.place(x=420, y=330)
+
+    check_search_image = Radiobutton(window2, text='Search Country', font=('arial', 8),
+                                        variable=r, value='search country', command=lambda: range_view1(r.get()))
+    check_search_image.place(x=420, y=360)
+
+
+def range_view1(value):
+    global checkbutton_value
+    checkbutton_value = ''
+    checkbutton_value = value
+    print('range view one ' ,checkbutton_value)
+
+
+def range_view2():
+    global checkbutton_value, temp_value, search_id_name, datas
+    print('range view2')
+    temp_value = []
+    temp_id = []
+    entry_valid = 'yes'
+    # first and last name sorting
+    lower_case = list(string.ascii_lowercase[:26])
+    # id no sorting
+    for x in range(90000 ,100000):
+        temp_id.append(str(x))
+    # name and id search
+    search_id_name = []
+    search_id_first = []
+    search_id_last = []
+    search_id = []
+    search_id_month = ['january','jan','february','feb','march','mar','april','apr','may','june','jun',
+                       'july','jul','august','aug','september','sept','october','oct','november','nov','december','dec']
+    search_id_phone = []
+    search_id_location = []
+    search_id_country = []
+
+    for x in datas:
+        search_id_name1 = []
+        temp_phone = ''
+        search_id_name1.append(x[1])
+        search_id_name1.append(x[2].lower())
+        search_id_name1.append(x[3].lower())
+        search_id.append(x[1])
+        search_id_first.append(x[2].lower())
+        search_id_last.append(x[3].lower())
+        search_id_name.append(list(search_id_name1))
+        temp_phone = str(x[8][0:4]) + str(x[8][5:13])
+        search_id_phone.append(temp_phone)
+        search_id_location.append(x[10].lower())
+        search_id_country.append(x[11].lower())
+
+
+    search_id_phone = list(set(search_id_phone))
+    search_id_location = list(set(search_id_location))
+    search_id_country = list(set(search_id_country))
+    search_id_first = list(set(search_id_first))
+    search_id_last = list(set(search_id_last))
+    # print(search_id_phone)
+    # print(search_id_location)
+    # print(search_id_country)
+    # print('search id and name ',search_id)
+    # print('search first name: ',search_id_first)
+    # print('search last name: ',search_id_last)
+    try:
+        # print('checkbutton value ', checkbutton_value)
+        for x in get_range:
+            # print(type(x.get()) ,x.get())
+            temp_value.append(x.get())
+
+        print('temp_value ',temp_value)
+        if checkbutton_value == 'first name':
+            temp_value[0] = temp_value[0].lower()
+            temp_value[1] = temp_value[1].lower()
+            if temp_value[0].lower() in lower_case and temp_value[1].lower() in lower_case:
+                # print('search letter valid: ',temp_value[0] ,temp_value[1])
+                # print('search letter valid: ', sorted(temp_value))
+                range_view3()
+
+            else:
+                entry_valid = 'no'
+                print('search letter invalid: ',temp_value)
+            # print('first name ',checkbutton_value)
+        elif checkbutton_value == 'last name':
+            temp_value[0] = temp_value[0].lower()
+            temp_value[1] = temp_value[1].lower()
+            if temp_value[0].lower() in lower_case and temp_value[1].lower() in lower_case:
+                # print('search letter valid: ',temp_value[0] ,temp_value[1])
+                # print('search letter valid: ', sorted(temp_value))
+                range_view3()
+            else:
+                print('search letter invalid: ',temp_value)
+                entry_valid = 'no'
+            # print('last name ',checkbutton_value)
+
+        elif checkbutton_value == 'id no':
+            if str(temp_value[0]) in temp_id and str(temp_value[1]) in temp_id:
+                # print('search ID valid: ',temp_value[0] ,temp_value[1])
+                # print('search letter valid: ', sorted(temp_value))
+                range_view3()
+            else:
+                print('search ID invalid: ',temp_value)
+                entry_valid = 'no'
+            # print('id no ',checkbutton_value)
+
+        elif checkbutton_value == 'search name':
+            # print('search id first ',temp_value[0].lower() , search_id_first)
+            # print('search id last ', temp_value[1])
+            temp_value[0] = temp_value[0].lower()
+            temp_value[1] = temp_value[1].lower()
+            if temp_value[0] in search_id_first or temp_value[1] in search_id_last:
+                range_view3()
+            else:
+                print('search ID invalid: ',temp_value)
+                entry_valid = 'no'
+            # print('id no ',checkbutton_value)
+
+        elif checkbutton_value == 'search idno':
+            # print('search idno')
+            if temp_value[0] in search_id or temp_value[1] in search_id:
+                    range_view3()
+            else:
+                print('search ID invalid: ',temp_value)
+                entry_valid = 'no'
+            # print('id no ',checkbutton_value)
+
+        elif checkbutton_value == 'search month':
+            # print('search month')
+            temp_value[0] = temp_value[0].lower()
+            temp_value[1] = temp_value[1].lower()
+            if temp_value[0] in search_id_month and temp_value[1] in search_id_month:
+                    range_months()
+            else:
+                print('search ID invalid: ',temp_value)
+                entry_valid = 'no'
+            # print('id no ',checkbutton_value)
+
+        elif checkbutton_value == 'search phone':
+            if temp_value[0] in search_id_phone or temp_value[1] in search_id_phone:
+                range_phone()
+            else:
+                print('search ID invalid: ',temp_value)
+                entry_valid = 'no'
+
+        elif checkbutton_value == 'search location':
+            temp_value[0] = temp_value[0].lower()
+            temp_value[1] = temp_value[1].lower()
+            if temp_value[0] in search_id_location or temp_value[1] in search_id_location:
+                range_location()
+            else:
+                print('search ID invalid: ',temp_value)
+                entry_valid = 'no'
+
+        elif checkbutton_value == 'search country':
+            print('search country')
+            temp_value[0] = temp_value[0].lower()
+            temp_value[1] = temp_value[1].lower()
+            if temp_value[0] in search_id_country or temp_value[1] in search_id_country:
+                range_country()
+            else:
+                print('search ID invalid: ',temp_value)
+                entry_valid = 'no'
+
+    except Exception as e:
+        messagebox.showinfo("Range View", "Invalid Entry")
+        print('error message two: ', e)
+
+    if entry_valid == 'no':
+        messagebox.showinfo("View Records", "Invalid Entry")
+
+def range_phone():
+    global temp_value,datas
+    print('range phone ',temp_value)
+    temp1 = []
+    for x in datas:
+        temp = ''
+        temp_phone = str(x[8][0:4]) + str(x[8][5:13])
+        if temp_phone in temp_value:
+            temp = x
+            temp1.append(list(temp))
+
+    datas = temp1
+    count_people.config(text=str(1) + ' - ' + str(len(datas)))
+    load_data()
+
+
+def range_location():
+    global temp_value ,datas
+    print('range location ',temp_value)
+    temp1 = []
+    for x in datas:
+        temp = ''
+        if x[10].lower() in temp_value:
+            temp = x
+            temp1.append(list(temp))
+
+    datas = temp1
+    count_people.config(text=str(1) + ' - ' + str(len(datas)))
+    load_data()
+
+def range_country():
+    global temp_value, datas
+    print('range country ',temp_value)
+
+    temp1 = []
+    for x in datas:
+        temp = ''
+        if x[11].lower() in temp_value:
+            temp = x
+            temp1.append(list(temp))
+
+    datas = temp1
+    count_people.config(text=str(1) + ' - ' + str(len(datas)))
+    load_data()
+
+
+def range_months():
+    global datas, temp_value
+    print('range months')
+    get_months = []
+    search_id_month = ['january', 'jan', 'february', 'feb', 'march', 'mar', 'april', 'apr', 'may', 'june', 'jun',
+                       'july', 'jul', 'august', 'aug', 'september', 'sept', 'october', 'oct', 'november', 'nov',
+                       'december', 'dec']
+    search_id_month1 = [ 'jan', 'feb', 'mar', 'apr', 'may','jun',
+                       'jul', 'aug', 'sept', 'oct', 'nov', 'dec']
+
+    for x in search_id_month:
+        if x in temp_value:
+            if x == 'january' or x == 'jan':
+                get_months.append('jan')
+            elif x == 'february' or x == 'feb':
+                get_months.append('feb')
+            elif x == 'march' or x == 'mar':
+                get_months.append('mar')
+            elif x == 'april' or x == 'apr':
+                get_months.append('apr')
+            elif x == 'may':
+                get_months.append('may')
+            elif x == 'june' or x == 'jun':
+                get_months.append('jun')
+            elif x == 'july' or x == 'jul':
+                get_months.append('jul')
+            elif x == 'august' or x == 'aug':
+                get_months.append('aug')
+            elif x == 'september' or x == 'sept':
+                get_months.append('sept')
+            elif x == 'october' or x == 'oct':
+                get_months.append('oct')
+            elif x == 'november' or x == 'nov':
+                get_months.append('nov')
+            elif x == 'december' or x == 'dec':
+                get_months.append('dec')
+
+    print('get the months ', len(get_months), get_months)
+    get_months = list(dict.fromkeys(get_months))
+    print('get the months ',len(get_months) ,get_months)
+
+    get_num_months = []
+    for x in range(0, len(search_id_month1)):
+        if search_id_month1[x] in get_months:
+            get_num_months.append(x)
+
+    get_num_months = list(dict.fromkeys(get_num_months))
+    print('get the months ', len(get_num_months), get_num_months)
+
+    if len(get_months) == 1:
+        pass
+    else:
+        get_months = []
+        for x in range(0, len(search_id_month1)):
+            if x >= get_num_months[0] and x <= get_num_months[1]:
+                get_months.append(search_id_month1[x])
+
+
+    temp1 = []
+    for x in range(0, len(datas)):
+        # print(data1[x])
+        temp = []
+        num_date = ''
+        temp.append(datas[x][1])
+
+        num_date = datas[x][5].split()
+        num_date1 = num_date[1]
+        month = num_date1[3:5]
+        days = num_date1[0:2]
+        year = num_date1[6:11]
+        total = str(month) + ':' + str(days) + ':' + str(year)
+        temp.append(''.join(num_date[0]))
+        # print('total dates ',total)
+        temp.append(total)
+        temp1.append(list(temp))
+
+    # for x in temp1:
+    #     print(x)
+    # print(temp1)
+    sort_list = sorted(temp1, key=operator.itemgetter(2))
+    sort_list1 = sorted(sort_list, key=operator.itemgetter(1))
+
+    jan, feb, mar, apr, may, june = [], [], [], [], [], []
+    july, aug, sept, oct, nov, dec = [], [], [], [], [], []
+
+    # print('total lenght ', len(sort_list))
+    for x in sort_list:
+        value = x[2][0:2]
+        if value == '01':
+            jan1 = ''
+            jan1 = x
+            jan.append(list(jan1))
+
+        if value == '02':
+            feb1 = ''
+            feb1 = x
+            feb.append(list(feb1))
+
+        if value == '03':
+            mar1 = ''
+            mar1 = x
+            mar.append(list(mar1))
+
+        if value == '04':
+            apr1 = ''
+            apr1 = x
+            apr.append(list(apr1))
+
+        if value == '05':
+            may1 = ''
+            may1 = x
+            may.append(list(may1))
+
+        if value == '06':
+            june1 = ''
+            june1 = x
+            june.append(list(june1))
+
+        if value == '07':
+            july1 = ''
+            july1 = x
+            july.append(list(july1))
+
+        if value == '08':
+            aug1 = ''
+            aug1 = x
+            aug.append(list(aug1))
+
+        if value == '09':
+            sept1 = ''
+            sept1 = x
+            sept.append(list(sept1))
+
+        if value == '10':
+            oct1 = ''
+            oct1 = x
+            oct.append(list(oct1))
+
+        if value == '11':
+            nov1 = ''
+            nov1 = x
+            nov.append(list(nov1))
+
+        if value == '12':
+            dec1 = ''
+            dec1 = x
+            dec.append(list(dec1))
+
+    total_months = []
+    for x in get_months:
+        if x == 'jan':
+            # print('january')
+            month_jan = sorted_time_dates(jan)
+            total_months += month_jan
+        elif x == 'feb':
+            # print('february')
+            month_feb = sorted_time_dates(feb)
+            total_months += month_feb
+        elif x == 'mar':
+            # print('march')
+            month_mar = sorted_time_dates(mar)
+            total_months += month_mar
+        elif x  == 'apr':
+            # print('april')
+            month_apr = sorted_time_dates(apr)
+            total_months += month_apr
+        elif x == 'may':
+            # print('may')
+            month_may = sorted_time_dates(may)
+            total_months += month_may
+        elif x == 'jun':
+            # print('june')
+            month_june = sorted_time_dates(june)
+            total_months += month_june
+        elif x == 'jul':
+            # print('july')
+            month_july = sorted_time_dates(july)
+            total_months += month_july
+        elif x == 'aug':
+            # print('august')
+            month_aug = sorted_time_dates(aug)
+            total_months += month_aug
+        elif x == 'sept':
+            # print('september')
+            month_sept = sorted_time_dates(sept)
+            total_months += month_sept
+        elif x  == 'oct':
+            # print('october')
+            month_oct = sorted_time_dates(oct)
+            total_months += month_oct
+        elif x == 'nov':
+            # print('november')
+            month_nov = sorted_time_dates(nov)
+            total_months += month_nov
+        elif x  == 'dec':
+            # print('december')
+            month_dec = sorted_time_dates(dec)
+            total_months += month_dec
+
+    temp1 = []
+    count = 1
+    for x in total_months:
+        for y in datas:
+            if x[0] == y[1]:
+                # y[0] = str(count)
+                y[5] = x[1]
+                temp1.append(y)
+                count += 1
+
+    datas = temp1
+    count_people.config(text=str(1) + ' - ' + str(len(datas)))
+    load_data()
+
+def range_view3():
+    global datas, temp_value, checkbutton_value, search_id_name
+    print('range view three')
+    lower_case = list(string.ascii_lowercase[:26])
+    temp, temp1, temp2= [], [], []
+    name = []
+    temp_fname = []
+    loop = 0
+    value_letters = temp_value
+    get_name = []
+
+    if checkbutton_value == 'first name':
+        print('value letters ',value_letters[0] ,value_letters[1])
+        for data_log in range(2, entry_login5.max_row + 1):
+            id = entry_login5.cell(data_log, 2).value
+            first_name = entry_login5.cell(data_log, 3).value
+            name1 = []
+            name1.append(id)
+            name1.append(first_name)
+            name.append(list(name1))
+
+        if value_letters[0].lower() !=  value_letters[1].lower():
+
+            for x in range(0, len(lower_case)):
+                if value_letters[0] == lower_case[x] or value_letters[1] == lower_case[x]:
+                    temp.append(x)
+            # print('temp ', temp)
+
+            for x in range(0, len(lower_case)):
+                if x >= temp[0] and x <= temp[1]:
+                    temp_fname.append(lower_case[x])
+            # print('letter search: ', temp_fname)
+        else:
+
+            temp_fname.append(value_letters[0].lower())
+            # print('first letter only ',temp_fname)
+
+        # print(name)
+        for x in name:
+            temp_name = ''
+            temp_name =x
+            # print('get first letter ',temp_name[1][0].lower())
+            for y in range(0, len(temp_fname)):
+                if temp_fname[y] == temp_name[1][0].lower():
+                    get_name.append(x)
+
+        sort_fname = sorted(get_name, key=operator.itemgetter(0))
+        sort_fname1 = sorted(sort_fname, key=operator.itemgetter(1))
+        # print(name)
+        # print('sorted fname one ' ,sort_fname1 )
+
+        while loop <= len(sort_fname1) - 1:
+            for x in range(0, len(datas)):
+                if sort_fname1[loop][0] == datas[x][1] and sort_fname1[loop][1] == datas[x][2]:
+                    temp1.append(datas[x])
+            loop += 1
+
+    elif checkbutton_value == 'last name':
+        print('value letters ', value_letters[0], value_letters[1])
+        for data_log in range(2, entry_login5.max_row + 1):
+            id = entry_login5.cell(data_log, 2).value
+            last_name = entry_login5.cell(data_log, 4).value
+            name1 = []
+            name1.append(id)
+            name1.append(last_name)
+            name.append(list(name1))
+
+        if value_letters[0].lower() != value_letters[1].lower():
+            for x in range(0, len(lower_case)):
+                if value_letters[0] == lower_case[x] or value_letters[1] == lower_case[x]:
+                    temp.append(x)
+            # print('temp ', temp)
+
+            for x in range(0, len(lower_case)):
+                if x >= temp[0] and x <= temp[1]:
+                    temp_fname.append(lower_case[x])
+            # print('letter search: ', temp_fname)
+        else:
+
+            temp_fname.append(value_letters[0].lower())
+            # print('first letter only ', temp_fname)
+
+        # print(name)
+        for x in name:
+            temp_name = ''
+            temp_name = x
+            # print('get first letter ',temp_name[1][0].lower())
+            for y in range(0, len(temp_fname)):
+                if temp_fname[y] == temp_name[1][0].lower():
+                    get_name.append(x)
+
+        sort_fname = sorted(get_name, key=operator.itemgetter(0))
+        sort_fname1 = sorted(sort_fname, key=operator.itemgetter(1))
+        # print(name)
+        # print('sorted fname one ', sort_fname1)
+
+        while loop <= len(sort_fname1) - 1:
+            for x in range(0, len(datas)):
+                if sort_fname1[loop][0] == datas[x][1] and sort_fname1[loop][1] == datas[x][3]:
+                    temp1.append(datas[x])
+            loop += 1
+
+    elif checkbutton_value == 'id no':
+        for x in range(0, len(datas)):
+            if datas[x][1] >= value_letters[0] and datas[x][1] <= value_letters[1]:
+                temp1.append(datas[x])
+        # print('get id no ', temp1)
+
+    elif checkbutton_value == 'search name':
+        print('range view 3 name and id search ',search_id_name)
+        loops = 'True'
+        show_info =''
+        if loops == 'True':
+            # print('search name and id')
+            get_value = []
+            for x in search_id_name:
+                if temp_value[0] == x[1] and temp_value[1] == x[2]:
+                    get_value.append(x[0])
+                    # print('search name and id ', x)
+                    loops = 'False'
+                    show_info = 'name_last'
+
+        if loops == 'True':
+            for x in search_id_name:
+                if temp_value[0] == x[1] :
+                    get_value.append(x[0])
+                    # print('search name and id ', x)
+                    loops = 'False'
+                    show_info = 'namefirst'
+
+        if loops == 'True':
+            for x in search_id_name:
+                if temp_value[1] == x[2]:
+                    get_value.append(x[0])
+                    # print('search name and id ', x)
+                    loops = 'False'
+                    show_info = 'lastname'
+
+        if show_info == 'name_last':
+            messagebox.showinfo("View Records", "first & last name found")
+        elif show_info == 'namefirst':
+            messagebox.showinfo("View Records", "first name found")
+        elif show_info == 'lastname':
+            messagebox.showinfo("View Records", "last name found")
+
+        for x in range(0, len(datas)):
+            for y in get_value:
+                if datas[x][1] == y:
+                    temp1.append(datas[x])
+
+    elif checkbutton_value == 'search idno':
+        for x in range(0, len(datas)):
+            if str(datas[x][1]) == str(value_letters[0]) or str(datas[x][1]) == str(value_letters[1]):
+                temp1.append(datas[x])
+
+
+    # print('temp one ',temp1)
+    datas = temp1
+    count_people.config(text=str(1) + ' - ' + str(len(datas)))
+    load_data()
+
+def sorted_time_dates(get_months):
+    # print('sorted time dates')
+    temp = []
+    temp1 = []
+    months = get_months
+    sort_months = sorted(months, key=operator.itemgetter(2))
+    for x in sort_months:
+        temp.append(x[2])
+    # print(len(temp), temp)
+    for x in temp:
+        if x not in temp1:
+            temp1.append(x)
+    # print(len(temp1), temp1)
+
+    sort1 = []
+    count = 0
+    for x in temp1:
+        sort = []
+        for y in sort_months:
+            if x == y[2]:
+                # print('sort ', y[2])
+                sort.append(y)
+
+        if len(sort) != 1:
+            # print('itemgetter ', sort)
+
+            total_jan = sorted(sort, key=operator.itemgetter(1))
+            # print('sort1 item', total_jan)
+            sort1.insert(count, total_jan)
+            # sort1.append(total_jan)
+        else:
+            # print('sort1 not item', sort)
+            sort1.insert(count, sort)
+            # sort1.append(sort)
+        count += 1
+
+    final_sort = []
+    count = 0
+    for x in sort1:
+        if len(x) != 1:
+            for y in x:
+                final_sort.insert(count, y)
+                count += 1
+        else:
+            for y in x:
+                final_sort.insert(count, y)
+                count += 1
+    replace_dates1 = []
+    count = 0
+    for x in final_sort:
+        replace_dates = []
+        replace_dates.append(''.join(x[0]))
+        change_dates = list(x[2])
+        months = ''.join(change_dates[0:2])
+        days = ''.join(change_dates[3:5])
+        year = ''.join(change_dates[6:11])
+        change_dates1 = str(days) + ':' + str(months) + str(':') + str(year)
+        temp_dates = str(x[1]) + ' ' + str(change_dates1)
+        replace_dates.append(temp_dates)
+        replace_dates1.append(list(replace_dates))
+
+        count += 1
+
+    # for x in replace_dates1:
+    #     print(x)
+    # print('final sort ', len(final_sort), final_sort)
+    # print('replace dates one ', len(replace_dates1), replace_dates1)
+    return replace_dates1
+
+
+def sorted_time_dates1():
+    global datas
+    print('sort time one')
+    temp1 = []
+    for x in range(0, len(datas)):
+        # print(data1[x])
+        temp = []
+        num_date = ''
+        temp.append(datas[x][1])
+        num_date = datas[x][5].split()
+        num_date1 = num_date[1]
+        month = num_date1[3:5]
+        days = num_date1[0:2]
+        year = num_date1[6:11]
+        total = str(month) +':' + str(days) + ':' + str(year)
+        temp.append(''.join(num_date[0]))
+        # print('total dates ',total)
+        temp.append(total)
+        temp1.append(list(temp))
+
+    # for x in temp1:
+    #     print(x)
+    # print(temp1)
+    sort_list = sorted(temp1, key=operator.itemgetter(2))
+    sort_list1 = sorted(sort_list, key=operator.itemgetter(1))
+    # count = 1
+    # for x in sort_list:
+    #     print(count, x)
+    #     count += 1
+    # print('sort list1 ',sort_list1)
+    # print('sort list1 ', len(sort_list1))
+    jan, feb, mar, apr, may, june = [], [], [], [], [], []
+    july, aug, sept, oct, nov, dec = [], [], [], [], [], []
+
+    # print('total lenght ', len(sort_list))
+    for x in sort_list:
+        value = x[2][0:2]
+        if value == '01':
+            jan1 = ''
+            jan1 = x
+            jan.append(list(jan1))
+
+        if value == '02':
+            feb1 = ''
+            feb1 = x
+            feb.append(list(feb1))
+
+        if value == '03':
+            mar1 = ''
+            mar1 = x
+            mar.append(list(mar1))
+
+        if value == '04':
+            apr1 = ''
+            apr1 = x
+            apr.append(list(apr1))
+
+        if value == '05':
+            may1 = ''
+            may1 = x
+            may.append(list(may1))
+
+        if value == '06':
+            june1 = ''
+            june1 = x
+            june.append(list(june1))
+
+        if value == '07':
+            july1 = ''
+            july1 = x
+            july.append(list(july1))
+
+        if value == '08':
+            aug1 = ''
+            aug1 = x
+            aug.append(list(aug1))
+
+        if value == '09':
+            sept1 = ''
+            sept1 = x
+            sept.append(list(sept1))
+
+        if value == '10':
+            oct1 = ''
+            oct1 = x
+            oct.append(list(oct1))
+
+        if value == '11':
+            nov1 = ''
+            nov1 = x
+            nov.append(list(nov1))
+
+        if value == '12':
+            dec1 = ''
+            dec1 = x
+            dec.append(list(dec1))
+
+    # print('january')
+    month_jan = sorted_time_dates(jan)
+    # print('february')
+    month_feb = sorted_time_dates(feb)
+    # print('march')
+    month_mar = sorted_time_dates(mar)
+    # print('april')
+    month_apr = sorted_time_dates(apr)
+    # print('may')
+    month_may = sorted_time_dates(may)
+    # print('june')
+    month_june = sorted_time_dates(june)
+    # print('july')
+    month_july = sorted_time_dates(july)
+    # print('august')
+    month_aug = sorted_time_dates(aug)
+    # print('september')
+    month_sept = sorted_time_dates(sept)
+    # print('october')
+    month_oct = sorted_time_dates(oct)
+    # print('november')
+    month_nov = sorted_time_dates(nov)
+    # print('december')
+    month_dec = sorted_time_dates(dec)
+
+    total_months = month_jan + month_feb + month_mar + month_apr + month_may + month_june + month_july + month_aug + month_sept + month_oct + month_nov + month_dec
+
+    temp1 = []
+    count = 1
+    for x in total_months:
+        for y in datas:
+            if x[0] == y[1]:
+                # y[0] = str(count)
+                y[5] = x[1]
+                temp1.append(y)
+                count += 1
+
+    year_temp1 = []
+    for x in temp1:
+        # print(x[5][15:19])
+        if x[5][15:19] not in year_temp1:
+            year_temp1.append(x[5][15:19])
+    year_temp1.sort()
+
+    print('get year ', year_temp1)
+    count = 0
+    sort_year = []
+    while count <= len(year_temp1)-1:
+        for x in temp1:
+            if year_temp1[count] == x[5][15:19]:
+                sort_year.append(x)
+
+        count += 1
+
+    datas = sort_year
+    count_people.config(text=str(1) + ' - ' + str(len(datas)))
+    load_data()
+
+
+def reverse_time():
+    global datas
+    print('reverse time')
+    temp1 = []
+    for x in range(0, len(datas)):
+        # print(data1[x])
+        temp = []
+        num_date = ''
+        temp.append(datas[x][1])
+
+        num_date = datas[x][5].split()
+        num_date1 = num_date[1]
+        month = num_date1[3:5]
+        days = num_date1[0:2]
+        year = num_date1[6:11]
+        total = str(month) + ':' + str(days) + ':' + str(year)
+        temp.append(''.join(num_date[0]))
+        # print('total dates ',total)
+        temp.append(total)
+        temp1.append(list(temp))
+
+    # for x in temp1:
+    #     print(x)
+    # print(temp1)
+    sort_list = sorted(temp1, key=operator.itemgetter(2))
+    sort_list1 = sorted(sort_list, key=operator.itemgetter(1))
+
+    jan, feb, mar, apr, may, june = [], [], [], [], [], []
+    july, aug, sept, oct, nov, dec = [], [], [], [], [], []
+
+    # print('total lenght ', len(sort_list))
+    for x in sort_list:
+        value = x[2][0:2]
+        if value == '01':
+            jan1 = ''
+            jan1 = x
+            jan.append(list(jan1))
+
+        if value == '02':
+            feb1 = ''
+            feb1 = x
+            feb.append(list(feb1))
+
+        if value == '03':
+            mar1 = ''
+            mar1 = x
+            mar.append(list(mar1))
+
+        if value == '04':
+            apr1 = ''
+            apr1 = x
+            apr.append(list(apr1))
+
+        if value == '05':
+            may1 = ''
+            may1 = x
+            may.append(list(may1))
+
+        if value == '06':
+            june1 = ''
+            june1 = x
+            june.append(list(june1))
+
+        if value == '07':
+            july1 = ''
+            july1 = x
+            july.append(list(july1))
+
+        if value == '08':
+            aug1 = ''
+            aug1 = x
+            aug.append(list(aug1))
+
+        if value == '09':
+            sept1 = ''
+            sept1 = x
+            sept.append(list(sept1))
+
+        if value == '10':
+            oct1 = ''
+            oct1 = x
+            oct.append(list(oct1))
+
+        if value == '11':
+            nov1 = ''
+            nov1 = x
+            nov.append(list(nov1))
+
+        if value == '12':
+            dec1 = ''
+            dec1 = x
+            dec.append(list(dec1))
+
+    # print('january')
+    month_jan = sorted_time_dates(jan)
+    # print('february')
+    month_feb = sorted_time_dates(feb)
+    # print('march')
+    month_mar = sorted_time_dates(mar)
+    # print('april')
+    month_apr = sorted_time_dates(apr)
+    # print('may')
+    month_may = sorted_time_dates(may)
+    # print('june')
+    month_june = sorted_time_dates(june)
+    # print('july')
+    month_july = sorted_time_dates(july)
+    # print('august')
+    month_aug = sorted_time_dates(aug)
+    # print('september')
+    month_sept = sorted_time_dates(sept)
+    # print('october')
+    month_oct = sorted_time_dates(oct)
+    # print('november')
+    month_nov = sorted_time_dates(nov)
+    # print('december')
+    month_dec = sorted_time_dates(dec)
+
+    total_months = month_jan + month_feb + month_mar + month_apr + month_may + month_june + month_july + month_aug + month_sept + month_oct + month_nov + month_dec
+
+    temp1 = []
+    count = 1
+    for x in total_months:
+        for y in datas:
+            if x[0] == y[1]:
+                # y[0] = str(count)
+                y[5] = x[1]
+                temp1.append(y)
+                count += 1
+
+    # for x in datas:
+    #     print(x)
+    year_temp1 = []
+    for x in temp1:
+        # print(x[5][15:19])
+        if x[5][15:19] not in year_temp1:
+            year_temp1.append(x[5][15:19])
+    year_temp1.sort()
+
+    print('get year ', year_temp1)
+    count = 0
+    sort_year = []
+    while count <= len(year_temp1) - 1:
+        for x in temp1:
+            if year_temp1[count] == x[5][15:19]:
+                sort_year.append(x)
+
+        count += 1
+
+    datas = sort_year[::-1]
+    count_people.config(text=str(1) + ' - ' + str(len(datas)))
+    load_data()
+
+def view_records():
+    print('View Records')
+    global win, win1, display_rec
+    win = []
+    display_rec = []
+    for x in win1:
+        x.destroy()
+
+    window1 = Toplevel()
+    win.append(window1)
+    window1.resizable(0, 0)
+    window1.title('Entry I.D System')
+    app_width = 300
+    app_height = 300
+    screen_width = window1.winfo_screenwidth()
+    screen_height = window1.winfo_screenheight()
+
+    x = (screen_width / 2) - 400 - (app_width / 2)
+    y = (screen_height / 2) - 50 - (app_height / 2)
+    window1.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+
+    label = Label(window1, text="Display Records", font=('arial', 15))
+    label.place(x=70, y=10)
+
+    my_frame = Frame(window1)
+    scrollbar1 = Scrollbar(my_frame, orient=VERTICAL)
+    scrollbar1.pack(side=RIGHT, fill=Y)
+
+    scrollbar = Scrollbar(my_frame, orient=HORIZONTAL)
+    scrollbar.pack(side=BOTTOM, fill=X)
+
+    listbox = Listbox(my_frame, xscrollcommand=scrollbar.set,
+                      yscrollcommand=scrollbar1.set,
+                      font=('Consolas', 11, ''), fg='black', bg='white',
+                      activestyle="none", width=40, height=16)
+
+    listbox.insert(1, " Sort ID Number")
+    listbox.insert(2, " Reverse ID Number")
+    listbox.insert(3, " Sort First Name")
+    listbox.insert(4, " Reverse First Name")
+    listbox.insert(5, " Sort Last Name")
+    listbox.insert(6, " Reverse Last Name")
+    listbox.insert(7, " Sort Time")
+    listbox.insert(8, " Reverse Time")
+    listbox.insert(9, " Range View")
+
+    listbox.pack(side=LEFT)
+    scrollbar1.config(command=listbox.yview, width=25)
+
+    listbox.pack(side=TOP)
+    scrollbar.config(command=listbox.xview, width=20)
+
+    my_frame.pack(padx=10, pady=70)
+
+    listbox.bind('<ButtonRelease>', scroll_view_rec)
+    display_rec.append(listbox)
+
+def scroll_view_rec(e):
+    global win, display_rec
+    print('scroll view rec')
+    temp = []
+    pick = ''
+    for x in display_rec:
+        pick = list(x.get(x.curselection()))
+        pick = ''.join(pick).strip().lower()
+
+    if pick == 'sort id number':
+        sort_records()
+
+    elif pick == 'reverse id number':
+        reverse_records()
+
+    elif pick == 'sort first name':
+        sort_first()
+
+    elif pick == 'reverse first name':
+        reverse_first()
+
+    elif pick == 'sort last name':
+        sort_last()
+
+    elif pick == 'reverse last name':
+        reverse_last()
+
+    elif pick == 'sort time':
+        sorted_time_dates1()
+
+    elif pick == 'reverse time':
+        reverse_time()
+
+    elif pick == 'range view':
+        range_view()
+
+    for x in win:
+        x.destroy()
+
+
+def get_data():
+    print('get data')
+    temp_data = []
+    temp_data1 = []
+    heading = ['Count' ,'ID Number' ,'First Name' ,'Last Name' ,'Email Address' ,'Registered Dates','Alert Status',
+               'Gender','Phone Number', 'Street', 'City/Province' ,'Country','Picture']
+
+    for data_log in range(2, entry_login5.max_row + 1):
+        temp_data = []
+        for data_log1 in range(1, entry_login5.max_column + 1):
+            # print(entry_login5.cell(data_log, data_log1).value )
+            temp = entry_login5.cell(data_log, data_log1).value
+            temp_data.append(temp)
+        temp_data1.append(list(temp_data))
+        # print('')
+
+    temp_id1 = []
+    temp_id = []
+    for data_log in range(2, entry_login5.max_row + 1):
+        id = entry_login5.cell(data_log, 2).value
+        temp_id1.append(str(id))
+
+    num_id = []
+    temp_id1 = sorted(temp_id1)
+
+    print(len(temp_id1))
+    print(len(set(temp_id1)))
+    for x in range(90000 ,100000):
+        if str(x) not in temp_id1:
+            temp_id.append(str(x))
+    # print(sorted(temp_id1))
+    # print(temp_id)
+    return heading, temp_data1, temp_id
+
+
+def view_profiles():
+    global get_profile, view_profile_values,  win2, view_photos, view_count, my_tree1, no_case_selects
+    no_case_selects = ''
+    print('view profiles')
+    # get_profile = []
+    # # photo = ''
+    display_rec2 = []
+    for x in win2:
+        x.destroy()
+    try:
+        window2 = Toplevel()
+        win2.append(window2)
+        window2.resizable(0, 0)
+        window2.title('View Profile')
+        app_width = 1000
+        app_height = 400
+        screen_width = window2.winfo_screenwidth()
+        screen_height = window2.winfo_screenheight()
+
+        x = (screen_width / 2) - 50 - (app_width / 2)
+        y = (screen_height / 2) - 50 - (app_height / 2)
+        window2.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+
+        # print('id number ',view_profile_values[1])
+        alert_stats = []
+        case_status = ''
+        for data_log in range(2, entry_login5.max_row + 1):
+            photo_id = entry_login5.cell(data_log, 2).value
+            alert_status = entry_login5.cell(data_log, 7).value
+            alert_stats.append(alert_status)
+
+            if photo_id == view_profile_values[1] and alert_status == 'red':
+                txt_color = 'RED'
+            elif photo_id == view_profile_values[1] and alert_status == 'green':
+                txt_color = 'GREEN'
+
+        view_label1 = Label(window2, text='Profile Records', font=('helvetica', 15, 'underline'),fg=txt_color)
+        view_label1.place(x=455,y=3)
+
+        photo_case = []
+        for data_log in range(2, entry_login6.max_row + 1):
+            case_id = entry_login6.cell(data_log, 1).value
+            photo_case1 = []
+            for data_log1 in range(1, entry_login6.max_column + 1):
+                data = entry_login6.cell(data_log, data_log1).value
+                if str(case_id) == str(view_profile_values[1]):
+                    photo_case1.append(data)
+            if photo_case1 != []:
+                photo_case.append(list(photo_case1))
+        # print('photo case ',photo_case)
+
+        style1 = ttk.Style()
+        style1.theme_use('default')
+        style1.configure("Treeview",
+                        bg_color="#D3D3DE",
+                        fg_color="black",
+                        rowheight=25,
+                        fieldbackground="D3D3DE")
+
+        style1.map('Treeview',
+                  bg=[('selected', '#347083')])
+
+        heading = ['ID Number', 'First Name', 'Last Name', 'Record Case', 'Record Date','Record Status']
+        viewed_profile = Frame(window2)
+        viewed_profile.place(x= 20,y=40,width= 500, height=250)
+
+        tree_scroll = Scrollbar(viewed_profile, orient=VERTICAL)
+        tree_scroll.pack(side=RIGHT, fill=Y)
+
+        tree_scroll1 = Scrollbar(viewed_profile, orient=HORIZONTAL)
+        tree_scroll1.pack(side=BOTTOM, fill=X)
+
+        my_tree1 = ttk.Treeview(viewed_profile, yscrollcommand=tree_scroll.set, xscrollcommand=tree_scroll1.set,
+                               selectmode='extended', height=10)
+        my_tree1.pack()
+
+        tree_scroll.config(command=my_tree1.yview, width=15)
+        tree_scroll1.config(command=my_tree1.xview, width=15)
+
+        tree_scroll.config(command=my_tree1.yview)
+        my_tree1['columns'] = tuple(heading)
+        my_tree1.column("#0", width=0, stretch=NO)
+        for x in range(0, len(heading)):
+            my_tree1.column(heading[x], anchor=CENTER, width=150)
+
+        my_tree1.heading("#0", text='', anchor=CENTER)
+        for x in range(0, len(heading)):
+            my_tree1.heading(heading[x], text=heading[x], anchor=CENTER)
+
+        my_tree1.tag_configure('oddrow', background='white')
+        my_tree1.tag_configure('evenrow', background='lightblue')
+
+        # global count
+        count = 0
+        temp = []
+        for data in photo_case:
+            # print('data ',data)
+            if count % 2 == 0:
+                my_tree1.tag_configure('evenrow', background='lightblue')
+                my_tree1.insert(parent='', index='end', iid=count, text='',
+                               values=data, tags=('evenrow',))
+
+            else:
+                my_tree1.insert(parent='', index='end', iid=count, text='',
+                               values=data, tags=('oddrow',))
+
+            count += 1
+
+
+        for count in range(0, len(photo_temp)):
+            if photo_temp[count][0] == view_profile_values[1]:
+                get_photos = photo_temp[count][1]
+
+        for x in get_pics:
+            if x[0] == get_photos:
+                get_photos1 = x[1]
+
+        get_photos1 = []
+        # print('view photo ',view_photo)
+        for data_log in range(2, entry_login5.max_row + 1):
+            photo_id = entry_login5.cell(data_log, 2).value
+            alert_status = entry_login5.cell(data_log, 7).value
+            picture = entry_login5.cell(data_log, 13).value
+            if photo_id == view_profile_values[1]:
+                view_photos = PhotoImage(file=picture)
+
+        global rc_profile1, rd_profile1, rs_profile1
+        # view_img.after(300, view_profiles)
+        add_text = str('ID Number') +' '+str(view_profile_values[1])
+        view_img = Label(window2, text =add_text, image=view_photos,compound='top', font=('helvetica', 12))
+        view_img.place(x=530, y=40)
+
+        profile_frame = LabelFrame(window2, text='Records')
+        profile_frame.place(x=20, y=300,width=970,height=70)
+
+        rc_profile = Label(profile_frame, text="Record Case")
+        rc_profile.grid(row=0, column=0, padx=10, pady=10)
+
+        rc_profile1 = Entry(profile_frame)
+        rc_profile1.grid(row=0, column=1, padx=10, pady=10)
+
+        rd_profile = Label(profile_frame, text="Record Dates")
+        rd_profile.grid(row=0, column=2, padx=10, pady=10)
+        rd_profile1 = Entry(profile_frame)
+        rd_profile1.grid(row=0, column=3, padx=10, pady=10)
+
+
+        rs_profile = Label(profile_frame, text="Record Status")
+        rs_profile.grid(row=0, column=4, padx=10, pady=10)
+        rs_profile1 = Entry(profile_frame)
+        rs_profile1.grid(row=0, column=5, padx=10, pady=10)
+
+
+        update_profile = Button(profile_frame, text="Update", command=update_profiles, width=7,justify='center')
+        update_profile.grid(row=0, column=6, padx=10, pady=10)
+
+        add_profile = Button(profile_frame, text="Add   ", command=add_profiles, width=7)
+        add_profile.grid(row=0, column=7, padx=10, pady=10)
+
+        remove_profile = Button(profile_frame, text="Remove", command=remove_profiles, width=7)
+        remove_profile.grid(row=0, column=8, padx=10, pady=10)
+
+        my_tree1.bind('<ButtonRelease-1>', view_profiles1)
+
+        # if view_count == 1:
+        #     window.after(300, view_profiles)
+        # view_count += 1
+    except Exception as e:
+        for x in win2:
+            x.destroy()
+        print('error message two: ', e)
+
+global case_selects, no_case_selects
+case_selects, no_case_selects = '', ''
+
+def view_profiles1(e):
+    global rc_profile1, rd_profile1, rs_profile1, my_tree1, case_selects, no_case_selects
+    case_selects, no_case_selects = '', ''
+    print('view profiles one')
+    no_case_selects = my_tree1.focus()
+    print('select ',no_case_selects)
+    if no_case_selects.isnumeric() == True:
+        case_selects = my_tree1.item(no_case_selects, 'values')
+        print('values ',case_selects)
+        # view_profile_values = values
+    else:
+        pass
+
+    photo_case = []
+    for data_log in range(2, entry_login6.max_row + 1):
+        case_id = entry_login6.cell(data_log, 1).value
+        photo_case1 = []
+        for data_log1 in range(1, entry_login6.max_column + 1):
+            data = entry_login6.cell(data_log, data_log1).value
+            if str(case_id) == str(view_profile_values[1]):
+                photo_case1.append(data)
+        if photo_case1 != []:
+            photo_case.append(list(photo_case1))
+    selects = int(no_case_selects)
+    rc_profile1.delete(0, END)
+    rd_profile1.delete(0, END)
+    rs_profile1.delete(0, END)
+    rc_profile1.insert(0, photo_case[selects][3])
+    rd_profile1.insert(0, photo_case[selects][4])
+    rs_profile1.insert(0, photo_case[selects][5])
+
+    # print('get data rc ',rc_profile1.get())
+
+def update_profiles():
+    print('update profile')
+    global rc_profile1, rd_profile1, rs_profile1, case_selects, no_case_selects
+    count = 0
+    print('ID number view_profile_values[1] ',view_profile_values[1])
+    print('case selects ',case_selects)
+
+    # if view_profile_values[1] != case_selects[0] or case_selects == '':
+    #     messagebox.showinfo(title='PNP I.D System', message="No Case Records")
+    validation = 'False'
+    for data_log in range(2, entry_login6.max_row + 1):
+        case_id = entry_login6.cell(data_log, 1).value
+        if str(case_id) == str(view_profile_values[1]):
+            validation ='True'
+    if rc_profile1.get() != '' and rd_profile1.get() != '' and rs_profile1.get() != '':
+        validation = 'True'
+    else:
+        validation = 'False'
+
+    if validation == 'False':
+        messagebox.showinfo(title='PNP I.D System', message="No Case or Select Records")
+    else:
+        try:
+            if view_profile_values[1]  == case_selects[0]:
+                print('case selects ',case_selects , no_case_selects)
+                print('update ',rc_profile1.get() ,rd_profile1.get() ,rs_profile1.get())
+                record_case = rc_profile1.get()
+                record_date = rd_profile1.get()
+                record_status = rs_profile1.get()
+                rc_profile1.delete(0, END)
+                rd_profile1.delete(0, END)
+                rs_profile1.delete(0, END)
+                rc_profile1.insert(0, record_case)
+                rd_profile1.insert(0, record_date)
+                rs_profile1.insert(0,record_status)
+
+                question = messagebox.askquestion(title='PNP I.D System', message="Update Case Record")
+                if question == 'yes':
+                    for data_log in range(2, entry_login6.max_row + 1):
+                        case_id = entry_login6.cell(data_log, 1).value
+                        if str(case_id) == str(view_profile_values[1]):
+                            print('count ', count)
+                            if count == int(no_case_selects):
+                                for data_log1 in range(1, entry_login6.max_column + 1):
+                                    data = entry_login6.cell(data_log, data_log1).value
+                                    if data_log1 == 4:
+                                        print('data log1 =4 ',data_log ,data_log1 ,data)
+                                        entry_login6.cell(data_log, data_log1).value = record_case
+                                    elif data_log1 == 5:
+                                        print('data log1 = 5 ', data_log, data_log1, data)
+                                        entry_login6.cell(data_log, data_log1).value = record_date
+                                    elif data_log1 == 6:
+                                        print('data log1 =6 ', data_log, data_log1, data)
+                                        entry_login6.cell(data_log, data_log1).value = record_status
+
+                            count += 1
+
+                    wb.save('entry_login1.xlsx')
+                else:
+                    pass
+            else:
+                messagebox.showinfo(title='PNP I.D System', message="No Case Records")
+
+        except Exception as e:
+            print('error message two: ', e)
+            messagebox.showinfo(title='PNP I.D System', message="No Case Records")
+            # for x in win2:
+            #     x.destroy()
+
+    view_profiles()
+
+def add_profiles():
+    print('add profile')
+    global rc_profile1, rd_profile1, rs_profile1, case_selects, view_profile_values
+    print(view_profile_values[1])
+
+
+    case_ids = []
+    print('case selects add profile ', case_selects ,view_profile_values[1])
+
+    for data_log in range(2, entry_login5.max_row + 1):
+        case_id = entry_login5.cell(data_log, 2).value
+        case_first = entry_login5.cell(data_log, 3).value
+        case_second = entry_login5.cell(data_log, 4).value
+        if str(case_id) == view_profile_values[1]:
+            case_ids.append(case_id)
+            case_ids.append(case_first)
+            case_ids.append(case_second)
+
+    if rc_profile1.get() != '' and rs_profile1.get() != '':
+        question = messagebox.askquestion(title='PNP I.D System', message="Add Case Record")
+        if question == 'yes':
+            add_row = entry_login6.max_row
+            record_case = rc_profile1.get()
+            record_date = rd_profile1.get()
+            record_status = rs_profile1.get()
+            print('case select empty ', case_ids, record_case, record_date, record_status)
+            current = datetime.datetime.today()
+            current = current.strftime("%H:%M:%S %d:%m:%Y")
+            entry_login6.cell(add_row + 1, 1).value = case_ids[0]
+            entry_login6.cell(add_row + 1, 2).value = case_ids[1]
+            entry_login6.cell(add_row + 1, 3).value = case_ids[2]
+            entry_login6.cell(add_row + 1, 4).value = record_case
+            entry_login6.cell(add_row + 1, 5).value = current
+            entry_login6.cell(add_row + 1, 6).value = record_status
+            print('case selects add profile ', case_selects, view_profile_values[1])
+            wb.save('entry_login1.xlsx')
+
+        else:
+            pass
+    else:
+        messagebox.showinfo(title='PNP I.D System', message="Incomplete Information")
+
+    view_profiles()
+
+def remove_profiles():
+    print('remove profile')
+    global rc_profile1, rd_profile1, rs_profile1, case_selects, no_case_selects, view_profile_values
+    print('case selects ', case_selects )
+    print('case selects ', no_case_selects)
+    validation ='False'
+    for data_log in range(2, entry_login6.max_row + 1):
+        case_id = entry_login6.cell(data_log, 1).value
+        if str(case_id) == str(view_profile_values[1]):
+            validation ='True'
+
+    if no_case_selects == '':
+        messagebox.showinfo(title='PNP I.D System', message="No Select Records")
+        pass
+    elif validation == 'False':
+        messagebox.showinfo(title='PNP I.D System', message="No Select Records")
+        pass
+    else:
+        question = messagebox.askquestion(title='PNP I.D System', message="Remove Case Record")
+        count = 0
+        if question == 'yes':
+            rc_profile1.delete(0, END)
+            rd_profile1.delete(0, END)
+            rs_profile1.delete(0, END)
+
+            for data_log in range(2, entry_login6.max_row + 1):
+                case_id = entry_login6.cell(data_log, 1).value
+                if str(case_id) == str(view_profile_values[1]):
+                    print('count ', count)
+                    if count == int(no_case_selects):
+                        remove_count = data_log
+                    count += 1
+
+            print('count remove ',remove_count)
+            entry_login6.delete_rows(remove_count)
+            wb.save('entry_login1.xlsx')
+
+    view_profiles()
+
+
+global move_text, move_count, counter_move,  move_end, win3, display_mes, greetings
+move_text, move_count,  move_end, counter_move, win3, display_mes, greetings = [], 1,  'True', 1, [], [], ''
+
+def display_messages3():
+    print('display message three')
+    global win3,dis, display_mes
+    dis = []
+    display_mes = []
+    for x in win3:
+        x.destroy()
+
+    window3 = Toplevel()
+    win3.append(window3)
+    window3.resizable(0, 0)
+    window3.title('Entry I.D System')
+    app_width = 300
+    app_height = 300
+    screen_width = window3.winfo_screenwidth()
+    screen_height = window3.winfo_screenheight()
+
+    x = (screen_width / 2) - 400 - (app_width / 2)
+    y = (screen_height / 2) - 50 - (app_height / 2)
+    window3.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+
+    label = Label(window3, text="Display Message", font=('arial', 15))
+    label.place(x=70, y=10)
+
+    my_frame = Frame(window3)
+    scrollbar1 = Scrollbar(my_frame, orient=VERTICAL)
+    scrollbar1.pack(side=RIGHT, fill=Y)
+
+    scrollbar = Scrollbar(my_frame, orient=HORIZONTAL)
+    scrollbar.pack(side=BOTTOM, fill=X)
+
+    listbox = Listbox(my_frame, xscrollcommand=scrollbar.set,
+                      yscrollcommand=scrollbar1.set,
+                      font=('Consolas', 11, ''), fg='black', bg='white',
+                      activestyle="none", width=40, height=16)
+
+    listbox.insert(1, " Display Message")
+    listbox.insert(2, " Stop Message")
+    listbox.insert(3, " Reset Message")
+    listbox.insert(4, " Add Greetings")
+    listbox.insert(5, " Remove Greetings")
+
+
+    listbox.pack(side=LEFT)
+    scrollbar1.config(command=listbox.yview, width=25)
+
+    listbox.pack(side=TOP)
+    scrollbar.config(command=listbox.xview, width=20)
+
+    my_frame.pack(padx=10, pady=70)
+
+    listbox.bind('<ButtonRelease>', scroll_display_mes)
+    display_mes.append(listbox)
+
+def scroll_display_mes(e):
+    # print('scroll display mes')
+    global win3, display_mes
+    temp = []
+    pick = ''
+    for x in display_mes:
+        pick = list(x.get(x.curselection()))
+        pick = ''.join(pick).strip().lower()
+
+    if pick == 'display message':
+        display_messages2()
+
+    elif pick == 'stop message':
+        display_messages1()
+
+    elif pick == 'reset message':
+        reset_messages()
+
+    elif pick == 'add greetings':
+        add_greetings()
+
+    elif pick == 'remove greetings':
+        remove_greetings()
+
+    for x in win3:
+        x.destroy()
+
+def remove_greetings():
+    # print('remove greetings')
+    global greetings
+    greetings = ''
+
+
+def add_greetings():
+    global greetings
+    greetings = ''
+    # print('add greetings')
+    current = datetime.datetime.today()
+    current = current.strftime("%H:%M:%S")
+    get_time = list(current)
+    # print('time ', list(current))
+    # print(int(''.join(get_time[0:2])))
+
+    if int(''.join(get_time[0:2])) >= 0 and int(''.join(get_time[0:2])) < 12:
+        # print('Good Morning')
+        greetings = 'Good Morning, have a wonderful day   '
+
+    elif int(''.join(get_time[0:2])) >= 12 and int(''.join(get_time[0:2])) < 18:
+        # print('Good Afternoon')
+        greetings = 'Good Afternoon, have a nice day   '
+
+    elif int(''.join(get_time[0:2])) >= 18 and int(''.join(get_time[0:2])) < 24:
+        # print('Good Evening')
+        greetings = 'Good Evening, have a great day   '
+
+def display_messages1():
+    # print('display messages one')
+    global move_end
+    move_end = 'Stop'
+    display_messages()
+
+    # display_message.config(command=display_messages2)
+    # window.after(0, display_messages1)
+
+
+def display_messages2():
+    # print('display message two')
+    global move_end
+    move_end = 'True'
+    display_messages()
+    # window.after(0, display_messages2)
+
+
+def reset_messages():
+    global move_text, move_end
+    # print('reset_message')
+    move_text = []
+    canvas.config(bg =bg_color)
+    display_messages()
+
+def display_messages():
+   global photo_temp, move_text, move_count, move_end,counter_move, greetings
+   # print('display messages ',move_end)
+   # print('lenght message', len(move_text))
+   if len(move_text) != 0:
+       canvas.config(bg='#347083')
+       if move_end == 'True' :
+           if move_count == 1 and greetings != '':
+               move_text = greetings + move_text
+
+           text_change = move_text
+           canvas.itemconfig(text, text=  text_change )
+           # print('text change ',move_text)
+           # print('text change ', text_change)
+
+           x1, y1, x2, y2 = canvas.bbox("marquee")
+
+           if (x2 < 0 or y1 < 0):  # reset the coordinates
+               x1 = canvas.winfo_width()
+               y1 = canvas.winfo_height() // 2
+               canvas.coords("marquee", x1, y1)
+               if counter_move == 2:
+                   # move_end = 'False'
+                   counter_move = 1
+                   photo_temp, move_text = display_messages_get()
+                   move_text = greetings + move_text
+               counter_move += 1
+
+           else:
+               canvas.move("marquee", -2, 0)
+
+           value = canvas.after(1000 // fps, display_messages)
+           move_count += 1
+           # print(x1, y1, x2, y2 ,canvas.bbox("marquee"))
+           # print(canvas.move("marquee", -2, 0))
+
+
+       else:
+           pass
+   else:
+       canvas.itemconfig(text, text=move_text)
+       temp_split1 = ''
+       for x in photo_temp:
+           temp_split1 += str(' '.join(x)) + ' ' + ' ' + ' ' + ' ' + ' '
+       move_text = temp_split1
+       canvas.itemconfig(0 -500, text=move_text, font=('courier', 10, 'bold'), fill='white', tags=("marquee",),
+                                 anchor='w', offset=0)
+       x1, y1, x2, y2 = canvas.bbox("marquee")
+       # print('bbox ', x1, y1, x2, y2, canvas.bbox("marquee"))
+       x1 = canvas.winfo_width()
+       y1 = canvas.winfo_height() // 2
+       canvas.coords("marquee", x1, y1)
+       # print('x and y ',x1 ,y1)
+       photo_temp, move_text = display_messages_get()
+
+
+def display_messages_get():
+    # print('display messages get')
+    message_temp, move_text = [], ''
+    counts = 0
+    for data_log in range(2, entry_login5.max_row + 1):
+        alert_status = entry_login5.cell(data_log, 7).value
+        message_temp1 = []
+        if alert_status == 'red':
+            # if counts <= 1:
+            for data_log1 in range(2, entry_login5.max_column + 1):
+                photo_id = entry_login5.cell(data_log, data_log1).value
+                message_temp1.append(photo_id)
+            # counts += 1
+        if message_temp1 != []:
+            message_temp.append(list(message_temp1))
+
+    num_message = [str(x) for x in range(0,len(message_temp))]
+    number = 3
+    get_num =[]
+    for x in range(0 ,number):
+        num = random.choice(num_message)
+        get_num.append(int(num))
+        num_message.remove(num)
+    get_num1 = sorted(get_num)
+
+    get_num.clear()
+    for x in range(0, len(message_temp)):
+        if x in get_num1:
+            get_num.append(message_temp[x])
+    temp_split1 = ''
+    for x in get_num:
+        temp_split1 += str(' '.join(x)) + ' ' + ' ' + ' ' + ' ' + ' '
+
+    move_text = temp_split1
+    return get_num, move_text
+
+global win4, display_count, dis_images, dis_images1, search_img, dis_command ,dis_stop, dis_play, dis_back , dis_forward
+(win4, display_count, dis_images, dis_images1, search_img, dis_command, dis_stop, dis_play, dis_back ,
+dis_forward) = [], 0, '', '', '','','','','', ''
+
+
+def dis_backs():
+    global dis_command, display_count, search_img
+    print('dis backs ',display_count)
+    if display_count >= 1 and display_count <= len(search_img) -1:
+        display_count -= 1
+        dis_command = '<<'
+        display_images1()
+    # elif display_count >= 1:
+    #     display_count -= 1
+    #     dis_command = '<<'
+    #     display_images1()
+
+def dis_forwards():
+    global dis_command, display_count, search_img
+    print('dis forwards ',display_count)
+    if display_count >= 0 and display_count <= len(search_img) - 2:
+        display_count += 1
+        dis_command = '>>'
+        display_images1()
+
+    # elif display_count <= len(search_img) - 1:
+    #     display_count += 1
+    #     dis_command = '>>'
+    #     display_images1()
+
+def dis_plays():
+    global dis_command, display_count, search_img
+    print('dis plays ',display_count ,len(search_img) == 1)
+    if len(search_img) == 1:
+        pass
+    else:
+        dis_command = 'play'
+        display_images1()
+
+def dis_stops():
+    global dis_command
+    print('dis stops')
+    dis_command = 'stop'
+    display_images1()
+
+def display_images1():
+    global search_img, datas, window4, dis_images, dis_images1, display_count, dis_command, dis_stop, dis_play, dis_back , dis_forward
+    text_id = ''
+    # print('display command ',dis_command ,len(search_img) - 2 ,display_count)
+    # print('display search_img ', search_img)
+    label = Label(window4, text="Search File Image", font=('arial', 15))
+    label.place(x=230, y=10)
+
+    if dis_command == 'play':
+        dis_back.config(state='disable')
+        dis_back.place(x=65, y=340)
+        dis_forward.config(state='disable')
+        dis_forward.place(x=440, y=340)
+
+        if display_count <= len(search_img) - 2:
+            display_count += 1
+            dis_images1.after(1000, display_images1)
+
+    elif dis_command == 'stop':
+        print('display command ',dis_command)
+        dis_back.config(state='normal')
+        dis_forward.config(state='normal')
+
+    elif dis_command == '<<':
+        print('back ',dis_command)
+        # dis_images1.after(1000, display_images1)
+
+    elif dis_command == '>>':
+        print('forward ',dis_command)
+
+    # if dis_command == 'play':
+    #     pass
+    print('display count ',display_count)
+    text_id = str(search_img[display_count][2]) +' '+ str(search_img[display_count][3]) + '  ' + str('ID # - ') + str(search_img[display_count][0])
+    dis_images = PhotoImage(file=search_img[display_count][1])
+    dis_images1.config(text=text_id, image=dis_images)
+    dis_images1.place(x=65, y=60)
+
+def display_images():
+    global win4, datas,  search_img, window4, dis_images1, dis_stop, dis_play, dis_back , dis_forward, dis_images, display_count
+    display_count = 0
+    print('display images ', display_count)
+    search_img = []
+    dis_images1 = ''
+    for x in win4:
+        x.destroy()
+
+    window4 = Toplevel()
+    win4.append(window4)
+    window4.resizable(0, 0)
+    window4.title('Entry I.D System')
+    app_width = 590
+    app_height = 500
+    screen_width = window4.winfo_screenwidth()
+    screen_height = window4.winfo_screenheight()
+
+    x = (screen_width / 2) - 200 - (app_width / 2)
+    y = (screen_height / 2) - 50 - (app_height / 2)
+    window4.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+
+    for x in datas:
+        search_img1 = []
+        search_img1.append(x[1].lower())
+        search_img1.append(x[12].lower())
+        search_img1.append(x[2])
+        search_img1.append(x[3])
+        search_img.append(list(search_img1))
+
+    text_id = str(search_img[display_count][2]) +' '+ str(search_img[display_count][3]) + '  ' + str('ID # - ') + str(search_img[display_count][0])
+    dis_images = PhotoImage(file=search_img[0][1])
+    dis_images1 = Label(window4, text=text_id, font=('arial', 15), image=dis_images, compound='top')
+    dis_images1.place(x=65, y=60)
+
+    dis_back = Button(window4, text='<<', font=('arial', 9), width=10, command=dis_backs, state='disable')
+    dis_back.place(x=65, y=340)
+
+    dis_forward = Button(window4, text='>>', font=('arial', 9), width=10, command=dis_forwards, state='disable')
+    dis_forward.place(x=440, y=340)
+
+    dis_play = Button(window4, text='Play', font=('arial', 9), width=10, command=dis_plays)
+    dis_play.place(x=200, y=340)
+
+    dis_stop = Button(window4, text='Stop', font=('arial', 9), width=10, command=dis_stops)
+    dis_stop.place(x=300, y=340)
+
+    # for data_log in range(2, entry_login5.max_row + 1):
+    #     search_img1 = []
+    #     get_id = entry_login5.cell(data_log, 2).value
+    #     get_img = entry_login5.cell(data_log, 13).value
+    #     search_img1.append(get_id)
+    #     search_img1.append(get_img)
+    #     search_img.append(list(search_img1))
+
+    # display_images1()
+
+
+def display_graph_month(value_months, value_year):
+    global graph_count
+    # print('display graph month ', value_months, str(value_year))
+    for x in range (0, len(graph_count)):
+        if x % 2 == 0:
+            if str(value_year) == ''.join(graph_count[x]):
+                index = 0
+                # print('index ',graph_count[x] )
+                index = x + 1
+
+    # print('count and index ',graph_count[index -1], graph_count[index])
+    # print('count and index ', graph_count[index][0])
+    if value_months == '01':
+        count = graph_count[index][0] + 1
+        graph_count[index][0] = count
+    elif value_months == '02':
+        count = graph_count[index][1] + 1
+        graph_count[index][1] = count
+    elif value_months == '03':
+        count = graph_count[index][2] + 1
+        graph_count[index][2] = count
+    elif value_months == '04':
+        count = graph_count[index][3] + 1
+        graph_count[index][3] = count
+    elif value_months == '05':
+        count = graph_count[index][4] + 1
+        graph_count[index][4] = count
+    elif value_months == '06':
+        count = graph_count[index][5] + 1
+        graph_count[index][5] = count
+    elif value_months == '07':
+        count = graph_count[index][6] + 1
+        graph_count[index][6] = count
+    elif value_months == '08':
+        count = graph_count[index][7] + 1
+        graph_count[index][7] = count
+    elif value_months == '09':
+        count = graph_count[index][8] + 1
+        graph_count[index][8] = count
+    elif value_months == '10':
+        count = graph_count[index][9] + 1
+        graph_count[index][9] = count
+    elif value_months == '11':
+        count = graph_count[index][10] + 1
+        graph_count[index][10] = count
+    elif value_months == '12':
+        count = graph_count[index][11] + 1
+        graph_count[index][11] = count
+    return graph_count
+
+
+
+def display_graph():
+    global datas, graph_count, graph_count_temp, graph_dis_registration, graph_dis_year, total_graph_months
+    graph_count, graph_count_temp, graph_dis_registration, graph_dis_year, total_graph_months= [] ,'','','',''
+
+    graph_year = ['2021', '2022', '2023']
+    graph_count = []
+    for x in range(0, len(graph_year)):
+        graph_count1 = []
+        graph_count1.append(graph_year[x])
+        graph_count.append(list(graph_count1))
+        graph_count1 = []
+        for y in range(0, 12):
+            graph_count1.append(0)
+        # print(graph_count1)
+        graph_count.append(list(graph_count1))
+
+    # for x in graph_count:
+    #     print(x)
+    # print('display graph ',graph_count)
+    count, count1 ,count2 = 0,0,0
+    for x in datas:
+        if (x[5][15:19]) == '2021':
+            count += 1
+            # print(x[5][12:14])
+            get_months = x[5][12:14]
+            get_year = '2021'
+            total_graph_months = display_graph_month(get_months ,get_year)
+        elif (x[5][15:19]) == '2022':
+            count1 += 1
+            get_months = x[5][12:14]
+            get_year = '2022'
+            total_graph_months = display_graph_month(get_months, get_year)
+        elif (x[5][15:19]) == '2023':
+            count2 += 1
+            get_months = x[5][12:14]
+            get_year = '2023'
+            total_graph_months = display_graph_month(get_months, get_year)
+    print('total graph months ',total_graph_months)
+    total = []
+    total1 = 0
+    counter = 1
+    for x in total_graph_months:
+        total1 = []
+        sum = 0
+        if counter % 2 == 0:
+            # print('modulus two' ,x)
+            for y in range(0 ,len(x)):
+                sum += x[y]
+            total.append(sum)
+            # total.append(list(total1))
+        counter += 1
+
+    print('total: ',total)
+    print('registration for 2021: ',count ,total[0])
+    print('registration for 2022: ',count1 ,total[1])
+    print('registration for 2023: ',count2 ,total[2])
+    print('registration for total: ', total[0] + total[1] + total[2])
+
+    graph_dis_registration = [count ,count1, count2]
+    graph_dis_year = ['2021', '2022' ,'2023']
+
+    # plt.rcParams['axes.prop_cycle'] = plt.cycler(
+    #     color =['#4C2A85' ,'#8E96FF' ,'#957DAD' ,'#5E366E' ,'#A98CCC'])
+    #
+    # fig1, ax1 = plt.subplots()
+    # ax1.bar(year ,registration)
+    # ax1.set_title('Data of Registration')
+    # ax1.set_xlabel('Year')
+    # ax1.set_ylabel('Registraion Turnout')
+    # plt.show()
+
+    global win4, graph_list, graph_listbox, graph_entry, graph_entry1
+    graph_list, graph_listbox, graph_entry, graph_entry1 = [], [], '', ''
+    for x in win4:
+        x.destroy()
+
+    window4 = Toplevel()
+    win4.append(window4)
+    window4.resizable(0, 0)
+    window4.title('Entry I.D System')
+    app_width = 550
+    app_height = 370
+    screen_width = window4.winfo_screenwidth()
+    screen_height = window4.winfo_screenheight()
+
+    x = (screen_width / 2) - 300 - (app_width / 2)
+    y = (screen_height / 2) - 50 - (app_height / 2)
+    window4.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+
+    graph_frame = Label(window4, text="Graph Display", font=('arial', 15))
+    graph_frame.pack(pady=10)
+
+    graph_frame1 = Label(window4, text="Type of View", font=('arial', 11))
+    graph_frame1.place(x=20, y=60)
+
+    graph_frame6 = Label(window4, text="Kinds of Graph", font=('arial', 11))
+    graph_frame6.place(x=300, y=60)
+
+    # first frame
+    my_frame = Frame(window4)
+    scrollbar1 = Scrollbar(my_frame, orient=VERTICAL)
+    scrollbar1.pack(side=RIGHT, fill=Y)
+
+    scrollbar = Scrollbar(my_frame, orient=HORIZONTAL)
+    scrollbar.pack(side=BOTTOM, fill=X)
+
+    graph_listbox = Listbox(my_frame, xscrollcommand=scrollbar.set,
+                            yscrollcommand=scrollbar1.set,
+                            font=('Consolas', 11, ''), fg='black', bg='white',
+                            activestyle="none", width=25, height=6, selectmode=MULTIPLE)
+
+    graph_listbox.insert(1, " A - Graph 2021")
+    graph_listbox.insert(2, " B - Graph 2022")
+    graph_listbox.insert(3, " C - Graph 2023")
+    graph_listbox.insert(4, " D - Graph Total Year")
+
+    graph_listbox.pack(side=LEFT)
+    scrollbar1.config(command=graph_listbox.yview, width=25)
+
+    graph_listbox.pack(side=TOP)
+    scrollbar.config(command=graph_listbox.xview, width=20)
+    my_frame.place(x=20, y=90)
+
+    # second frame
+    my_frame1 = Frame(window4)
+    scrollbar1 = Scrollbar(my_frame1, orient=VERTICAL)
+    scrollbar1.pack(side=RIGHT, fill=Y)
+
+    scrollbar = Scrollbar(my_frame1, orient=HORIZONTAL)
+    scrollbar.pack(side=BOTTOM, fill=X)
+
+    graph_listbox = Listbox(my_frame1, xscrollcommand=scrollbar.set,
+                            yscrollcommand=scrollbar1.set,
+                            font=('Consolas', 11, ''), fg='black', bg='white',
+                            activestyle="none", width=25, height=6, selectmode=MULTIPLE)
+
+    graph_listbox.insert(1, " 1 - Bar Graph")
+    graph_listbox.insert(2, " 2 - Barh Graph")
+    graph_listbox.insert(3, " 3 - Fill Betwwen Graph")
+    graph_listbox.insert(4, " 4 - Plot Graph")
+    graph_listbox.insert(5, " 5 - Stem Graph")
+    graph_listbox.insert(6, " 6 - Scatter Graph")
+    graph_listbox.insert(7, " 7 - Stockplot Graph")
+    graph_listbox.insert(8, " 8 - Pie Graph")
+
+
+    graph_listbox.pack(side=LEFT)
+    scrollbar1.config(command=graph_listbox.yview, width=25)
+
+    graph_listbox.pack(side=TOP)
+    scrollbar.config(command=graph_listbox.xview, width=20)
+    my_frame1.place(x=300, y=90)
+
+    # labels and button
+    graph_frame14 = Label(window4, text="Pick Letter for Graph View", font=('arial', 7))
+    graph_frame14.place(x=20, y=240)
+    # graph_entry.delete(0, END)
+    graph_entry = Entry(window4, font=('arial', 15),  width=20, border=2)
+    graph_entry.place(x=20, y=260)
+
+    graph_frame15 = Label(window4, text="Pick Number to Kind of Graph", font=('arial', 7))
+    graph_frame15.place(x=300, y=240)
+    # graph_entry.delete(0, END)
+    graph_entry1 = Entry(window4, font=('arial', 15), width=20, border=2)
+    graph_entry1.place(x=300, y=260)
+
+    graph_listbox_button = Button(window4, text='Enter', font=('arial', 10), width=25, command=graph_display_year)
+    graph_listbox_button.place(x=165, y=310)
+
+    # graph_listbox_button1 = Button(window4, text='Enter', font=('arial', 10), width=20, command=graph_display_year)
+    # graph_listbox_button1.place(x=45, y=290)
+
+
+global win5
+win5 = []
+def graph_display_year():
+    global graph_list, graph_dis_registration ,graph_dis_year, total_graph_months, graph_listbox,win5, \
+        graph_listbox_button, graph_entry, graph_entry1
+    print('graph display year ')
+    months= ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+    temp_graph_listbox = []
+
+    for x in win5:
+        x.destroy()
+
+    window5 = tk.Toplevel()
+    win5.append(window5)
+    window5.title('Dashboard')
+    # window5.state('zoomed')
+
+    # app_width = 1200
+    # app_height = 630
+    # screen_width = window5.winfo_screenwidth()
+    # screen_height = window5.winfo_screenheight()
+    #
+    # x = (screen_width / 2) - (app_width / 2)
+    # y = (screen_height / 2) - 50 - (app_height / 2)
+    # window5.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+
+    # icon = PhotoImage(file='mevin_pics1.png')
+    # window5.iconphoto(True, icon)
+
+    get_entry_letter1 =list((graph_entry.get()).lower())
+    print('entry letter ', get_entry_letter1)
+    # get_entry_letter1= list(dict.fromkeys(get_entry_letter1))
+    # print('entry letter ',get_entry_letter1)
+    get_entry_letter2 = []
+    for x in get_entry_letter1:
+        if x in ['a','b','c','d']:
+            get_entry_letter2.append(x)
+    # print('entry letter ', get_entry_letter)
+    get_entry_letter = ''
+    get_entry_letter = get_entry_letter2
+    if len(get_entry_letter2) >= 3:
+        get_entry_letter = ''
+        get_entry_letter = get_entry_letter2[0:4]
+
+    print('entry letter ', get_entry_letter1)
+
+    get_figs = []
+    for x in temp_graph_listbox:
+        # print('listbox ',x)
+        get_figs.append(x)
+
+    get_entry_number1 = list(str(graph_entry1.get()))
+    print('entry letter ', get_entry_number1)
+    # get_entry_number1 = list(dict.fromkeys(get_entry_number1))
+    # print('entry letter ', get_entry_number1)
+    get_entry_number2 = []
+    for x in get_entry_number1:
+        if x in ['1', '2', '3', '4', '5', '6', '7', '8']:
+            get_entry_number2.append(x)
+    # print('entry letter ', get_entry_number2)
+
+    get_entry_number = []
+    for x in range(0 ,len(get_entry_letter)):
+        get_entry_number.append(get_entry_number2[x])
+
+    # print('entry letter ', get_entry_letter)
+    # print('entry number ', get_entry_number)
+    join_letter_number =[]
+    for x in range(0 ,len(get_entry_letter)):
+        join_letter_number1 = []
+        join_letter_number1.append(''.join(get_entry_letter[x]))
+        join_letter_number1.append(int(''.join(get_entry_number[x])))
+        join_letter_number.append(list(join_letter_number1))
+
+
+    print('join_letter_number ',join_letter_number)
+    sort_join_letter_number = sorted(join_letter_number, key=operator.itemgetter(0))
+    print('sort_join_letter_number ',sort_join_letter_number)
+
+    # plt.rcParams['axes.prop_cycle'] = plt.cycler(
+    #     color =['teal' ,'indigo' , 'midnightblue' ,'firebrick','sienna', 'olivedrab'])
+    # plt.rcParams['axes.prop_cycle']
+    # plt.rcParams['figure.figsize'] = [1,1]
+    colors = ['teal', 'indigo', 'midnightblue', 'firebrick', 'darkgoldenrod', 'olivedrab','maroon',
+              'navy' ,'slategrey', 'darkorange', 'lightseagreen' ]
+    temp = []
+    plt.style.use('ggplot')
+    for x in sort_join_letter_number:
+        if x[0] == 'a':
+            print('pick graph 2021 ', total_graph_months[1])
+            values = x[1]
+            fig1, ax1 = plt.subplots(figsize=(6, 3))
+            fig1.set_facecolor('aliceblue')
+            ax1.set_facecolor('whitesmoke')
+            colored = random.choice(colors)
+            colored1 = random.choice(colors)
+            if values == 1:
+                design = ax1.bar(months, total_graph_months[1]  , color = colored ,label ='count',alpha=0.5)
+                # addlabels(months, total_graph_months[1])
+                ax1.bar_label(design, color=colored1, label_type='center')
+            elif values == 2:
+                design = ax1.barh(months, total_graph_months[1] , color = colored ,label ='count',alpha=0.5)
+                ax1.bar_label(design, color=colored1, label_type='center')
+            elif values == 3:
+                # design = ax1.fill_between(months, total_graph_months[1] , color = colored)
+                fillx = list(map(lambda x: x+2 ,total_graph_months[1]))
+                fillx1 = list(map(lambda x: x-2 ,total_graph_months[1]))
+                y = fillx
+                y1 =fillx1
+                design =ax1.plot(months, total_graph_months[1] , color = colored,label ='count')
+                design = ax1.fill_between(months, y, y1, color='lightblue',alpha=0.5 )
+                # addlabels(months, total_graph_months[1])
+                for i in range(len(months)):
+                    ax1.text(months[i], total_graph_months[1][i], str('  ' +str(total_graph_months[1][i])) ,color=colored1)
+                    # plt.text(i, 10, y[i], ha='center',color='white')
+                # ax1.text(0, 33, str('    ' +str(total_graph_months[1][0])))
+                # addlabels(months, total_graph_months[1])
+
+            elif values == 4:
+                design = ax1.plot(months, total_graph_months[1] , color = colored ,label ='count',alpha=0.5)
+                for i in range(len(months)):
+                    ax1.text(months[i], total_graph_months[1][i], str('  ' +str(total_graph_months[1][i])) ,color=colored1)
+                # ax1.plot(design, color='white', label_type='center')
+                # addlabels(months, total_graph_months[1])
+            elif values == 5:
+                design = ax1.stem(months, total_graph_months[1] ,label ='count')
+                # ax1.stem(design, color='white', label_type='center')
+                for i in range(len(months)):
+                    ax1.text(months[i], total_graph_months[1][i], str('  ' +str(total_graph_months[1][i])) ,color=colored1)
+                # addlabels(months, total_graph_months[1])
+            elif values == 6:
+                design = ax1.scatter(months, total_graph_months[1] , color = colored ,label ='count',alpha=0.5)
+                for i in range(len(months)):
+                    ax1.text(months[i], total_graph_months[1][i], str('  ' +str(total_graph_months[1][i])) ,color=colored1)
+                # ax1.scatter(design, color='white', label_type='center')
+                # addlabels(months, total_graph_months[1])
+            elif values == 7:
+                design = ax1.stackplot(months, total_graph_months[1] , color = colored,alpha=0.5 )
+                for i in range(len(months)):
+                    ax1.text(months[i], total_graph_months[1][i], str('  ' +str(total_graph_months[1][i])) ,color=colored1)
+                ax1.legend(['count'], loc='lower left')
+                # ax1.stackplot(design, color='white', label_type='center')
+                # addlabels(months, total_graph_months[1])
+            elif values == 8:
+                ax1.pie(total_graph_months[1] ,labels =months,autopct='%1.1f%%')
+                ax1.legend(total_graph_months[1], loc='upper left')
+                ax1.axis('equal')
+            else:
+                pass
+
+            graph_name = graph_names(values)
+            ax1.set_title('Data Registration for 2021  ' + graph_name ,size =13, color='darkslategrey')
+            # ax1.set_xlabel('Months 2021')
+            # if values != 8:
+            ax1.set_ylabel('Registration Turnout' ,size =13 , color='darkslategrey')
+
+            # ax1.legend()
+            if values != 8 and values != 7:
+                ax1.legend(loc='lower left')
+            # ax1.axis('equal')
+            # plt.tight_layout()
+            temp1 = []
+            # temp1.append(' Graph 2021')
+            temp1.append('a')
+            temp1.append(fig1)
+            temp.append(list(temp1))
+            # plt.show()
+
+        elif x[0] == 'b':
+            print('pick graph 2022 ', total_graph_months[3])
+            values1 = x[1]
+            fig2, ax2 = plt.subplots(figsize=(6, 3))
+            fig2.set_facecolor('aliceblue')
+            ax2.set_facecolor('whitesmoke')
+            colored = random.choice(colors)
+            colored1 = random.choice(colors)
+
+            # ax2.barh(months, total_graph_months[3])
+            if values1 == 1:
+                # ax2.bar(months, total_graph_months[3] ,color = colored)
+                design = ax2.bar(months, total_graph_months[3], color=colored, label='count',alpha=0.5)
+                ax2.bar_label(design, color=colored1, label_type='center')
+            elif values1 == 2:
+                # ax2.barh(months, total_graph_months[3] ,color = colored)
+                design = ax2.barh(months, total_graph_months[3], color=colored, label='count',alpha=0.5)
+                ax2.bar_label(design, color=colored1, label_type='center')
+            elif values1 == 3:
+                # ax2.fill_between(months, total_graph_months[3] ,color = colored)
+                fillx = list(map(lambda x: x + 2, total_graph_months[3]))
+                fillx1 = list(map(lambda x: x - 2, total_graph_months[3]))
+                y = fillx
+                y1 = fillx1
+                design = ax2.plot(months, total_graph_months[3], color=colored ,label ='count')
+                design = ax2.fill_between(months, y, y1, color='lightblue', alpha=0.5)
+                for i in range(len(months)):
+                    ax2.text(months[i], total_graph_months[3][i], str('  ' + str(total_graph_months[3][i])),
+                             color=colored1)
+            elif values1 == 4:
+                # ax2.plot(months, total_graph_months[3] ,color = colored)
+
+                design = ax2.plot(months, total_graph_months[3], color=colored, label='count',alpha=0.5)
+                for i in range(len(months)):
+                    ax2.text(months[i], total_graph_months[3][i], str('  ' + str(total_graph_months[3][i])),
+                             color=colored1)
+
+            elif values1 == 5:
+                # ax2.stem(months, total_graph_months[3] )
+                design = ax2.stem(months, total_graph_months[3], label='count')
+                for i in range(len(months)):
+                    ax2.text(months[i], total_graph_months[3][i], str('  ' + str(total_graph_months[3][i])),
+                             color=colored1)
+
+            elif values1 == 6:
+                # ax2.scatter(months, total_graph_months[3] ,color = colored)
+                design = ax2.scatter(months, total_graph_months[3], color=colored, label='count',alpha=0.5)
+                for i in range(len(months)):
+                    ax2.text(months[i], total_graph_months[3][i], str('  ' + str(total_graph_months[3][i])),
+                             color=colored1)
+
+            elif values1 == 7:
+                # ax2.stackplot(months, total_graph_months[3] ,color = colored)
+                design = ax2.stackplot(months, total_graph_months[3], color=colored,alpha=0.5)
+                for i in range(len(months)):
+                    ax2.text(months[i], total_graph_months[3][i], str('  ' + str(total_graph_months[3][i])),
+                             color=colored1)
+                ax2.legend(['count'], loc='lower left')
+
+            elif values1 == 8:
+                # ax2.pie(total_graph_months[3] ,labels =months ,autopct='%1.1f%%' )
+                ax2.pie(total_graph_months[3], labels=months, autopct='%1.1f%%')
+                ax2.legend(total_graph_months[3], loc='upper left')
+                ax2.axis('equal')
+            else:
+                pass
+            # graph_name = graph_names(values1)
+            # ax2.set_title('Data Registration for 2022  ' + graph_name)
+            # # ax2.set_xlabel('Months 2022')
+            # ax2.set_ylabel('Registraion Turnout')
+            # temp1 = []
+            # # temp1.append(' Graph 2022')
+            # temp1.append('b')
+            # temp1.append(fig2)
+            # temp.append(list(temp1))
+            # # plt.show()
+
+            graph_name = graph_names(values1)
+            ax2.set_title('Data Registration for 2022  ' + graph_name, size=13, color='darkslategrey')
+            ax2.set_ylabel('Registration Turnout', size=13, color='darkslategrey')
+
+            if values1 != 8 and values1 != 7:
+                ax2.legend(loc='lower left')
+            temp1 = []
+            temp1.append('b')
+            temp1.append(fig2)
+            temp.append(list(temp1))
+            # plt.show()
+
+        elif x[0] == 'c':
+            # values2 = x[1]
+            # fig3, ax3 = plt.subplots(figsize=(6, 3))
+            # fig3.set_facecolor('aliceblue')
+            # # ax3.set_facecolor('whitesmoke')
+            # colored = random.choice(colors)
+            # # ax3.fill_between(months, total_graph_months[5])
+
+            print('pick graph 2023 ', total_graph_months[5])
+            values2 = x[1]
+            fig3, ax3 = plt.subplots(figsize=(6, 3))
+            fig3.set_facecolor('aliceblue')
+            ax3.set_facecolor('whitesmoke')
+            colored = random.choice(colors)
+            colored1 = random.choice(colors)
+
+            if values2 == 1:
+                # ax3.bar(months, total_graph_months[5] ,color = colored )
+                design = ax3.bar(months, total_graph_months[5], color=colored, label='count',alpha=0.5)
+                ax3.bar_label(design, color=colored1, label_type='center')
+            elif values2 == 2:
+                # ax3.barh(months, total_graph_months[5] ,color = colored)
+                design = ax3.barh(months, total_graph_months[5], color=colored, label='count',alpha=0.5)
+                ax3.bar_label(design, color=colored1, label_type='center')
+            elif values2 == 3:
+                # ax3.fill_between(months, total_graph_months[5] ,color = colored)
+
+                fillx = list(map(lambda x: x + 2, total_graph_months[5]))
+                fillx1 = list(map(lambda x: x - 2, total_graph_months[5]))
+                y = fillx
+                y1 = fillx1
+                design = ax3.plot(months, total_graph_months[5], color=colored,label ='count')
+                design = ax3.fill_between(months, y, y1, color='lightblue', alpha=0.5)
+                for i in range(len(months)):
+                    ax3.text(months[i], total_graph_months[5][i], str('  ' + str(total_graph_months[5][i])),
+                             color=colored1)
+            elif values2 == 4:
+                # ax3.plot(months, total_graph_months[5] ,color = colored)
+                design = ax3.plot(months, total_graph_months[5], color=colored, label='count',alpha=0.5)
+                for i in range(len(months)):
+                    ax3.text(months[i], total_graph_months[5][i], str('  ' + str(total_graph_months[5][i])),
+                             color=colored1)
+            elif values2 == 5:
+                # ax3.stem(months, total_graph_months[5] )
+                design = ax3.stem(months, total_graph_months[5], label='count')
+                for i in range(len(months)):
+                    ax3.text(months[i], total_graph_months[5][i], str('  ' + str(total_graph_months[5][i])),
+                             color=colored1)
+            elif values2 == 6:
+                # ax3.scatter(months, total_graph_months[5] ,color = colored)
+                design = ax3.scatter(months, total_graph_months[5], color=colored, label='count',alpha=0.5)
+                for i in range(len(months)):
+                    ax3.text(months[i], total_graph_months[5][i], str('  ' + str(total_graph_months[5][i])),
+                             color=colored1)
+            elif values2 == 7:
+                # ax3.stackplot(months, total_graph_months[5] ,color = colored)
+                design = ax3.stackplot(months, total_graph_months[5], color=colored,alpha=0.5)
+                for i in range(len(months)):
+                    ax3.text(months[i], total_graph_months[5][i], str('  ' + str(total_graph_months[5][i])),
+                             color=colored1)
+                ax3.legend(['count'], loc='lower left')
+            elif values2 == 8:
+                # ax3.pie(total_graph_months[5] ,labels =months ,autopct='%1.1f%%' )
+                ax3.pie(total_graph_months[5], labels=months, autopct='%1.1f%%')
+                ax3.legend(total_graph_months[5], loc='upper left')
+                ax3.axis('equal')
+            else:
+                pass
+            # graph_name = graph_names(values2)
+            # ax3.set_title('Data Registration of 2023  ' + graph_name)
+            # # ax3.set_xlabel('Months 2023')
+            # ax3.set_ylabel('Registraion Turnout')
+            # temp1 = []
+            # # temp1.append(' Graph 2023')
+            # temp1.append('c')
+            # temp1.append(fig3)
+            # temp.append(list(temp1))
+            # # plt.show()
+
+            graph_name = graph_names(values2)
+            ax3.set_title('Data Registration for 2023  ' + graph_name, size=13, color='darkslategrey')
+            ax3.set_ylabel('Registration Turnout', size=13, color='darkslategrey')
+
+            if values2 != 8 and values2 != 7:
+                ax3.legend(loc='lower left')
+            temp1 = []
+            temp1.append('c')
+            temp1.append(fig3)
+            temp.append(list(temp1))
+            # plt.show()
+
+        elif x[0] == 'd':
+            # values3 = x[1]
+            # fig4, ax4 = plt.subplots(figsize=(6, 3))
+            # fig4.set_facecolor('aliceblue')
+            # # ax4.set_facecolor('whitesmoke')
+            # colored = random.choice(colors)
+            # # ax4.plot(graph_dis_year ,graph_dis_registration)
+
+            print('Registration Data of Total Year ', graph_dis_registration)
+            values3 = x[1]
+            fig4, ax4 = plt.subplots(figsize=(6, 3))
+            fig4.set_facecolor('aliceblue')
+            ax4.set_facecolor('whitesmoke')
+            colored = random.choice(colors)
+            colored1 = random.choice(colors)
+            if values3 == 1:
+                # ax4.bar(graph_dis_year, graph_dis_registration ,color = colored)
+                design = ax4.bar(graph_dis_year, graph_dis_registration , color=colored, label='count',alpha=0.5)
+                ax4.bar_label(design, color=colored1, label_type='center')
+
+            elif values3 == 2:
+                # ax4.barh(graph_dis_year, graph_dis_registration ,color = colored)
+                design = ax4.barh(graph_dis_year, graph_dis_registration, color=colored, label='count',alpha=0.5)
+                ax4.bar_label(design, color=colored1, label_type='center')
+            elif values3 == 3:
+                # ax4.fill_between(graph_dis_year, graph_dis_registration,color = colored)
+
+                fillx = list(map(lambda x: x + 2, graph_dis_registration))
+                fillx1 = list(map(lambda x: x - 2, graph_dis_registration))
+                y = fillx
+                y1 = fillx1
+                design = ax4.plot(graph_dis_year, graph_dis_registration, color=colored,label ='count')
+                design = ax4.fill_between(graph_dis_year, y, y1, color='lightblue', alpha=0.5)
+                for i in range(len(graph_dis_year)):
+                    ax4.text(graph_dis_year[i], graph_dis_registration[i], str('  ' + str(graph_dis_registration[i])),
+                             color=colored1)
+            elif values3 == 4:
+                # ax4.plot(graph_dis_year, graph_dis_registration ,color = colored)
+
+                design = ax4.plot(graph_dis_year, graph_dis_registration, color=colored, label='count',alpha=0.5)
+                for i in range(len(graph_dis_year)):
+                    ax4.text(graph_dis_year[i], graph_dis_registration[i], str('  ' + str(graph_dis_registration[i])),
+                             color=colored1)
+            elif values3 == 5:
+                # ax4.stem(graph_dis_year, graph_dis_registration )
+
+                design = ax4.stem(graph_dis_year, graph_dis_registration, label='count')
+                for i in range(len(graph_dis_year)):
+                    ax4.text(graph_dis_year[i], graph_dis_registration[i], str('  ' + str(graph_dis_registration[i])),
+                             color=colored1)
+            elif values3 == 6:
+                # ax4.scatter(graph_dis_year, graph_dis_registration ,color = colored)
+
+                design = ax4.scatter(graph_dis_year, graph_dis_registration, color=colored, label='count',alpha=0.5)
+                for i in range(len(graph_dis_year)):
+                    ax4.text(graph_dis_year[i], graph_dis_registration[i], str('  ' + str(graph_dis_registration[i])),
+                             color=colored1)
+            elif values3 == 7:
+                # ax4.stackplot(graph_dis_year, graph_dis_registration ,color = colored)
+
+                design = ax4.stackplot(graph_dis_year, graph_dis_registration, color=colored,alpha=0.5)
+                for i in range(len(graph_dis_year)):
+                    ax4.text(graph_dis_year[i], graph_dis_registration[i], str('  ' + str(graph_dis_registration[i])),
+                             color=colored1)
+                ax4.legend(['count'], loc='lower left')
+            elif values3 == 8:
+                # ax4.pie(graph_dis_registration ,labels months=graph_dis_year,autopct='%1.1f%%' )
+                ax4.pie(graph_dis_registration, labels=graph_dis_year, autopct='%1.1f%%')
+                ax4.legend(graph_dis_registration, loc='upper left')
+                ax4.axis('equal')
+            else:
+                pass
+            # graph_name = graph_names(values3)
+            # ax4.set_title('Registration Data of Total Year  ' + graph_name)
+            # # ax4.set_xlabel('Total Year')
+            # ax4.set_ylabel('Registraion Turnout', color ='blue')
+            # temp1 = []
+            # # temp1.append(' Graph Total Year')
+            # temp1.append('d')
+            # temp1.append(fig4)
+            # temp.append(list(temp1))
+            graph_name = graph_names(values3)
+            ax4.set_title('Registration Data of Total Year  ' + graph_name, size=13, color='darkslategrey')
+            ax4.set_ylabel('Registration Turnout', size=13, color='darkslategrey')
+
+            if values3 != 8 and values3 != 7:
+                ax4.legend(loc='lower left')
+            temp1 = []
+            temp1.append('d')
+            temp1.append(fig4)
+            temp.append(list(temp1))
+            # plt.show()
+
+    get_figs1 = []
+    counts = 0
+    for x in get_entry_letter:
+        counts = 0
+        for y in range(0, len(temp)):
+            if counts == 0:
+                if x == temp[y][0]:
+                    get_figs1.append(temp[y])
+                    temp.pop(y)
+                    counts += 1
+
+    print('get entry letter', get_entry_letter)
+    print('join letter number ', join_letter_number)
+    print('get value of temp ', temp)
+    print('get value of get figs1 ', get_figs1)
+
+    for x in range (0 ,len(get_figs1)):
+        if x == 0:
+            # print('get value of graph ',get_figs1[x][1])
+            value = get_figs1[x][1]
+            upper_frame = tk.Frame(window5)
+            upper_frame.pack(fill='both', expand=True)
+            canvas1 = FigureCanvasTkAgg(value, upper_frame)
+            canvas1.draw()
+            canvas1.get_tk_widget().pack(side='left',fill='both',expand=True)
+
+        elif x == 1:
+            value = get_figs1[x][1]
+            canvas2 = FigureCanvasTkAgg(value, upper_frame)
+            canvas2.draw()
+            canvas2.get_tk_widget().pack(side='left', fill='both', expand=True)
+
+        elif x == 2:
+            value = get_figs1[x][1]
+            lower_frame = tk.Frame(window5)
+            lower_frame.pack(fill='both', expand=True)
+            canvas3 = FigureCanvasTkAgg(value, lower_frame)
+            canvas3.draw()
+            canvas3.get_tk_widget().pack(side='left', fill='both', expand=True)
+
+        elif x == 3:
+            value = get_figs1[x][1]
+            canvas4 = FigureCanvasTkAgg(value, lower_frame)
+            canvas4.draw()
+            canvas4.get_tk_widget().pack(side='left', fill='both', expand=True)
+
+    for x in win4:
+        x.destroy()
+
+def addlabels(get_x, get_y):
+    # for i in range(len(x)):
+    #     print(i ,y[i] // 2,  y[i])
+    #     plt.text(i, 10, y[i], ha='center', color='black')
+    #     # plt.text(i, 10, y[i], ha='center',color='white')
+    # get_x = total_graph_months[1]
+    print(get_x ,get_y)
+    for i in range(len(get_x)):
+        # print(months[i], total_graph_months[1][i])
+        plt.text(get_x[i], get_y[1][i], str('    ' + str(get_y[1][i])), color='white')
+        # plt.text(i, 10, y[i], ha='center',color='white')
+
+def graph_names(no_selected):
+    name = ''
+    if no_selected == 1:
+        name = 'Bar Graph'
+    elif no_selected == 2:
+        name = 'Barh Graph'
+    elif no_selected == 3:
+        name = 'Fill Between Graph'
+    elif no_selected == 4:
+        name = 'Plot Graph'
+    elif no_selected == 5:
+        name = 'Stem Graph'
+    elif no_selected == 6:
+        name = 'Scatter Graph'
+    elif no_selected == 7:
+        name = 'Stackplot Graph'
+    elif no_selected == 8:
+        name = 'Pie Graph'
+    elif no_selected == 9:
+        name = 'Hist Graph'
+    else:
+        pass
+
+    return name
+
+
+def exit_records():
+    print('Exit Records')
+    exit()
+
+def my_treeview():
+    global datas
+    print('my treeview')
+    count = 0
+
+    for data in datas:
+        if count % 2 == 0:
+            my_tree.tag_configure('evenrow', background='lightblue')
+            my_tree.insert(parent='', index='end', iid=count, text='',
+                           values=data, tags=('evenrow',))
+
+        else:
+            my_tree.insert(parent='', index='end', iid=count, text='',
+                           values=data, tags=('oddrow',))
+        count += 1
+
+get_info = get_data()
+datas = get_info[1]
+datas_refresh = datas.copy()
+headings = get_info[0]
+
+style = ttk.Style()
+style.theme_use('default')
+style.configure("Treeview",
+                bg_color="#D3D3DE",
+                fg_color="black",
+                rowheight=25,
+                fieldbackground="D3D3DE")
+
+style.map('Treeview',
+          bg=[('selected', '#347083')])
+
+tree_frame = Frame(window)
+tree_frame.pack(pady=10 ,padx=20 ,fill='both')
+
+tree_scroll = Scrollbar(tree_frame, orient=VERTICAL)
+tree_scroll.pack(side=RIGHT, fill=Y)
+
+tree_scroll1 = Scrollbar(tree_frame, orient=HORIZONTAL)
+tree_scroll1.pack(side=BOTTOM, fill=X)
+
+my_tree = ttk.Treeview(tree_frame, yscrollcommand=tree_scroll.set, xscrollcommand=tree_scroll1.set,
+                       selectmode='extended', height=10)
+my_tree.pack()
+
+tree_scroll.config(command=my_tree.yview, width=15)
+tree_scroll1.config(command=my_tree.xview, width=15)
+
+tree_scroll.config(command=my_tree.yview)
+my_tree['columns'] = tuple(headings)
+my_tree.column("#0", width=0, stretch=NO)
+for x in range(0, len(headings)):
+    my_tree.column(headings[x], anchor=CENTER, width=150)
+
+my_tree.heading("#0", text='', anchor=CENTER)
+for x in range(0, len(headings)):
+    my_tree.heading(headings[x], text=headings[x], anchor=CENTER)
+
+my_tree.tag_configure('oddrow', background='white')
+my_tree.tag_configure('evenrow', background='lightblue')
+
+# global count
+count = 0
+
+for data in datas:
+    if count % 2 == 0:
+        my_tree.tag_configure('evenrow', background='lightblue')
+        my_tree.insert(parent='', index='end', iid=count , text='',
+                       values=data, tags=('evenrow',))
+
+    else:
+        my_tree.insert(parent='', index='end', iid=count , text='',
+                       values=data, tags=('oddrow',))
+
+    count += 1
+
+count_people = Label(window, text=str(1) +' - '+ str(len(datas)), font=('arial', 7),fg='black', bg=bg_color)
+count_people.pack()
+
+#label frame
+data_frame = LabelFrame(window, text='Records' ,bg =bg_color)
+data_frame.pack(fill='x', expand='no', padx=25, pady=10)
+
+dc_label = Label(data_frame, text="Data Count" ,bg =bg_color)
+dc_label.grid(row=0 ,column=0, padx=10,  pady=10)
+dc_entry = Entry(data_frame )
+dc_entry.grid(row=0 ,column=1, padx=10, pady=10)
+
+id_label = Label(data_frame, text="ID #" ,bg=bg_color)
+id_label.grid(row=0 ,column=2, padx=10, pady=10)
+id_entry = Entry(data_frame )
+id_entry.grid(row=0 ,column=3, padx=10, pady=10)
+
+fn_label = Label(data_frame, text="First Name" ,bg=bg_color)
+fn_label.grid(row=0 ,column=4, padx=10, pady=10)
+fn_entry = Entry(data_frame)
+fn_entry.grid(row=0 ,column=5, padx=10, pady=10)
+
+ln_label = Label(data_frame, text="Last Name",bg=bg_color)
+ln_label.grid(row=0 ,column=6, padx=10, pady=10)
+ln_entry = Entry(data_frame)
+ln_entry.grid(row=0 ,column=7, padx=10, pady=10)
+
+gd_label = Label(data_frame, text='Gender',bg=bg_color)
+gd_label.grid(row=0 ,column=8, padx=10, pady=10)
+gd_entry = Entry(data_frame)
+gd_entry.grid(row=0 ,column=9, padx=10, pady=10)
+
+cp_label = Label(data_frame, text="Cellphone #",bg=bg_color)
+cp_label.grid(row=1 ,column=0, padx=10, pady=10)
+cp_entry = Entry(data_frame)
+cp_entry.grid(row=1 ,column=1, padx=10, pady=10)
+
+st_label = Label(data_frame, text="Street",bg=bg_color)
+st_label.grid(row=1 ,column=2, padx=10, pady=10)
+st_entry = Entry(data_frame)
+st_entry.grid(row=1 ,column=3, padx=10, pady=10)
+
+ct_label = Label(data_frame, text="City",bg=bg_color)
+ct_label.grid(row=1 ,column=4, padx=10, pady=10)
+ct_entry = Entry(data_frame)
+ct_entry.grid(row=1 ,column=5, padx=10, pady=10)
+
+cy_label = Label(data_frame, text="Country",bg=bg_color)
+cy_label.grid(row=1 ,column=6, padx=10, pady=10)
+cy_entry = Entry(data_frame)
+cy_entry.grid(row=1 ,column=7, padx=10, pady=10)
+
+ea_label = Label(data_frame, text="Email Add",bg=bg_color)
+ea_label.grid(row=1 ,column=8, padx=10, pady=10)
+ea_entry = Entry(data_frame)
+ea_entry.grid(row=1 ,column=9, padx=10, pady=10)
+
+as_label = Label(data_frame, text="Alert Status",bg=bg_color)
+as_label.grid(row=2 ,column=0, padx=10, pady=10)
+as_entry = Entry(data_frame)
+as_entry.grid(row=2 ,column=1, padx=10, pady=10)
+
+pc_label = Label(data_frame, text="Picture",bg=bg_color)
+pc_label.grid(row=2 ,column=2, padx=10, pady=10)
+pc_entry = Entry(data_frame)
+pc_entry.grid(row=2 ,column=3, padx=10, pady=10)
+
+rd_label = Label(data_frame, text="Dates",bg=bg_color)
+rd_label.grid(row=2 ,column=4, padx=10, pady=10)
+rd_entry = Entry(data_frame)
+rd_entry.grid(row=2 ,column=5, padx=10, pady=10)
+
+#button frame
+button_frame = LabelFrame(window, text='Buttons' ,bg =bg_color)
+button_frame.pack(fill='x', expand='yes', padx=25 ,pady=5)
+
+update_button = Button(button_frame, image=photo_but ,text='Update Record',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=update_record)
+update_button.grid(row=0 ,column=0, padx=(30,23) ,pady=1, sticky='nwse')
+
+add_button = Button(button_frame, image=photo_but ,text='Add Record',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=add_entry)
+add_button.grid(row=0 ,column=1, padx=(25,23) , pady=1,sticky='nwse')
+
+
+# remove_button = Button(button_frame, text="Remove Record" ,command=remove_entry)
+# remove_button.grid(row=0 ,column=2, padx=(25,23) ,pady=10, sticky='nwse')
+
+remove_button = Button(button_frame, image=photo_but ,text='Remove Record',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=remove_entry)
+remove_button.grid(row=0 ,column=2, padx=(25,23) ,pady=1, sticky='nwse')
+
+# remove_many_button = Button(button_frame, text="Remove Records", command=remove_many)
+# remove_many_button.grid(row=0 ,column=3, padx=(25,23) ,pady=10, sticky='nwse')
+
+remove_many_button = Button(button_frame, image=photo_but ,text='Remove Records',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=remove_many)
+remove_many_button.grid(row=0 ,column=3, padx=(25,23) ,pady=1, sticky='nwse')
+
+# move_up_button = Button(button_frame, text="Move Up", command= ups )
+# move_up_button.grid(row=0 ,column=4, padx=(25,23) , pady=10, sticky='nwse')
+
+move_up_button = Button(button_frame, image=photo_but ,text='Move Up',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=ups)
+move_up_button.grid(row=0 ,column=4, padx=(25,23) , pady=1, sticky='nwse')
+
+# move_down_button = Button(button_frame, text="Move Down" ,command=downs)
+# move_down_button.grid(row=0 ,column=5,padx=(25,23) ,pady=10, sticky='nwse')
+
+move_down_button = Button(button_frame, image=photo_but ,text='Move Down',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=downs)
+move_down_button.grid(row=0 ,column=5,padx=(25,23) ,pady=1, sticky='nwse')
+
+# select_record = Button(button_frame, text="Clear Entry Boxes" ,command=clear_entry)
+# select_record.grid(row=0 ,column=6, padx=(25,23) ,pady=10, sticky='nwse')
+
+select_record = Button(button_frame, image=photo_but ,text='Clear Entry Boxes',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=clear_entry)
+select_record.grid(row=0 ,column=6, padx=(25,23) ,pady=1, sticky='nwse')
+
+# clear_record = Button(button_frame, text="Clear All Records" ,command=clear_data)
+# clear_record.grid(row=0 ,column=7, padx=(25,23) ,pady=10, sticky='nwse')
+
+clear_record = Button(button_frame, image=photo_but ,text='Clear All Records',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=clear_data)
+clear_record.grid(row=0 ,column=7, padx=(25,23) ,pady=1, sticky='nwse')
+
+# load_record = Button(button_frame, text="Refresh Records" ,command=load_records)
+# load_record.grid(row=1 ,column=0, padx=(30,23) ,pady=10, sticky='nwse')
+
+load_record = Button(button_frame, image=photo_but ,text='Refresh Records',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=load_records)
+load_record.grid(row=1 ,column=0, padx=(30,23) ,pady=1, sticky='nwse')
+
+# refresh_record = Button(button_frame, text="Update & Sort" ,command=refresh_records)
+# refresh_record.grid(row=1 ,column=1, padx=(25,23) ,pady=5, sticky='nwse')
+
+refresh_record = Button(button_frame, image=photo_but ,text='Update & Sort',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=refresh_records)
+refresh_record.grid(row=1 ,column=1, padx=(25,23) ,pady=1, sticky='nwse')
+
+# view_record = Button(button_frame, text="View Records" ,command=view_records)
+# view_record.grid(row=1 ,column=2, padx=(25,23) ,pady=5, sticky='nwse')
+
+view_record = Button(button_frame, image=photo_but ,text='View Records',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=view_records)
+view_record.grid(row=1 ,column=2, padx=(25,23) ,pady=1, sticky='nwse')
+
+# view_profile = Button(button_frame, text="View Profile" ,command=view_profiles)
+# view_profile.grid(row=1 ,column=3, padx=(25,23) ,pady=5, sticky='nwse')
+
+view_profile = Button(button_frame, image=photo_but ,text='View Profile',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=view_profiles)
+view_profile.grid(row=1 ,column=3, padx=(25,23) ,pady=1, sticky='nwse')
+
+# display_message = Button(button_frame, text="Display Message" ,command=display_messages3)
+# display_message.grid(row=1 ,column=4, padx=(25,23) ,pady=5,sticky='nwse')
+
+display_message = Button(button_frame, image=photo_but ,text='Display Message',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=display_messages3)
+display_message.grid(row=1 ,column=4, padx=(25,23) ,pady=1,sticky='nwse')
+
+# display_image = Button(button_frame, text="View Image" ,command=display_images)
+# display_image.grid(row=1 ,column=5, padx=(25,23) ,pady=5,sticky='nwse')
+
+display_image = Button(button_frame, image=photo_but ,text='View Image',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=display_images)
+display_image.grid(row=1 ,column=5, padx=(25,23) ,pady=1,sticky='nwse')
+
+# display_graph = Button(button_frame, text="Display Graph" ,command=display_graph)
+# display_graph.grid(row=1 ,column=6, padx=(25,23) ,pady=5,sticky='nwse')
+
+display_graph = Button(button_frame, image=photo_but ,text='Display Graph',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=display_graph)
+display_graph.grid(row=1 ,column=6, padx=(25,23) ,pady=1,sticky='nwse')
+
+# exit_record = Button(button_frame, text="Exit Records" ,command=exit_records)
+# exit_record.grid(row=1 ,column=7, padx=(25,23) ,pady=5,sticky='nwse')
+
+exit_record = Button(button_frame, image=photo_but ,text='Exit Records',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=exit_records)
+exit_record.grid(row=1 ,column=7, padx=(25,23) ,pady=1,sticky='nwse')
+
+# display text messages
+photo_temp, move_text = display_messages_get()
+canvas=Canvas(window,bg =bg_color , highlightbackground=bg_color)
+canvas.pack(fill=BOTH, padx=100)
+text_var=move_text
+text=canvas.create_text(0,-500,text=text_var,font=('courier',10,'bold'),fill='white',tags=("marquee",),anchor='w')
+x1,y1,x2,y2 = canvas.bbox("marquee")
+# print('bbox ',x1,y1,x2,y2 ,canvas.bbox("marquee"))
+width = x2-x1
+height = y2-y1
+canvas['width']=width
+canvas['height']=height
+fps=40    #Change the fps to make the animation faster/slower
+
+# bind select records
+my_tree.bind('<ButtonRelease-1>', select_records)
+
+# print('len of data ',len(datas))
+# for data in range(0 ,len(datas)):
+#     print(datas[data])
+
+# print('/n')
+window.mainloop()
