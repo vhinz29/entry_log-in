@@ -1,0 +1,74 @@
+import ssl
+from tkinter import *
+import tkinter
+import smtplib
+from email.message import EmailMessage
+from tkinter import messagebox
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.image import MIMEImage
+
+
+def alert_warning(num_id,locations ,login, logout):
+    email_sender = 'diazmelvin2940@gmail.com'
+    email_password = 'blgk pklq njmp iraa'
+    email_receiver = 'diazmelvin2940@gmail.com'
+    pic = str('pic_') + str(num_id)
+
+    # Plain Text string as the email message
+    subject = 'Attention: Red Alert ID Status found'
+
+    img_path = "mevin_pics1.png"
+    # Open the image in bynary mode
+    with open(img_path, 'rb') as file:
+        img = MIMEImage(file.read())
+    # img.add_header('Content-ID','<{}>'.format(img_path))  # angle brackets are important
+    img.add_header('Content-Disposition', '<{}>'.format(img_path), filename=pic)
+
+    msg = MIMEMultipart('related')
+    msg['Subject'] = subject
+    msg['From'] = email_sender
+    msg['To'] = email_receiver
+    msg_text = MIMEText("""\
+       <html>
+         <head></head>
+         <h1>Red Alert ID Status found </h1>
+         <body>
+            <hr style="width: 500px;">
+            <table style="margin-right: auto">
+                <tr>
+                    <th>ID Number:</th>
+                    <th style="padding-left: 50px">{}</th>
+                   
+                </tr>
+            </table>
+            <hr class="width">
+            <table style="margin-right: auto">
+                <tr>
+                    <th>Location:</th>
+                    <th style="padding-left: 63px">{}</th>
+                   
+                </tr>
+            </table>
+            <hr class="width">
+            <p>Time in: {}<br></p>
+            <p>Time out: {}<br></p>
+         </body>
+       </html>
+     
+    """.format(num_id, locations, login, logout, img_path), 'html')
+
+    msg.attach(msg_text)
+    # Attach image
+    msg.attach(img)
+
+    context = ssl.create_default_context()
+    try:
+        with smtplib.SMTP_SSL('smtp.gmail.com',465, context=context) as smtp:
+            smtp.login(email_sender, email_password)
+            smtp.sendmail(email_sender, email_receiver, msg.as_string())
+        print('message successfully sent')
+        messagebox.showinfo(title='i.d email red status ', message="message sent")
+    except:
+        print('error sending message')
+        messagebox.showinfo(title='i.d email red status ', message="message not sent")
