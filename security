@@ -1,0 +1,1520 @@
+from tkinter import *
+import tkinter
+from tkinter import ttk
+import tkinter as tk
+from tkinter import messagebox
+from datetime import date
+from datetime import datetime
+import datetime
+import time
+from time import sleep
+import random
+import string
+from operator import itemgetter
+import operator
+from PIL import Image, ImageTk
+from PIL import Image, ImageTk, ImageFont, ImageDraw
+import data_logins
+import email_program1
+import email_program3
+import data_entry_logins
+from openpyxl import Workbook, load_workbook
+
+wb = load_workbook("entry_login1.xlsx")
+
+ws = wb['entry_log']
+ws1 = wb['entry_log1']
+ws2 = wb['entry_log2']
+ws3 = wb['alert_status']
+ws4 = wb['alert_records']
+ws5 = wb['data_records']
+
+entry_login = ws
+entry_login1 = ws1
+entry_login2 = ws2
+entry_login3 = ws3
+entry_login4 = ws4
+entry_login5 = ws5
+
+# get data of datas, datas1
+global fg_alert, fg_alert_color, datas ,datas1, temp_datas1
+fg_alert, fg_alert_color, datas, datas1, temp_datas1 =  '', [], '','',''
+
+# get display record
+global display_rec, win, win1
+display_rec, win = [],[]
+
+# get id's number
+global  win1
+win1 = []
+
+# view profiles
+global get_profile, get_pro_rec, many_rec
+get_profile, get_pro_rec = [], ''
+
+# select locations
+global win2, select_loc
+select_loc, win2 = [], []
+
+# update data temporary
+global update_data_temp, send_datas1_idno, many_send_email
+update_data_temp ,send_datas1_idno, many_send_email= '', '', ''
+
+window = Tk()
+window.resizable(0,0)
+window.title('Security I.D System')
+# tkinter to the center
+# window.geometry("900x500")
+app_width = 700
+app_height = 500
+screen_width = window.winfo_screenwidth()
+screen_height = window.winfo_screenheight()
+
+x = (screen_width / 2) - (app_width / 2)
+y = (screen_height / 2) - 50 - (app_height / 2)
+window.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+
+img = Image.open('mevin_pics1.png')
+resize_img = img.resize((250,160))
+photo = ImageTk.PhotoImage(resize_img)
+
+img1 = Image.open('email_icon.png')
+resize_img1 = img1.resize((30,20))
+photo1 = ImageTk.PhotoImage(resize_img1)
+
+img2 = Image.open('folder_icon.png')
+resize_img2 = img2.resize((25,20))
+photo2 = ImageTk.PhotoImage(resize_img2)
+
+img3 = Image.open('dial_icon.jpg')
+resize_img3 = img3.resize((23,17))
+photo3 = ImageTk.PhotoImage(resize_img3)
+
+img4 = Image.open('button_icon1.png')
+resize_img4 = img4.resize((85,40))
+photo4 = ImageTk.PhotoImage(resize_img4)
+
+icon = PhotoImage(file= 'mevin_pics1.png')
+window.iconphoto(True,icon)
+window['bg']='#d9d9d9'
+bg_color ='#d9d9d9'
+fg_color ='black'
+
+def main_treeview(e):
+    global select_loc,win2,datas, datas1, get_loc_view_alerts
+    print('main treeview`')
+    temps = ''
+    no_records.destroy()
+    view_profile.config(command=view_profiles)
+    # datas1 = data_entry_logins.get_datas_id()
+    for x in select_loc:
+        temp = list(x.get(x.curselection()))
+        temp = ''.join(temp).strip().lower()
+    get_loc_view_alerts = temp
+    # print('location pick ',temp)
+    for x in range(0, len(win2)):
+        win2[x].destroy()
+
+    if temp == 'super malls':
+        temps = data_entry_logins.super_malls()
+        datas = temps[1]
+
+    elif temp == 'fast food':
+        temps = data_entry_logins.fast_food()
+        datas = temps[1]
+
+    elif temp == 'computer store':
+        temps = data_entry_logins.computer_shop()
+        datas = temps[1]
+
+    temp_data_super = temps[0]
+    # print('load data ', len(datas))
+    # print('load data ',datas)
+    # my_tree.delete(*my_tree.get_children())
+    my_tree['columns'] = tuple(temp_data_super)
+    # my_tree['show'] = 'headings'
+    my_tree.column("#0", width=0, stretch=NO)
+
+    for x in range(0, len(temp_data_super)):
+        if x >= 2:
+            # print(x ,temp_data_super[x])
+            my_tree.column(temp_data_super[x], anchor=CENTER,  minwidth=150)
+
+        else:
+            # print(x ,temp_data_super[x])
+            # my_tree.column(temp_data_super[x], anchor=CENTER, stretch = False)
+            my_tree.column(temp_data_super[x], anchor=CENTER,  minwidth=150)
+
+    my_tree.heading("#0", text='', anchor=CENTER)
+    for x in range(0, len(temp_data_super)):
+        if x >= 2:
+            my_tree.heading(temp_data_super[x], text=temp_data_super[x], anchor=CENTER)
+        else:
+            my_tree.heading(temp_data_super[x], text=temp_data_super[x], anchor=CENTER)
+
+    count_people.config(text=str(1) + ' - ' + str(len(datas)))
+    load_data()
+
+def select_locations():
+    print('select locations')
+    global select_loc, win2, datas
+    select_loc = []
+    view_profiles_forget()
+    destroy_all_windows()
+
+
+    window2 = Toplevel()
+    win2.append(window2)
+    window2.resizable(0, 0)
+    window2.title('Entry I.D System')
+    app_width = 300
+    app_height = 300
+    screen_width = window2.winfo_screenwidth()
+    screen_height = window2.winfo_screenheight()
+
+    x = (screen_width / 2) - 400 - (app_width / 2)
+    y = (screen_height / 2) - 50 - (app_height / 2)
+    window2.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+
+    label = Label(window2, text="Select Locations", font=('arial', 15))
+    label.place(x=70, y=10)
+
+    my_frame = Frame(window2)
+    scrollbar1 = Scrollbar(my_frame, orient=VERTICAL)
+    scrollbar1.pack(side=RIGHT, fill=Y)
+
+    scrollbar = Scrollbar(my_frame, orient=HORIZONTAL)
+    scrollbar.pack(side=BOTTOM, fill=X)
+
+    listbox = Listbox(my_frame, xscrollcommand=scrollbar.set,
+                      yscrollcommand=scrollbar1.set,
+                      font=('Consolas', 11, ''), fg='black', bg='white',
+                      activestyle="none", width=40, height=16)
+
+    listbox.insert(1, " Super Malls")
+    listbox.insert(2, " Fast Food")
+    listbox.insert(3, " Computer Store")
+
+    listbox.pack(side=LEFT)
+    scrollbar1.config(command=listbox.yview, width=25)
+
+    listbox.pack(side=TOP)
+    scrollbar.config(command=listbox.xview, width=20)
+
+    my_frame.pack(padx=10, pady=70)
+
+    listbox.bind('<ButtonRelease>', main_treeview)
+    select_loc.append(listbox)
+def reverse_times():
+    print('reverse times')
+    temp = []
+    temp1 = []
+    loop = 0
+    view_profile.config(command=view_profiles)
+    for x in range(0, len(datas)):
+        temp.append(datas[x][0])
+        temp.append(datas[x][2])
+        temp1.append(list(temp))
+        temp = []
+    sort_list = sorted(temp1, key=operator.itemgetter(1), reverse=True)
+    temp1.clear()
+    while loop <= len(sort_list) - 1:
+        for x in range(0, len(datas)):
+            if sort_list[loop][0] == datas[x][0]:
+                temp1.append(datas[x])
+        loop += 1
+    # print(temp1)
+    if datas != '':
+        datas.clear()
+        for x in range(0, len(temp1)):
+            datas.append(temp1[x])
+        # print(len(datas), datas)
+        load_data()
+
+def sort_times():
+    print('sort times')
+    temp = []
+    temp1 = []
+    loop = 0
+    view_profile.config(command=view_profiles)
+
+    for x in range(0, len(datas)):
+        temp.append(datas[x][0])
+        temp.append(datas[x][2])
+        temp1.append(list(temp))
+        temp = []
+    sort_list= sorted(temp1, key=operator.itemgetter(1))
+    temp1.clear()
+    while loop <= len(sort_list) - 1:
+        for x in range(0, len(datas)):
+            if sort_list[loop][0] == datas[x][0]:
+                temp1.append(datas[x])
+        loop += 1
+    # print(temp1)
+    if datas != '':
+        datas.clear()
+        for x in range(0, len(temp1)):
+            datas.append(temp1[x])
+        # print(len(datas), datas)
+        load_data()
+
+def get_reverse(value,num ,num1):
+    # print('get reverse value ')
+    temp = []
+    while num >= num1:
+        if str(num) in value:
+            temp.append(num)
+        num -= 1
+    return temp
+
+def reverse_records():
+    print('reverse records')
+    temp = []
+    temp1 = []
+    temp2 = []
+    loop = 0
+    view_profile.config(command=view_profiles)
+    for x in range(0, len(datas)):
+        temp2.append(str(datas[x][0]))
+    # print('reverse records ',temp2)
+    temp = get_reverse(temp2,100000 ,89999)
+    while loop <= len(temp) - 1:
+        for x in range(0, len(datas)):
+            if str(temp[loop]) == str(datas[x][0]):
+                temp1.append(datas[x])
+        loop += 1
+    # datas.clear()
+    for x in range(0, len(temp1)):
+        datas[x] = temp1[x]
+    load_data()
+
+def sort_records():
+    print('sort data')
+    temp = []
+    temp1 = []
+    loop = 0
+    view_profile.config(command=view_profiles)
+    # print('sort records datas ',datas)
+    for x in range(0 ,len(datas)):
+        temp.append(str(datas[x][0]))
+    temp = sorted(temp)
+    while loop <= len(temp) -1:
+        for x in range(0 ,len(datas)):
+            if temp[loop] == str(datas[x][0]):
+                temp1.append(datas[x])
+        loop += 1
+    for x in range(0,len(temp1)):
+        datas[x] = temp1[x]
+    load_data()
+
+def load_data():
+    print('load data')
+    global select_loc, fg_alert, count, datas, datas1, get_loc_view_alerts
+    count ,fg_alert= 0, ''
+    clear_warning = 'no'
+    # print(len(datas1))
+
+    view_profiles_forget()
+    destroy_all_windows()
+    view_profile.config(command=view_profiles)
+    # print('datas 1 ',datas1)
+    fg_alerts_temp = fg_alerts1()
+    try:
+        if get_loc_view_alerts == 'super malls':
+            fg_alert = fg_alerts_temp[0]
+        elif get_loc_view_alerts == 'fast food':
+            fg_alert = fg_alerts_temp[1]
+        elif get_loc_view_alerts == 'computer store':
+            fg_alert = fg_alerts_temp[2]
+    except Exception as e:
+        print('error message: ', e)
+        pass
+
+    clear_data()
+    for data in datas:
+        # print('data ',data[0])
+        if str(data[0]) in fg_alert:
+            my_tree.insert(parent='', index='end', iid=count, text='',
+                                   values=(data), tags=('alert',))
+
+        elif count % 2 == 0:
+            my_tree.insert(parent='', index='end', iid=count, text='',
+                           values=(data), tags=('evenrow',))
+
+        else:
+            my_tree.insert(parent='', index='end', iid=count, text='',
+                           values=(data), tags=('oddrow',))
+        count += 1
+
+    if datas != '':
+        count_people.config(text=str(1) + ' - ' + str(len(datas)))
+
+        if clear_warning == 'yes':
+            warning_message()
+
+def clear_data():
+    # print('clear_data')
+    for record in my_tree.get_children():
+        my_tree.delete(record)
+
+def warning_message():
+    # print('warning_message')
+    # current = datetime.datetime.today()
+    # current = current.strftime("%S")
+    # time.sleep(5)
+    messagebox.showinfo("Message Alert", "Call Immediate Authorities")
+
+def clear_warnings():
+    count = 0
+    print('clear warnings')
+    clear_data()
+    for data in datas:
+        if count % 2 == 0:
+            my_tree.insert(parent='', index='end', iid=count, text='',
+                           values=(data), tags=('evenrow',))
+
+        else:
+            my_tree.insert(parent='', index='end', iid=count, text='',
+                           values=(data), tags=('oddrow',))
+        count += 1
+
+    if datas != '':
+        count_people.config(text=str(1) + ' - ' + str(len(datas)))
+    else:
+        count_people.config(text='')
+    # load_data()
+
+def view_alerts():
+    print('view alerts ')
+    global  datas1, get_loc_view_alerts
+    count = 0
+    destroy_all_windows()
+    view_profile.config(command=view_profiles)
+    try:
+        clear_data()
+        view_profiles_forget()
+
+        if get_loc_view_alerts == 'super malls':
+            temp_data_view = data_entry_logins.super_malls()
+            temp_data_view1 = temp_data_view[1]
+            # print(len(temp_data_view1), temp_data_view1)
+
+        elif get_loc_view_alerts == 'fast food':
+            temp_data_view = data_entry_logins.fast_food()
+            temp_data_view1 = temp_data_view[1]
+            # print(get_loc_view_alerts)
+            temp_data = data_entry_logins.fast_food()
+        elif get_loc_view_alerts == 'computer store':
+            temp_data_view = data_entry_logins.computer_shop()
+            temp_data_view1 = temp_data_view[1]
+            # print(get_loc_view_alerts)
+
+        for data in range(0, len(temp_data_view1)):
+            if str(temp_data_view1[data][0]) in fg_alert:
+                if count % 2 == 0:
+                    my_tree.insert(parent='', index='end', iid=count, text='',
+                               values=(temp_data_view1[data]), tags=('alert',))
+
+                else:
+                    my_tree.insert(parent='', index='end', iid=count, text='',
+                                   values=(temp_data_view1[data]), tags=('alert1',))
+                count += 1
+        if fg_alert == []:
+            count_people.config(text='')
+        else:
+            count_people.config(text=str(1) + ' - ' + str(count))
+
+        # messagebox.showinfo("View Alert Status", str(get_loc_view_alerts) + str(' id no. location'))
+    except Exception as e:
+        pass
+        print('error message: ',e)
+
+def view_warnings():
+    print('view warnings')
+    global  datas1, temp_datas1,select_loc
+    count = 0
+    destroy_all_windows()
+    # print('location pick ',select_loc)
+    if select_loc != []:
+        clear_data()
+        datas1.clear()
+        datas1 = data_entry_logins.get_datas_id()
+        temp = []
+        for x in range(0, len(temp_datas1)):
+            if temp_datas1[x][1] == 'green':
+                temp.append(temp_datas1[x][0])
+        # print('temp ',temp)
+        for x in range(0 ,len(datas1)):
+            if datas1[x][0] in temp:
+                # print('datass1' ,datas1[x][0])
+                datas1[x][1] = 'green'
+        # print('temp_datas1 ',temp_datas1)
+        # print(datas1)
+        load_data()
+    else:
+        pass
+        # print('empty')
+def scroll_view_rec(event):
+    # print('scroll view records')
+    global display_rec, my_list_value
+    my_list_value = []
+    for x in display_rec:
+        if x.curselection() == ():
+            my_list_value = []
+        else:
+            # my_list_value =x.curselection()
+            temp = list(x.get(x.curselection()))
+            temp = ''.join(temp).strip().lower()
+            my_list_value.append(temp)
+
+    if temp == 'sort id records':
+        for x in range(0, len(win)):
+            win[x].destroy()
+        sort_records()
+
+    elif temp == 'reverse id records':
+        for x in range(0, len(win)):
+            win[x].destroy()
+        reverse_records()
+
+    elif temp == 'sort time records':
+        for x in range(0, len(win)):
+            win[x].destroy()
+        sort_times()
+
+    elif temp == 'reverse time records':
+        for x in range(0, len(win)):
+            win[x].destroy()
+        reverse_times()
+    win.clear()
+
+def view_records():
+    print('view records')
+    global display_rec, win
+    display_rec = []
+    view_profiles_forget()
+    destroy_all_windows()
+
+    window1 = Toplevel()
+    win.append(window1)
+    window1.resizable(0, 0)
+    window1.title('Entry I.D System')
+    app_width = 300
+    app_height = 300
+    screen_width = window1.winfo_screenwidth()
+    screen_height = window1.winfo_screenheight()
+
+    x = (screen_width / 2) - 400 - (app_width / 2)
+    y = (screen_height / 2) - 50 - (app_height / 2)
+    window1.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+
+    label = Label(window1, text="Display Records", font=('arial', 15))
+    label.place(x=70, y=10)
+
+    my_frame = Frame(window1)
+    scrollbar1 = Scrollbar(my_frame, orient=VERTICAL)
+    scrollbar1.pack(side=RIGHT, fill=Y)
+
+    scrollbar = Scrollbar(my_frame, orient=HORIZONTAL)
+    scrollbar.pack(side=BOTTOM, fill=X)
+
+    listbox = Listbox(my_frame, xscrollcommand=scrollbar.set,
+                      yscrollcommand=scrollbar1.set,
+                      font=('Consolas', 11, ''), fg='black', bg='white',
+                      activestyle="none", width=40, height=16)
+
+    listbox.insert(1, " Sort ID Records")
+    listbox.insert(2, " Reverse ID Records")
+    listbox.insert(3, " Sort Time Records")
+    listbox.insert(4, " Reverse Time Records")
+
+
+    listbox.pack(side=LEFT)
+    scrollbar1.config(command=listbox.yview, width=25)
+
+    listbox.pack(side=TOP)
+    scrollbar.config(command=listbox.xview, width=20)
+
+    my_frame.pack(padx=10, pady=70)
+
+    listbox.bind('<ButtonRelease>', scroll_view_rec)
+    display_rec.append(listbox)
+
+def search_profiles1():
+    print('search profiles one')
+    global profile_search, win1, profile_get, datas, get_pro_rec, many_rec, temp_many_idno, send_datas1_idno
+    found ,profile_get, temp_many_idno = 'no' ,[], ''
+    temp_id = []
+    idno_many_alert = ''
+    answer_get = 'yes'
+    # print('select many records', many_rec, get_pro_rec[0])
+    # for x in profile_search:
+    #     temp_many_idno = x.get()
+    #     print('profile  search ',x.get())
+    idno_many_alert = fg_alerts1()
+    # print('id no many alert ',idno_many_alert[3])
+    try:
+        for x in profile_search:
+            temp_many_idno = x.get()
+
+    except Exception as e:
+        answer_get = 'no'
+        print('error message one: ',e)
+        temp_many_idno = ''.join(send_datas1_idno)
+        # print('temp many idno ',temp_many_idno)
+
+    # print('id number alert',idno_many_alert[4])
+    # temp_id_no = data_entry_logins.get_datas_id()
+    # for x in range(0 ,len(temp_id_no)):
+    #     temp_id.append(temp_id_no[x][0])
+    # print(temp_id)
+    if answer_get == 'yes':
+        if temp_many_idno == '':
+            messagebox.showinfo(title="Search ID's", message="No Entry ID Number")
+            # clear_data()
+            # count_people.config(text='', font=('arial', 7), fg='black', bg='#F0F0F0')
+        elif temp_many_idno in idno_many_alert[4]:
+            # print('id no. found ',temp)
+            found = 'yes'
+            messagebox.showinfo(title="Search ID's", message="Valid ID Number")
+        else:
+            messagebox.showinfo(title="Search ID's", message="Invalid ID Number")
+            # clear_data()
+            # count_people.config(text='', font=('arial', 7), fg='black', bg='#F0F0F0')
+            # print('invalid entry ', temp)
+    else:
+        found = 'yes'
+
+    if found == 'yes':
+        view_profile.config(command=view_profile_entry)
+        no_records.destroy()
+        # print('temp datas1 ', temp_datas1)
+
+        many_records = data_entry_logins.super_malls()
+        many_records1 = data_entry_logins.fast_food()
+        many_records2 = data_entry_logins.computer_shop()
+
+        temp_many_id_status = ''
+        temp_many_id_status1 = []
+        loops1,loops2,loops3 = 0,0,0
+        for x in many_records[1]:
+            if str(x[0]) == temp_many_idno:
+                temp_many_id_status = x
+                temp_many_id_status1.append(list(temp_many_id_status))
+                loops1 = 1
+
+        for x in many_records1[1] :
+            if str(x[0]) == temp_many_idno:
+                temp_many_id_status = x
+                temp_many_id_status1.append(list(temp_many_id_status))
+                loops2 = 1
+
+        for x in many_records2[1] :
+            if str(x[0]) == temp_many_idno :
+                temp_many_id_status = x
+                temp_many_id_status1.append(list(temp_many_id_status))
+                loops3 = 1
+
+        clear_data()
+        num = 100
+        sizeone = entry_login.max_column
+        sizetwo = entry_login1.max_column
+        sizethree = entry_login2.max_column
+        # print('size of column ',sizeone ,sizetwo ,sizethree)
+        num_size = []
+        while num >= 0:
+
+            if int(sizeone) == num:
+                if loops1 == 1:
+                    num_size.append(many_records[0])
+                else:
+                    pass
+            if int(sizetwo) == num:
+                if loops2 == 1:
+                    num_size.append(many_records1[0])
+                else:
+                    pass
+            if int(sizethree) == num:
+                if loops3 == 1:
+                    num_size.append(many_records2[0])
+                else:
+                    pass
+            num -= 1
+
+        # print('super malls ',entry_login.max_column)
+        # print('fast food ',entry_login1.max_column)
+        # print('computer store ',entry_login2.max_column)
+        try:
+            tempo = num_size[0]
+            # print('tempo ',len(tempo))
+            my_tree['columns'] = tuple(tempo)
+            my_tree.column("#0", width=0, stretch=NO)
+            for x in range(0, len(tempo)):
+                if x >= 2:
+                    my_tree.column(tempo[x], anchor=CENTER, minwidth=150)
+
+                else:
+                    my_tree.column(tempo[x], anchor=CENTER, minwidth=150)
+
+            my_tree.heading("#0", text='', anchor=CENTER)
+            for x in range(0, len(tempo)):
+                if x >= 2:
+                    my_tree.heading(tempo[x], text=tempo[x], anchor=CENTER)
+                else:
+                    my_tree.heading(tempo[x], text=tempo[x], anchor=CENTER)
+            # print('id many alert ',idno_many_alert[0])
+            # print('temp many id status one ', temp_many_id_status1)
+            for data in range(0, len(temp_many_id_status1)):
+
+                if data == 0 and str(temp_many_id_status1[data][0]) in idno_many_alert[0]:
+                    if data % 2 == 0:
+                        my_tree.insert(parent='', index='end', iid=data, text='',
+                                       values=(temp_many_id_status1[data]), tags=('alert',))
+                    else:
+                        my_tree.insert(parent='', index='end', iid=data, text='',
+                                       values=(temp_many_id_status1[data]), tags=('alert1',))
+
+                elif data == 1 and str(temp_many_id_status1[data][0]) in idno_many_alert[1]:
+                    if data % 2 == 0:
+                        my_tree.insert(parent='', index='end', iid=data, text='',
+                                       values=(temp_many_id_status1[data]), tags=('alert',))
+                    else:
+                        my_tree.insert(parent='', index='end', iid=data, text='',
+                                       values=(temp_many_id_status1[data]), tags=('alert1',))
+
+
+                elif data == 2 and str(temp_many_id_status1[data][0]) in idno_many_alert[2]:
+                    if data % 2 == 0:
+                        my_tree.insert(parent='', index='end', iid=data, text='',
+                                       values=(temp_many_id_status1[data]), tags=('alert',))
+                    else:
+                        my_tree.insert(parent='', index='end', iid=data, text='',
+                                       values=(temp_many_id_status1[data]), tags=('alert1',))
+
+                else:
+                    if data % 2 == 0:
+                        my_tree.insert(parent='', index='end', iid=data, text='',
+                                       values=(temp_many_id_status1[data]), tags=('evenrow',))
+
+                    else:
+                        my_tree.insert(parent='', index='end', iid=data, text='',
+                                       values=(temp_many_id_status1[data]), tags=('oddrow',))
+            count_people.config(text=str(1) + ' - ' + str(len(temp_many_id_status1)))
+
+
+        except Exception as e:
+            count_people.config(text='')
+            print('error message two: ', e)
+            pass
+
+
+    for x in range(0, len(win1)):
+        win1[x].destroy()
+
+def view_profile_entry():
+    print('view profile entry')
+    global  many_rec,temp_many_idno, update_data_temp,many_rec_list, many_send_email
+    many_rec_list, update_data_temp, many_send_email = [] ,'True', 'True'
+    # print('temp many idno ',temp_many_idno)
+    try:
+        fg_alerts_temp = fg_alerts1()
+        many_records = data_entry_logins.super_malls()
+        many_records1 = data_entry_logins.fast_food()
+        many_records2 = data_entry_logins.computer_shop()
+        total_rec = ''
+        total_rec1 = []
+        pick = []
+        # print('fg alert temp ',fg_alerts_temp)
+        for x in many_rec:
+            if x == '0':
+                for x in many_records[1]:
+                    if str(temp_many_idno) == x[0]:
+                        if x[0] in fg_alerts_temp[0]:
+                            many_rec_list.append(list(x))
+
+            elif x == '1':
+                for x in many_records1[1]:
+                    if str(temp_many_idno) == x[0]:
+                        if x[0] in fg_alerts_temp[1]:
+                            many_rec_list.append(list(x))
+            elif x == '2':
+                for x in many_records2[1]:
+                    if str(temp_many_idno) == x[0]:
+                        if x[0] in fg_alerts_temp[2]:
+                            many_rec_list.append(list(x))
+
+        style = ttk.Style()
+        style.theme_use('default')
+        style.configure('TButton',
+                        foreground='black', background='white', font=('arial', 10), borderwidth=0)
+        style.map('TButton', background=[('active', 'red')])
+
+        temp_bg = 'white'
+        # print(get_pro_rec)
+        # count_people.config(text='', font=('arial', 7), fg='black', bg='#F0F0F0')
+        # try:
+
+
+        view_label = Label(window, background='white', padx=306, pady=130, highlightbackground='darkgray',
+                           highlightthickness=1)
+        view_label.place(x=40, y=10)
+        get_profile.append(view_label)
+
+        my_email = Frame(window)
+        scrollbar1 = Scrollbar(my_email, orient=VERTICAL)
+        scrollbar1.pack(side=RIGHT, fill=Y)
+
+        scrollbar = Scrollbar(my_email, orient=HORIZONTAL)
+        scrollbar.pack(side=BOTTOM, fill=X)
+
+        listbox = Listbox(my_email, xscrollcommand=scrollbar.set,
+                          yscrollcommand=scrollbar1.set,
+                          font=('Consolas', 10, ''), fg='black', bg='white',
+                          activestyle="none", width=42, height=9)
+        temp_count = 0
+        listbox.insert(1 , "ID Number: " + str(many_rec_list[0][0]))
+        listbox.insert(2 , "")
+        a = 1
+        b = 2
+        c = 3
+        for x in many_rec_list:
+            for y in range(0,len(x)):
+                if y % 2 == 0:
+                    if str(x[y]) not in ['None']:
+                        if y == 0:
+                            listbox.insert(c, "Location:  " + str(x[y + 1]))
+                            c += 1
+                            listbox.insert(c, "Time in" + "               " + " Time out")
+                            # print(x[y + 1] ,c)
+                        else:
+                            c += 1
+                            listbox.insert(c, str(x[y]) + '    ' + str(x[y + 1]))
+                            # print(x[y]  ,x[y + 1])
+                            # print(x[y + 1], y)
+            c += 1
+            listbox.insert(c, ' ')
+            c += 1
+            # print('')
+                # else:
+                #     print(y ,x[y])
+
+        listbox.pack(side=LEFT)
+        scrollbar1.config(command=listbox.yview, width=25)
+
+        listbox.pack(side=TOP)
+        scrollbar.config(command=listbox.xview, width=20)
+
+        my_email.place(x=40, y=75)
+        get_profile.append(my_email)
+        listbox.bind('<ButtonRelease>', my_emails)
+
+        view_label1 = Label(window, text='Alert ID Information', font=('helvetica', 12, 'underline'), bg='white')
+        view_label1.place(x=285, y=20)
+        get_profile.append(view_label1)
+
+        view_label9 = Label(window, image=photo, bg=temp_bg)
+        view_label9.place(x=380, y=75)
+        get_profile.append(view_label9)
+
+        close_win = ttk.Button(window, text=' X ', style='TButton', width=3, command=close_wins)
+        close_win.place(x=627, y=11)
+        get_profile.append(close_win)
+
+        send_data = Label(window, image=photo2, text=' update data ', compound='left', font=('arial', 10),
+                          fg='#455A64', bg='lightblue')
+        send_data.place(x=52, y=258)
+        get_profile.append(send_data)
+
+        send_email = Label(window, image=photo1, text=' send email ', compound='left', font=('arial', 10),
+                           fg='#455A64', bg='lightblue')
+        send_email.place(x=200, y=258)
+        get_profile.append(send_email)
+
+        call_hotline = Label(window, image=photo3, text=' hotline no. 911 ', compound='left', font=('arial', 10),
+                             fg='#455A64', bg='lightblue', height=20)
+        call_hotline.place(x=350, y=258)
+        get_profile.append(call_hotline)
+
+        # close_win.bind("<Button-1>", close_wins)
+
+        send_data.bind("<Button-1>", send_datas)
+        send_email.bind("<Button-1>", send_emails)
+        call_hotline.bind("<Button-1>", call_hotlines)
+
+    except Exception as e:
+        for x in get_profile:
+            x.place_forget()
+        # print('get profile ')
+        print('error message: ',e)
+        pass
+
+def search_profiles():
+    global profile_search, win1
+    profile_search = []
+    view_profiles_forget()
+    destroy_all_windows1()
+    window2 = Toplevel()
+    win1.append(window2)
+    window2.resizable(0, 0)
+    window2.title('Entry I.D System')
+    app_width = 300
+    app_height = 300
+    screen_width = window2.winfo_screenwidth()
+    screen_height = window2.winfo_screenheight()
+
+    x = (screen_width / 2) - 400 - (app_width / 2)
+    y = (screen_height / 2) - 50 - (app_height / 2)
+    window2.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+
+    label = Label(window2, text="Search ID", font=('arial', 15))
+    label.pack(pady=20)
+
+    login_profile = Entry(window2, font=('arial', 20), width=15)
+
+    login_profile.pack(pady=20)
+    profile_search.append(login_profile)
+
+    button_entry = Button(window2, text='Enter I.D ', font=('arial', 10), width=20, command=search_profiles1)
+    button_entry.pack()
+
+def select_records(e):
+    print('select records')
+    global get_pro_rec, many_rec
+    get_pro_rec, many_rec = '',''
+    temp = 'False'
+    select = my_tree.focus()
+    x = my_tree.selection()
+    # many_rec1 = list(reversed(sorted(x)))
+    # many_rec = get_reverse(many_rec1, 100, 0)
+    many_rec = list(x)
+    # print('select records ',many_rec)
+    if select.isnumeric() == True:
+        values = my_tree.item(select, 'values')
+        get_pro_rec = values
+
+    if get_pro_rec != '':
+        for data in range(0, len(datas)):
+            if str(datas[data][0]) in fg_alert:
+                if str(datas[data][0]) == str(get_pro_rec[0]):
+                    temp = 'True'
+
+    # print('select value ', get_pro_rec[0], temp)
+    if temp == 'False':
+        get_pro_rec = ''
+
+def view_profiles():
+    global get_profile, get_pro_rec, update_data_temp,many_send_email
+    update_data_temp, many_send_email= 'False', 'False'
+    print('view profile')
+    destroy_all_windows1()
+    style = ttk.Style()
+    style.theme_use('default')
+    style.configure('TButton',
+                    foreground='black',background='white',font=('arial', 10), borderwidth=0)
+    style.map('TButton',background=[('active' ,'red')])
+
+    temp_bg = 'white'
+    # print(get_pro_rec)
+    # count_people.config(text='', font=('arial', 7), fg='black', bg='#F0F0F0')
+    # try:
+    if get_pro_rec != '':
+
+        view_label = Label(window, background='white', padx=306, pady=130, highlightbackground='darkgray',
+                           highlightthickness=1)
+        view_label.place(x=40, y=10)
+        get_profile.append(view_label)
+
+        my_email = Frame(window)
+        scrollbar1 = Scrollbar(my_email, orient=VERTICAL)
+        scrollbar1.pack(side=RIGHT, fill=Y)
+
+        scrollbar = Scrollbar(my_email, orient=HORIZONTAL)
+        scrollbar.pack(side=BOTTOM, fill=X)
+
+        listbox = Listbox(my_email, xscrollcommand=scrollbar.set,
+                          yscrollcommand=scrollbar1.set,
+                          font=('Consolas', 10, ''), fg='black', bg='white',
+                          activestyle="none", width=42, height=9)
+
+        listbox.insert(1, "ID Number: " + str(get_pro_rec[0]))
+        listbox.insert(2, "Location:  " + str(get_pro_rec[1]))
+        listbox.insert(3, "Time in" +"               "+" Time out")
+        count = 4
+        temp = []
+        for x in range(0 ,len(get_pro_rec)):
+            if x <= 1:
+                pass
+            elif x % 2 == 0:
+                if str(get_pro_rec[x]) not in ['None']:
+                    listbox.insert(count,str(get_pro_rec[x]) +'    '+ str(get_pro_rec[x + 1]))
+                    count += 1
+                    # print(get_pro_rec[x] ,get_pro_rec[x + 1])
+        # listbox.insert(4, " Time out")
+        # print('lenght of list ',len(get_pro_rec))
+        listbox.pack(side=LEFT)
+        scrollbar1.config(command=listbox.yview, width=25)
+
+        listbox.pack(side=TOP)
+        scrollbar.config(command=listbox.xview, width=20)
+
+        my_email.place(x=40, y=75)
+        get_profile.append(my_email)
+        listbox.bind('<ButtonRelease>', my_emails)
+
+        view_label1 = Label(window, text='Alert ID Information', font=('helvetica', 12, 'underline'), bg='white')
+        view_label1.place(x=285, y=20)
+        get_profile.append(view_label1)
+
+        view_label9 = Label(window, image=photo, bg =temp_bg)
+        view_label9.place(x=380, y=75)
+        get_profile.append(view_label9)
+
+
+        close_win= ttk.Button(window, text=' X ',style='TButton',width=3,command=close_wins)
+        close_win.place(x=627, y=11)
+        get_profile.append(close_win)
+
+        send_data = Label(window, image=photo2, text=' update data ', compound='left', font=('arial', 10),
+                           fg='#455A64', bg='lightblue')
+        send_data.place(x=52, y=258)
+        get_profile.append(send_data)
+
+        send_email = Label(window, image=photo1,text=' send email ',compound='left', font=('arial', 10), fg='#455A64', bg='lightblue')
+        send_email.place(x=200, y=258)
+        get_profile.append(send_email)
+
+        call_hotline = Label(window, image=photo3, text=' hotline no. 911 ', compound='left', font=('arial', 10),
+                           fg='#455A64', bg='lightblue',height=20)
+        call_hotline.place(x=350, y=258)
+        get_profile.append(call_hotline)
+
+        # close_win.bind("<Button-1>", close_wins)
+
+        send_data.bind("<Button-1>", send_datas)
+        send_email.bind("<Button-1>", send_emails)
+        call_hotline.bind("<Button-1>", call_hotlines)
+    # except Exception as e:
+    #     print('error message: ',e)
+def my_emails(e):
+    print('my emails')
+def close_wins():
+    print('close wins')
+    # get_profile.append(close_win)
+    view_profiles_forget()
+
+def send_emails(e):
+    global many_send_email
+    print('send emails')
+
+    if many_send_email == 'True':
+        send_emails1(e)
+    else:
+        num = get_pro_rec[0]
+        loc = get_pro_rec[1]
+        # login = get_pro_rec[2]
+        # logout = get_pro_rec[3]
+        login = []
+        logout = []
+        for x in range(0, len(get_pro_rec)):
+            if x <= 1:
+                pass
+            elif x % 2 == 0:
+                if str(get_pro_rec[x]) not in ['None']:
+                    login.append(get_pro_rec[x])
+                    logout.append(get_pro_rec[x + 1])
+                    # listbox.insert(count, str(get_pro_rec[x]) + '    ' + str(get_pro_rec[x + 1]))
+                    # count += 1
+        send_red_alert = email_program3.alert_warning(num,loc,login,logout)
+
+def send_emails1(e):
+    global many_rec_list, many_send_email
+    id_no = []
+    id_loc = []
+    send_email1 = []
+    print('send emails one\n')
+    # print(f"ID Number:   {many_rec_list[0][0]} \n")
+    id_no.append(many_rec_list[0][0])
+
+    for x in many_rec_list:
+        send_email = []
+        for y in range(0, len(x)):
+            if y % 2 == 0:
+                if str(x[y]) not in ['None']:
+                    if y == 0:
+                        # print("Location:  " + str(x[y + 1]))
+                        id_loc.append(str(x[y + 1]))
+                        # print("Time in" + "               " + " Time out")
+                        # print(x[y + 1], c)
+                    else:
+                        temp_num = ''
+                        # print(str(x[y]) + '    ' + str(x[y + 1]))
+                        temp_num = str(x[y]) + '    ' + str(x[y + 1])
+                        send_email.append(str(x[y]))
+                        send_email.append(str(x[y+1]))
+
+        send_email1.append(send_email)
+        # print(' ')
+    # print('send id num ', id_no)
+    # print('send id loc ', id_loc)
+    # print('send email ',send_email1)
+    # for x in send_email1:
+    #     print(x)
+    send_red_alert1 = email_program3.alert_warning1(id_no,id_loc,send_email1)
+
+def fg_alerts1():
+    print('fg alerts one')
+    global fg_alert_idno ,fg_alert_sm, fg_alert_ff, fg_alert_cs, total_alert_stats
+    fg_alert_idno ,fg_alert_sm, fg_alert_ff, fg_alert_cs, total_alert_stats = [],[],[],[], ''
+
+    for data_log in range(2, entry_login3.max_row + 1):
+        get_entry_id = entry_login3.cell(data_log, 1).value
+        get_entry_sm = entry_login3.cell(data_log, 2).value
+        get_entry_ff = entry_login3.cell(data_log, 3).value
+        get_entry_cs = entry_login3.cell(data_log, 4).value
+        # print('get entry cs ',get_entry_id ,get_entry_ff)
+        fg_alert_idno.append(str(get_entry_id))
+        if get_entry_sm == 'red':
+            fg_alert_sm.append(str(get_entry_id))
+        if get_entry_ff == 'red':
+            fg_alert_ff.append(str(get_entry_id))
+        if get_entry_cs == 'red':
+            fg_alert_cs.append(str(get_entry_id))
+
+    total_alert_stats = sorted(list(set(fg_alert_sm + fg_alert_ff + fg_alert_cs)))
+    # print('fg alert sm ',fg_alert_sm)
+    # print('fg alert ff ',fg_alert_ff)
+    # print('fg aler cs' ,fg_alert_cs)
+    # print('combine red alert status ',total_alert_stats)
+
+    return fg_alert_sm, fg_alert_ff, fg_alert_cs, total_alert_stats, fg_alert_idno
+
+def send_datas(e):
+    print('send_data')
+    global get_pro_rec, fg_alert, datas1, temp_datas1, update_data_temp
+    send_mes = 'no'
+    temps= ''
+
+    if update_data_temp == 'True':
+        # print('send datas oneeeeeeeeeeeeeeeeeee')
+        send_datas1()
+    # print('get pro rec ',get_pro_rec)
+    # print('datas one ', datas1)
+    else:
+        temps = get_pro_rec[1].lower()
+        many_records = data_entry_logins.super_malls()
+        many_records1 = data_entry_logins.fast_food()
+        many_records2 = data_entry_logins.computer_shop()
+        temps_many_records = ''
+        alerted = 'no'
+        for data_log in range(2, entry_login3.max_row + 1):
+            get_entry_id = entry_login3.cell(data_log, 1).value
+            get_entry_sm = entry_login3.cell(data_log, 2).value
+            get_entry_ff = entry_login3.cell(data_log, 3).value
+            get_entry_cs = entry_login3.cell(data_log, 4).value
+            if str(get_entry_id) == get_pro_rec[0]:
+                if temps == 'super malls':
+                    if get_entry_sm == 'red':
+                        alerted = 'yes'
+                    # print('temps ',temps)
+                    entry_login3.cell(data_log, 2).value = 'green'
+                    temps_many_records = many_records[1]
+                    # print('super malls ', temps, entry_login3.cell(data_log, 3).value)
+                elif temps == 'fast food':
+                    if get_entry_ff == 'red':
+                        alerted = 'yes'
+                    entry_login3.cell(data_log, 3).value = 'green'
+                    # print('fast food ', temps, entry_login3.cell(data_log, 4).value)
+                    temps_many_records = many_records1[1]
+                elif temps == 'computer shop':
+                    if get_entry_cs == 'red':
+                        alerted = 'yes'
+                    entry_login3.cell(data_log, 4).value = 'green'
+                    # print('computer shop ',temps ,entry_login3.cell(data_log, 5).value)
+                    temps_many_records = many_records2[1]
+                send_mes = 'yes'
+
+        # alert records
+        if alerted == 'yes':
+            # print('alerted records save')
+            current = datetime.datetime.today()
+            current = current.strftime("%H:%M:%S %d/%m/%Y")
+            # print('current time ', current)
+            num = entry_login4.max_row + 1
+            for x in temps_many_records:
+                if x[0] == get_pro_rec[0]:
+                    num1 = 1
+                    x.insert(2, current)
+                    for y in range(0,len(x)):
+                        entry_login4.cell(num, num1).value = x[y]
+                        num1 += 1
+
+        # print('fg_alert ',fg_alert)
+        # datas1 = data_entry_logins.get_datas_id()
+
+        if send_mes == 'yes':
+            for x in range(0 ,len(datas1)):
+                if str(datas1[x][0]) == get_pro_rec[0]:
+                    if temps == 'super malls':
+                        datas1[x][1] = 'green'
+                        # print('super malls ', datas1[x][1])
+                    elif temps == 'fast food':
+                        datas1[x][2] = 'green'
+                        # print('fast food ', datas1[x][2])
+                    elif temps == 'computer shop':
+                        datas1[x][3] = 'green'
+                        # print('computer shop ', datas1[x][3])
+
+            for x in range(0, len(temp_datas1)):
+                if str(temp_datas1[x][0]) == get_pro_rec[0]:
+                    if temps == 'super malls':
+                        temp_datas1[x][1] = 'green'
+                        # print('super malls ', temp_datas1[x][1])
+                    elif temps == 'fast food':
+                        temp_datas1[x][2] = 'green'
+                    elif temps == 'computer shop':
+                        temp_datas1[x][3] = 'green'
+                        # print('computer shop ', temp_datas1[x][3])
+
+            # print('datas      ', datas)
+            # print('datas1     ', datas1)
+            # print('temp datas ', temp_datas1)
+
+            messagebox.showinfo(title='i.d red status', message="id information now green status")
+            # print('id information turns green status')
+        else:
+            messagebox.showinfo(title='i.d red status', message="id information still red status")
+            # print('id information still red status')
+
+        wb.save('entry_login1.xlsx')
+
+def send_datas1():
+    print('send datas1')
+    global many_rec_list, send_datas1_idno
+    send_datas1_idno = ''
+
+    get_id = []
+    temp  = data_entry_logins.get_datas_id()
+    # print('many record red alert ',temp)
+    for x in range(0,len(many_rec_list)):
+        pass
+        # print('many record list ',x)
+
+    for x in range(0,len(many_rec_list)):
+        if x == 0:
+            get_id.append(many_rec_list[x][0])
+    # print('many record list id ',get_id)
+    current = datetime.datetime.today()
+    current = current.strftime("%H:%M:%S %d/%m/%Y")
+    # print('current time ', current)
+    for data_log in range(2, entry_login3.max_row + 1):
+        get_entry_idno = entry_login3.cell(data_log, 1).value
+        get_entry_sm = entry_login3.cell(data_log, 2).value
+        get_entry_ff = entry_login3.cell(data_log, 3).value
+        get_entry_cs = entry_login3.cell(data_log, 4).value
+
+        num = entry_login4.max_row + 1
+        if get_id[0] == str(get_entry_idno):
+            send_datas1_idno = get_id
+            # print('get id ',get_id)
+            messagebox.showinfo(title='i.d red status', message="id information now green status")
+
+            for x in many_rec_list:
+                num1 = 1
+                for data in temp:
+                    if x[0] == data[0] and x[1] == 'Super Malls' and get_entry_sm == 'red':
+                        # print('temp ',x[0] ,x[1] , get_entry_sm)
+                        entry_login3.cell(data_log, 2).value = 'green'
+                        x.insert(2,current)
+                        for y in range(0, len(x)):
+                            entry_login4.cell(num, num1).value = x[y]
+                            num1 += 1
+
+                    if x[0] == data[0] and x[1] == 'Fast Food' and get_entry_ff == 'red':
+                        entry_login3.cell(data_log, 3).value = 'green'
+                        # print('fast food' ,entry_login3.cell(data_log, 3).value)
+                        x.insert(2, current)
+                        for y in range(0, len(x)):
+                            entry_login4.cell(num, num1).value = x[y]
+                            num1 += 1
+
+                    if x[0] == data[0] and x[1] == 'Computer Shop' and get_entry_cs == 'red':
+                        entry_login3.cell(data_log, 4).value = 'green'
+                        # print('computer store ' ,entry_login3.cell(data_log, 4).value)
+                        x.insert(2, current)
+                        for y in range(0, len(x)):
+                            entry_login4.cell(num, num1).value = x[y]
+                            num1 += 1
+                num += 1
+    # clear_data()
+    wb.save('entry_login1.xlsx')
+    search_profiles1()
+
+def call_hotlines(e):
+    print('call hotlines')
+def view_profiles_forget():
+    for x in get_profile:
+        x.place_forget()
+    get_profile.clear()
+def destroy_all_windows():
+    # print('destroy all windows')
+    for x in range(0, len(win)):
+        win[x].destroy()
+    for x in range(0, len(win1)):
+        win1[x].destroy()
+    for x in range(0, len(win2)):
+        win2[x].destroy()
+    count_people.config(text='')
+
+def destroy_all_windows1():
+    # print('destroy all windows')
+    for x in range(0, len(win)):
+        win[x].destroy()
+    for x in range(0, len(win1)):
+        win1[x].destroy()
+    for x in range(0, len(win2)):
+        win2[x].destroy()
+
+def alert_records():
+    print('Alert Records')
+    clear_data()
+    destroy_all_windows()
+    no_records.destroy()
+    many_records = data_entry_logins.super_malls()
+    many_records1 = data_entry_logins.fast_food()
+    many_records2 = data_entry_logins.computer_shop()
+
+    num = 100
+    sizeone = entry_login.max_column
+    sizetwo = entry_login1.max_column
+    sizethree = entry_login2.max_column
+    # print('size of column ',sizeone ,sizetwo ,sizethree)
+    num_size = []
+    while num >= 0:
+        if int(sizeone) == num:
+            num_size.append(many_records[0])
+
+        if int(sizetwo) == num:
+            num_size.append(many_records1[0])
+
+        if int(sizethree) == num:
+            num_size.append(many_records2[0])
+
+        num -= 1
+
+    # print('super malls ',entry_login.max_column)
+    # print('fast food ',entry_login1.max_column)
+    # print('computer store ',entry_login2.max_column)
+
+    try:
+        tempo = num_size[0]
+        tempo.insert(2,'Disalert Time')
+        for x in range(0 ,len(tempo)):
+            entry_login4.cell(1, x + 1).value = tempo[x]
+
+        num = entry_login4.max_row + 1
+
+        # print('max row ', entry_login4.max_row, num)
+        # print('tempo ', tempo)
+
+        my_tree['columns'] = tuple(tempo)
+        my_tree.column("#0", width=0, stretch=NO)
+        for x in range(0, len(tempo)):
+            if x >= 2:
+                my_tree.column(tempo[x], anchor=CENTER, minwidth=150)
+
+            else:
+                my_tree.column(tempo[x], anchor=CENTER, minwidth=150)
+
+        my_tree.heading("#0", text='', anchor=CENTER)
+        for x in range(0, len(tempo)):
+            if x >= 2:
+                my_tree.heading(tempo[x], text=tempo[x], anchor=CENTER)
+            else:
+                my_tree.heading(tempo[x], text=tempo[x], anchor=CENTER)
+
+        data_alert = []
+        for data_log in range(2, entry_login4.max_row + 1 ):
+            data_alert1 = []
+            for data_log1 in range(1, entry_login4.max_column + 1):
+                temp = entry_login4.cell(data_log, data_log1).value
+                # current = current.strftime("%H:%M:%S %d/%m/%Y")
+                # data_alert1.append(current)
+                data_alert1.append(temp)
+
+                # data_alert1.append(entry_login4.cell(data_log, data_log1 ).value)
+
+            data_alert.append(list(data_alert1))
+            # print('')
+
+        # for x in data_alert:
+        #     print('data alert ',x)
+
+        for data in range(0, len(data_alert)):
+            if data % 2 == 0:
+                my_tree.insert(parent='', index='end', iid=data, text='',
+                               values=(data_alert[data]), tags=('alert',))
+            else:
+                my_tree.insert(parent='', index='end', iid=data, text='',
+                               values=(data_alert[data]), tags=('alert1',))
+
+
+        count_people.config(text=str(1) + ' - ' + str(len(data_alert)))
+
+
+    except Exception as e:
+        count_people.config(text='')
+        print('error message two: ', e)
+        pass
+
+    wb.save('entry_login1.xlsx')
+
+def exit_datas():
+    print('Exit Datas')
+
+    # wb.save('entry_login1.xlsx')
+    exit()
+
+# datas = data_logins.get_datas1()
+# datas1 = data_logins.get_datas()
+# datas = data_super[1]
+# datas1 = data_entry_logins.get_datas_id()
+
+datas1 = data_entry_logins.get_datas_id()
+temp_datas1 = data_entry_logins.get_datas_id()
+
+style = ttk.Style()
+style.theme_use('default')
+style.configure("Treeview",
+                bg_color="D3D3DE",
+                fg_color="black",
+                rowheight=25,
+                fieldbackground="D3D3DE")
+
+style.map('Treeview',
+          bg=[('selected', '#347083')])
+
+# tree=ttk.Treeview(win, column=("c1", "c2"), show='headings', height=8)
+tree_frame = Frame(window)
+tree_frame.pack(pady=10, padx=20, fill='both')
+# tree_frame.pack(pady=10, padx=(20,20)) spacing left to right
+
+tree_scroll = Scrollbar(tree_frame, orient=VERTICAL)
+tree_scroll.pack(side=RIGHT, fill=Y)
+
+tree_scroll1 = Scrollbar(tree_frame, orient=HORIZONTAL)
+tree_scroll1.pack(side=BOTTOM, fill=X)
+
+# my_tree = ttk.Treeview(tree_frame, yscrollcommand=tree_scroll.set, xscrollcommand=tree_scroll1.set,selectmode='extended')
+my_tree = ttk.Treeview(tree_frame, yscrollcommand=tree_scroll.set, xscrollcommand=tree_scroll1.set,
+                       selectmode='extended', height=10)
+my_tree.pack()
+temp_data_super = []
+tree_scroll.config(command=my_tree.yview, width=15)
+tree_scroll1.config(command=my_tree.xview, width=15)
+my_tree['columns'] = tuple(temp_data_super)
+my_tree.column("#0", width=0, stretch=NO)
+for x in range(0, len(temp_data_super)):
+    if x >= 2:
+        # print(x ,temp_data_super[x])
+        my_tree.column(temp_data_super[x], anchor=CENTER, width=150)
+    else:
+        # print(x ,temp_data_super[x])
+        my_tree.column(temp_data_super[x], anchor=CENTER, width=150)
+
+my_tree.heading("#0", text='', anchor=CENTER)
+for x in range(0, len(temp_data_super)):
+    if x >= 2:
+        my_tree.heading(temp_data_super[x], text=temp_data_super[x], anchor=CENTER)
+    else:
+        my_tree.heading(temp_data_super[x], text=temp_data_super[x], anchor=CENTER)
+
+my_tree.tag_configure('oddrow', background='white')
+my_tree.tag_configure('evenrow', background='lightblue')
+my_tree.tag_configure('alert', background='red')
+my_tree.tag_configure('alert1', background='#FFCDD2')
+
+my_tree.bind('<ButtonRelease-1>', select_records)
+count_people = Label(window, text='', font=('arial', 7),fg='black', bg=bg_color)
+count_people.pack( fill='both')
+# #button frame
+no_records = Label(window, text='No Records Found',font=('arial', 30),fg='#969696')
+no_records.place(x=180,y=90)
+
+button_frame = LabelFrame(window ,bg='#d9d9d9')
+button_frame.pack(fill='both',padx=20,pady=20)
+
+search_profile = Button(button_frame, image=photo4 ,text='Search ID No.',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=search_profiles)
+search_profile.grid(row=0 ,column=0, padx=(20,23) , sticky='nwse')
+
+
+view_profile = Button(button_frame, image=photo4 ,text='View Profile',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=view_profiles)
+view_profile.grid(row=0 ,column=1, padx=(0,23) , sticky='nwse')
+
+
+view_record = Button(button_frame, image=photo4 ,text='View Records',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=view_records)
+view_record.grid(row=0 ,column=2, padx=(0,23) , sticky='nwse')
+
+
+load_record = Button(button_frame, image=photo4 ,text='Refresh',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=load_data)
+load_record.grid(row=0 ,column=3, padx=(0,23) , sticky='nwse')
+
+select_location = Button(button_frame, image=photo4 ,text='Pick Location',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=select_locations)
+select_location.grid(row=0 ,column=4, padx=(0,23) , sticky='nwse')
+
+
+clear_warning = Button(button_frame, image=photo4 ,text='Clear Warning',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=clear_warnings)
+clear_warning.grid(row=1 ,column=0, padx=(20,23) , sticky='nwse')
+
+
+view_alert = Button(button_frame, image=photo4 ,text='Alert List',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=view_alerts)
+view_alert.grid(row=1 ,column=1, padx=(0,23) , sticky='nwse')
+
+
+view_warning = Button(button_frame, image=photo4 ,text='Alert Warning',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=view_warnings)
+view_warning.grid(row=1 ,column=2, padx=(0,23) , sticky='nwse')
+
+alert_record = Button(button_frame, image=photo4 ,text='Disalert Records',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=alert_records)
+alert_record.grid(row=1 ,column=3, padx=(0,23) , sticky='nwse')
+
+
+exit_data = Button(button_frame, image=photo4 ,text='exit',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=exit_datas)
+exit_data.grid(row=1 ,column=4, padx=(0,23) , sticky='nwse')
+
+# wb.save('entry_login.xlsx')
+print('/n')
+temp_time = ''
+# current = datetime.datetime.today()
+# current = current.strftime("%H:%M:%S %d/%m/%Y")
+for data_log in range(2, entry_login4.max_row + 1):
+    disalert = entry_login4.cell(data_log, 3).value
+    if data_log == 2:
+        temp_time = list(disalert)
+print('disalert ', temp_time)
+# temp_time = temp_time.split()
+a = int(''.join(temp_time[9:11]))
+b = int(''.join(temp_time[12:14]))
+c = int(''.join(temp_time[15:]))
+print('days ',a)
+print('month ',b)
+print('year ',c)
+# for x in range(0, len(temp_time)):
+#     print(temp_time[x])
+temp_date = date(c, b, a)
+temp_date1 = temp_date.strftime("%b %d %Y")
+print('new date ',temp_date1)
+
+window.mainloop()
+
+# if __name__ == '__main__':
+
+
