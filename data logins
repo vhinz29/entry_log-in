@@ -1,0 +1,661 @@
+from tkinter import *
+import tkinter
+from tkinter import ttk
+import tkinter as tk
+from tkinter import messagebox
+from datetime import date
+import datetime
+from time import sleep
+import random
+from openpyxl import Workbook, load_workbook
+from calendar import monthrange
+from operator import itemgetter
+import operator
+from PIL import Image, ImageTk, ImageFont, ImageDraw
+
+
+wb = load_workbook("entry_login1.xlsx")
+
+ws = wb['entry_log']
+ws1 = wb['entry_log1']
+ws2 = wb['entry_log2']
+ws3 = wb['alert_status']
+ws4 = wb['alert_records']
+ws5 = wb['data_records']
+ws6 = wb['case_records']
+
+entry_login = ws
+entry_login1 = ws1
+entry_login2 = ws2
+entry_login3 = ws3
+entry_login4 = ws4
+entry_login5 = ws5
+entry_login6 = ws6
+
+months = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12']
+year= ['2021','2022','2023']
+hours = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23']
+minutes = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+           '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39',
+           '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59']
+seconds = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+           '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39',
+           '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50', '51', '52', '53', '54', '55', '56', '57', '58', '59']
+
+dates1 = []
+dates = []
+num = []
+data1 = []
+loop = 1
+
+gender_m = ['Manuel' , 'Ronald' ,'Noel' , 'Melvin' , 'Allen' ,'Chervin','Raymond' ,'Ranier' ,'Hans' ,
+         'Patrick' ,'Zyrone' ,'Rico' ,'Danny', 'Tony', 'Sonny' ,'Nono' ,'Joel' ,'Boy' ,'Totoy' ,'Sam', 'Momol',
+         'Mangwe','Alvin' ,'Jenald','Louie', 'Lester','Michael','Daniel', 'Check','Jay-r','Joana','Maning',
+         'Buboy', 'Regie', 'Sito', 'Alberto', 'Richie', 'Jun', 'Jet', 'King', 'Vher', 'Charlie' ,'Jon']
+
+gender_f = ['Purita' , 'Maricel' , 'Lannie' , 'Mariel' ,'Angel' ,'Mish','Mishallen' ,'Wacky',
+         'Feye', 'Ayesha' ,'Elba' ,'Marissa' ,'Rose' ,'Maricon' ,'Marishell','Roseanne' , 'Lisa',
+         'Beng', 'Katrina','Monica','Meg','MM','Singsing', 'Karen','Marie','Joana','Neth','Ningning',
+         'Josie','Ruby','Violie','Liberty','Eva','Myrna','Sanang','Grace','Meng', 'Malou','Lucy','Puring','Rachel','Susan']
+
+
+first = ['Manuel' ,'Purita' ,'Ronald' ,'Noel' ,'Maricel' ,'Melvin' ,'Lannie' ,
+         'Mariel' ,'Allen' ,'Chervin','Angel' ,'Mish','Mishallen' ,'Wacky','Raymond' ,'Ranier' ,'Hans' ,
+         'Feye', 'Patrick' ,'Zyrone' ,'Ayesha' ,'Elba' ,'Rico' ,'Danny', 'Tony',
+         'Sonny' ,'Nono' ,'Marissa' ,'Rose' ,'Joel' ,'Boy' ,'Totoy' ,'Sam', 'Momol',
+         'Mangwe','Maricon' ,'Marishell','Roseanne' ,'Alvin' ,'Jenald','Lisa','Louie',
+         'Lester','Beng','Michael','Daniel','Katrina','Monica','Meg','MM','Singsing',
+         'Check','Karen','Marie','Jay-r','Joana','Neth','Maning','Ningning','Buboy','Regie',
+         'Josie','Ruby','Violie','Liberty','Eva','Myrna','Sanang','Sito','Grace','Meng',
+         'Alberto','Malou','Richie','Lucy','Jun','Puring','Rachel','Susan','Jet', 'King', 'Vher', 'Charlie' ,'Jon']
+
+last = ['Diaz', 'Gamboa' ,'Navarra' ,'De Jesus' ,'Perez', 'Joverez', 'Baldecasa',
+        'Tipan' ,'Ramirez' ,'Dela Cruz','Dizon' ,'Sanchez', 'Eding', 'Apostol' ,
+        'Aguilar', 'Martin', 'Gates' ,'Musk' ,'Bezos' , 'Agapay' ,'Vinarao'
+        ,'Vhinz' ,'Elbo' ,'Klietz' ,'Mangwelito', 'Daza', 'Zuckerberg','Jordan','Messi',
+        'Ronaldo','Pacquiao','Oneal','Bryant','Durant','Duncan','Roberts','Aniston','Curry','Leonard','Brady','Swift',
+        'Velasquez','Pressman','Gomez','Mulach','Curtis','Alonzo','Pressman','Panganiban','Barretto','Padilla','Carey','Bonjovi',
+        'Wembanyama','Dion','Van Rossum','Rivera','Mel','Nivs','Lem','Gamdi','Digam', 'Brains','Evangelista']
+
+email_ad = ['gmail.com' ,'yahoo.com','hotmail.com']
+alert = ['green' ,'green' ,'red' ,'green']
+gender = ['male' ,'female']
+
+# print('first ',len(first))
+
+photo_img = ['family_photo.png' ,'me_&_kids.png' ,'me_&_kids_four.png' ,'me_&_kids_three', 'me_&_kids_two.png','me_&_pamangkin.png',
+             'mel_grad.png', 'vhinz_&_dad.png', 'vhinz_bday.png' ,'vhinz_beach.png','vhinz_call_center.png',
+             'vhinz_call_center1.png','vhinz_call_center2.png' ,'vhinz_call_center3.png' ,'vhinz_call_center4.png' ,'vhinz_call_center5.png' ,
+             'vhinz_call_center6.png' ,'vhinz_call_center7.png' ,'vhinz_call_center8.png' ,'vhinz_call_center9.png' ,'vhinz_call_center10.png' ,
+             'vhinz_call_center11.png' ,'vhinz_call_center12.png' ,'vhinz_call_center13.png','vhinz_grad.png' , 'vhinz_jog.png', 'vhinz_jog1.png' ,
+             'vhinz_selfie.png' ,'vhinz_selfie2.png' ,'vhinz_selfie3.png' ,'vhinz_selfie4.png' ,'vhinz_selfie5.png' ,'vhinz_selfie1.png']
+
+cell = ['0960' ,'0961' ,'0962', '0963' ,'0964','0965', '0966' ,'0967' ,'0968' ,'0969']
+cell1 = ['0' ,'1', '2', '3', '4', '5', '6', '7', '8', '9']
+
+no_street = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20',
+           '21', '22', '23', '24', '25', '26', '27', '28', '29', '30', '31', '32', '33', '34', '35', '36', '37', '38', '39',
+           '40', '41', '42', '43', '44', '45', '46', '47', '48', '49', '50']
+name_street = ['West Bajac-Bajac' ,'East Bajac-Bajac', 'Mabayuan', 'East Tapinac', 'West Tapinac' ,'Pag-asa', 'Gordon Heights',
+               'Kalaklan', 'Barreto', 'Iram', 'New Kalalake', 'New Kababae', 'Sta Rita', 'Asinan', 'Banicain', 'Iram', 'Old Cabalan',
+               'Old Cabalan']
+city = ['Olongapo City', 'Subic', 'Castillejos', 'San Marcelino', 'San Antonio' ,'San Felipe', 'San Narciso', 'Cabangan', 'Iba', 'Masinloc',
+        'Palawig', 'Candelaria', 'Sta Cruz','Bataan', 'Pampanga','Naga','Manila' ,'Makati' ,'Caloocan','Pasay','Paranaque','Taguig',
+        'Quezon City']
+country = ['Philippines', 'U.S.A', 'Great Britain', 'Australia', 'Canada', 'China', 'Japan', 'South Korea', 'Singapore', 'Greece','Egypt',
+           'UAE', 'Saudi Arabia', 'Taiwan', 'Hong Kong', 'Germany', 'Brazil', 'Switzerland', 'Holland',
+           'France', 'Italy', 'Argentina','Jerusalem']
+
+pic = ['family_photo.png' ,'me_&_kids.png' ,'me_&_kids_four.png' ,'me_&_kids_three.png', 'me_&_kids_two.png','me_&_pamangkin.png',
+             'mel_grad.png', 'vhinz_&_dad.png', 'vhinz_bday.png' ,'vhinz_beach.png','vhinz_call_center.png',
+             'vhinz_call_center1.png','vhinz_call_center2.png' ,'vhinz_call_center3.png' ,'vhinz_call_center4.png' ,'vhinz_call_center5.png' ,
+             'vhinz_call_center6.png' ,'vhinz_call_center7.png' ,'vhinz_call_center8.png' ,'vhinz_call_center9.png' ,'vhinz_call_center10.png' ,
+             'vhinz_call_center11.png' ,'vhinz_call_center12.png' ,'vhinz_call_center13.png','vhinz_grad.png' , 'vhinz_jog.png', 'vhinz_jog1.png' ,
+             'vhinz_selfie.png' ,'vhinz_selfie2.png' ,'vhinz_selfie3.png' ,'vhinz_selfie4.png' ,'vhinz_selfie5.png' ,'vhinz_selfie1.png']
+def sorted_time_dates(get_months):
+    # print('sorted time dates')
+
+    temp = []
+    temp1 = []
+    months = get_months
+    sort_months = sorted(months, key=operator.itemgetter(2))
+    for x in sort_months:
+        temp.append(x[2])
+    # print(len(temp), temp)
+    for x in temp:
+        if x not in temp1:
+            temp1.append(x)
+    # print(len(temp1), temp1)
+
+    sort1 = []
+    count = 0
+    for x in temp1:
+        sort = []
+        for y in sort_months:
+            if x == y[2]:
+                # print('sort ', y[2])
+                sort.append(y)
+
+        if len(sort) != 1:
+            # print('itemgetter ', sort)
+
+            total_jan = sorted(sort, key=operator.itemgetter(1))
+            # print('sort1 item', total_jan)
+            sort1.insert(count, total_jan)
+            # sort1.append(total_jan)
+        else:
+            # print('sort1 not item', sort)
+            sort1.insert(count, sort)
+            # sort1.append(sort)
+        count += 1
+
+    final_sort = []
+    count = 0
+    for x in sort1:
+        if len(x) != 1:
+            for y in x:
+                final_sort.insert(count, y)
+                count += 1
+        else:
+            for y in x:
+                final_sort.insert(count, y)
+                count += 1
+    replace_dates1 = []
+    count = 0
+    for x in final_sort:
+        replace_dates = []
+        replace_dates.append(''.join(x[0]))
+        change_dates = list(x[2])
+        months = ''.join(change_dates[0:2])
+        days = ''.join(change_dates[3:5])
+        year = ''.join(change_dates[6:11])
+        change_dates1 = str(days) +':'+ str(months) +str(':')+ str(year)
+        temp_dates = str(x[1]) +' '+str(change_dates1)
+        replace_dates.append(temp_dates)
+        replace_dates1.append(list(replace_dates))
+
+        count += 1
+
+    # for x in replace_dates1:
+    #     print(x)
+    # print('final sort ', len(final_sort), final_sort)
+    # print('replace dates one ', len(replace_dates1), replace_dates1)
+
+    return replace_dates1
+
+
+# print(len(idcount))
+while loop <= 1000:
+    idcount = []
+    for x in range(90000, 100000):
+        idcount.append(str(x))
+    number = random.choice(idcount)
+    if number in idcount:
+        idcount.remove(number)
+    first_name = random.choice(first)
+    if first_name in gender_m:
+        genders = gender[0]
+    else:
+        genders = gender[1]
+    last_name = random.choice(last)
+    email_ads = random.choice(email_ad)
+    email = str(first_name[0])+ str(last_name[0]) + str('_') + str(last_name) +str('@')+str(email_ads)
+    alerted = random.choice(alert)
+    # dates
+    temp_days, temp_months, temp_year, temp_hours, temp_minutes, temp_seconds, days, dates1, dates = '','', '', '', '', '', [], [], []
+
+    temp_year = random.choice(year)
+
+    temp_months = random.choice(months)
+    get_months = int(temp_months)
+    temp_months = list(temp_months)
+    if len(temp_months) == 1:
+        temp_months.insert(0, '0')
+
+    get_days = monthrange(2023, get_months)
+    get_days1 = get_days[1]
+    # print('get days one ', get_months, get_days1)
+    for x in range(1, get_days1 + 1):
+        days.append(str(x))
+    # print('days ', days)
+    temp_days = (random.choice(days))
+    temp_days = list(temp_days)
+    if len(temp_days) == 1:
+        temp_days.insert(0, '0')
+
+    temp_hours = random.choice(hours)
+    temp_hours = list(temp_hours)
+    if len(temp_hours) == 1:
+        temp_hours.insert(0, '0')
+
+    temp_minutes = random.choice(minutes)
+    temp_minutes = list(temp_minutes)
+    if len(temp_minutes) == 1:
+        temp_minutes.insert(0, '0')
+
+    temp_seconds = random.choice(seconds)
+    temp_seconds = list(temp_seconds)
+    if len(temp_seconds) == 1:
+        temp_seconds.insert(0, '0')
+
+    dates.insert(0,
+                 str(''.join(temp_hours)) + ':' + str(''.join(temp_minutes)) + ':' + str(''.join(temp_seconds)))
+
+    dates1.insert(0,
+
+                 str(''.join(temp_months)) + ':' + str(''.join(temp_days)) + ':' + str(temp_year))
+
+    num_cel = ''
+    num_cel1 = ''
+    num_cel = random.choice(cell)
+
+    for x in range(0, 7):
+
+        temp_cel = random.choice(cell1)
+        num_cel1 += temp_cel
+    total_cel = str(num_cel) +'-'+ str(num_cel1)
+
+    temp_no_st = random.choice(no_street)
+    temp_street_name = random.choice(name_street)
+    temp_street = str(temp_no_st) +' '+str(temp_street_name)
+    temp_city = random.choice(city)
+    temp_country = random.choice(country)
+
+
+    picture = random.choice(pic)
+
+
+    if str(number) not in num:
+        data = []
+        num.append(number)
+        data.append(str(loop))
+        data.append(num[-1])
+        data .append(first_name)
+        data .append(last_name)
+        data .append(email)
+        data.append(''.join(dates))
+        data.append(''.join(dates1))
+        data .append(alerted)
+        data.append(genders)
+        data.append(total_cel)
+        data.append(temp_street)
+        data.append(temp_city)
+        data.append(temp_country)
+        data.append(picture)
+        data1.append(list(data))
+        loop += 1
+
+
+# print(len(data1))
+temp = data1[0]
+headings = ['Count' ,'ID Number' ,'First Name' ,'Last Name' ,'Email Address' ,'Registered Dates','Alert Status',
+            'Gender' ,'Phone Number','Street','City/Province','Country','Picture']
+for x in range(0 ,len(headings)):
+    entry_login5.cell(1, x+1).value = headings[x]
+    # print('headings ',headings[x])
+
+
+temp1 = []
+for x in range(0, len(data1)):
+    # print(data1[x])
+    temp = []
+    temp.append(data1[x][1])
+    temp.append(data1[x][5])
+    temp.append(data1[x][6])
+    temp1.append(list(temp))
+
+# print(temp1)
+sort_list = sorted(temp1, key=operator.itemgetter(2))
+sort_list1 = sorted(sort_list, key=operator.itemgetter(1))
+
+jan, feb, mar, apr, may, june =[] ,[], [], [], [], []
+july, aug, sept, oct, nov, dec =[] ,[], [], [], [], []
+
+# print('total lenght ',len(sort_list))
+for x in sort_list:
+    value = x[2][0:2]
+    if value == '01':
+        jan1 = ''
+        jan1 = x
+        jan.append(list(jan1))
+
+    if value == '02':
+        feb1 = ''
+        feb1 = x
+        feb.append(list(feb1))
+
+    if value == '03':
+        mar1 = ''
+        mar1 = x
+        mar.append(list(mar1))
+
+    if value == '04':
+        apr1 = ''
+        apr1 = x
+        apr.append(list(apr1))
+
+    if value == '05':
+        may1 = ''
+        may1 = x
+        may.append(list(may1))
+
+    if value == '06':
+        june1 = ''
+        june1 = x
+        june.append(list(june1))
+
+    if value == '07':
+        july1 = ''
+        july1 = x
+        july.append(list(july1))
+
+    if value == '08':
+        aug1 = ''
+        aug1 = x
+        aug.append(list(aug1))
+
+    if value == '09':
+        sept1 = ''
+        sept1 = x
+        sept.append(list(sept1))
+
+    if value == '10':
+        oct1 = ''
+        oct1 = x
+        oct.append(list(oct1))
+
+    if value == '11':
+        nov1 = ''
+        nov1 = x
+        nov.append(list(nov1))
+
+    if value == '12':
+        dec1 = ''
+        dec1 = x
+        dec.append(list(dec1))
+
+# print('january')
+month_jan = sorted_time_dates(jan)
+# print('february')
+month_feb = sorted_time_dates(feb)
+# print('march')
+month_mar = sorted_time_dates(mar)
+# print('april')
+month_apr = sorted_time_dates(apr)
+# print('may')
+month_may = sorted_time_dates(may)
+# print('june')
+month_june = sorted_time_dates(june)
+# print('july')
+month_july = sorted_time_dates(july)
+# print('august')
+month_aug = sorted_time_dates(aug)
+# print('september')
+month_sept = sorted_time_dates(sept)
+# print('october')
+month_oct = sorted_time_dates(oct)
+# print('november')
+month_nov = sorted_time_dates(nov)
+# print('december')
+month_dec = sorted_time_dates(dec)
+
+# print('jan ', month_jan)
+# print('feb ', month_feb)
+total_months = month_jan + month_feb + month_mar + month_apr + month_may + month_june + month_july + month_aug + month_sept + month_oct + month_nov + month_dec
+# for x in total_months:
+#     print(x)
+# sort_jan = sorted(jan, key=operator.itemgetter(2))
+# sort_dec = sorted(dec, key=operator.itemgetter(2))
+# print(len(sort_jan), sort_jan)
+
+for x in data1:
+    x.remove(x[5])
+
+# print('data one ', data1[0])
+
+data2 = []
+count = 1
+for x in total_months:
+    for y in data1:
+        if x[0] == y[1]:
+            y[0] = str(count)
+            y[5] = x[1]
+            data2.append(y)
+            count += 1
+
+# for x in data2:
+#     print(x)
+
+counts = 2
+for x in data2:
+    for y in range(0, len(x)):
+        entry_login5.cell(counts, y + 1).value = x[y]
+    counts += 1
+
+# print('total records ',len(data2))
+temp = []
+for data_log in range(2, entry_login5.max_row + 1):
+    temp1=[]
+    for data_log1 in range(2, entry_login5.max_column + 1):
+        data = entry_login5.cell(data_log, data_log1).value
+        temp1.append(data)
+    temp.append(list(temp1))
+
+# sort year entry login5
+# for x in temp:
+#     print(x[4])
+
+year_temp1 = []
+for x in temp:
+    # print(x[5][15:19])
+    if x[4][15:19] not in year_temp1:
+        year_temp1.append(x[4][15:19])
+year_temp1.sort()
+
+# print('get year ', year_temp1)
+count = 0
+sort_year = []
+while count <= len(year_temp1)-1:
+    for x in temp:
+        if year_temp1[count] == x[4][15:19]:
+            sort_year.append(x)
+    count += 1
+
+counts = 2
+for x in sort_year:
+    for y in range(0, len(x)):
+        entry_login5.cell(counts, y + 2).value = x[y]
+    counts += 1
+
+# for x in sort_year:
+#     print(x)
+
+# get dates case record
+temp_shuffle = []
+for data_log in range(2, entry_login5.max_row + 1):
+    date_shuffle = entry_login5.cell(data_log, 6).value
+    temp_shuffle.append(date_shuffle)
+
+random.shuffle(temp_shuffle)
+# for x in temp_shuffle:
+#     print(x)
+print('len of data ',len(temp_shuffle))
+# for x in temp:
+#     print(x)
+print('len of data ',len(temp))
+cases =['Assault','Bribery','Computer Crime','Cyberbullying','Robbery','Shoplifting','Rape','Murder',
+        'Child Support','Prostitution','Perjury','Kidnapping','Fraud','Extortion','Drug possession','Vandalism']
+case_status = ['Not Guilty', 'Parole','No Record']
+case_status1 = ['Not Guilty', 'Parole']
+case_status2 = ['Wanted', 'On-Trial']
+
+headings = ['ID Number' ,'First Name' ,'Last Name' ,'Record Case' ,'Record Dates','Record Status']
+for x in range(0 ,len(headings)):
+    entry_login6.cell(1, x+1).value = headings[x]
+
+temp3 =[]
+for x in range(0 ,len(temp)):
+    temp2 = []
+    temp_case = ''
+    temp_case_status1 = ''
+    temp2.append(temp[x][0])
+    temp2.append(temp[x][1])
+    temp2.append(temp[x][2])
+    if temp[x][5] == 'red':
+        temp_case = random.choice(cases)
+        temp_case_status1 = random.choice(case_status2)
+        temp2.append(temp_case)
+    else:
+        temp_case = random.choice(case_status)
+        if temp_case == 'No Record':
+            temp2.append(temp_case)
+            temp_case_status1 = temp_case
+        else:
+            temp_case = random.choice(cases)
+            temp2.append(temp_case)
+            temp_case_status1 = random.choice(case_status1)
+    temp2.append(temp_shuffle[x])
+    temp2.append(temp_case_status1)
+    temp3.append(list(temp2))
+
+# for x in temp3:
+#     print(x)
+
+counts = 2
+for x in temp3:
+    for y in range(0, len(x)):
+        entry_login6.cell(counts, y + 1).value = x[y]
+    counts += 1
+
+
+# for data_log in range(2, entry_login5.max_row + 1):
+#     get_entry_idno = entry_login5.cell(data_log, 1).value
+#     get_entry_sm = entry_login5.cell(data_log, 2).value
+#     get_entry_ff = entry_login5.cell(data_log, 3).value
+#     get_entry_cs = entry_login5.cell(data_log, 4).value
+
+print('data loggins')
+# wb.save('entry_login1.xlsx')
+# pnp id log-ins data
+
+
+def get_datas():
+    datas =[
+        ['98994', 'mishallen', 'baldecasa', 'm_baldecasa@gmail.com', 'red'],
+        ['93941', 'allen', 'mangwelito', 'a_mangwelito@gmail.com', 'green'],
+        ['99959', 'manuel', 'gamboa', 'm_gamboa@gmail.com', 'green'],
+        ['91946', 'angel', 'mangwelito', 'a_mangwelito@gmail.com', 'green'],
+        ['90134', 'noel', 'diaz', 'n_diaz@gmail.com', 'green'],
+        ['92463', 'ronald', 'perez', 'r_perez@gmail.com', 'red'],
+        ['90250', 'noel', 'ramirez', 'n_ramirez@gmail.com', 'green'],
+        ['99905', 'maricel', 'joverez', 'm_joverez@gmail.com', 'green'],
+        ['90184', 'allen', 'dejesus', 'a_dejesus@gmail.com', 'green'],
+        ['91453', 'allen', 'navarra', 'a_navarra@gmail.com', 'green'],
+        ['90186', 'mariel', 'baldecasa', 'm_baldecasa@gmail.com', 'green'],
+        ['99003', 'maricel', 'navarra', 'm_navarra@gmail.com', 'red'],
+        ['95616', 'melannie', 'gamboa', 'm_gamboa@gmail.com', 'green'],
+        ['92485', 'purita', 'baldecasa', 'p_baldecasa@gmail.com', 'red'],
+        ['98095', 'noel', 'joverez', 'n_joverez@gmail.com', 'green'],
+        ['96626', 'mishallen', 'tipan', 'm_tipan@gmail.com', 'green'],
+        ['91635', 'mishallen', 'diaz', 'm_diaz@gmail.com', 'red'],
+        ['98118', 'angel', 'gamboa', 'a_gamboa@gmail.com', 'red'],
+        ['98241', 'mariel', 'baldecasa', 'm_baldecasa@gmail.com', 'green'],
+        ['96989', 'allen', 'ramirez', 'a_ramirez@gmail.com', 'red'],
+        ['92843', 'noel', 'dejesus', 'n_dejesus@gmail.com', 'green'],
+        ['94188', 'vhinz', 'dejesus', 'v_dejesus@gmail.com', 'green'],
+        ['98984', 'melannie', 'gamboa', 'm_gamboa@gmail.com', 'red'],
+        ['96949', 'ronald', 'tipan', 'r_tipan@gmail.com', 'green'],
+        ['91348', 'maricel', 'gamboa', 'm_gamboa@gmail.com', 'red'],
+        ['99220', 'purita', 'delacruz', 'p_delacruz@gmail.com', 'green'],
+        ['94321', 'melannie', 'baldecasa', 'm_baldecasa@gmail.com', 'green'],
+        ['96288', 'manuel', 'navarra', 'm_navarra@gmail.com', 'green'],
+        ['95363', 'mishallen', 'diaz', 'm_diaz@gmail.com', 'green'],
+        ['96338', 'mishallen', 'ramirez', 'm_ramirez@gmail.com', 'green'],
+    ]
+    return datas
+
+    # for data in range(0 ,len(datas)):
+    #     print(datas[data])
+
+# security id log-ins data
+def get_datas1():
+    datas1 =[
+        ['98994', 'fastfood', '2023/11/13 09:00:01', 'still login'],
+        ['93941', 'fastfood', '2023/11/13 09:00:59', '2023/11/13 09:09:45'],
+        ['99959', 'sm downtown', '2023/11/13 09:10:09', '2023/11/13 09:20:55'],
+        ['91946', 'sm central', '2023/11/13 09:15:15', '2023/11/13 09:20:06'],
+        ['90134', 'choas', '2023/11/13 09:15:15', '2023/11/13 09:20:59'],
+        ['92463', 'harbour point', '2023/11/13 09:25:31', '2023/11/13 09:28:10'],
+        ['90250', 'newstar', '2023/11/13 09:40:21', '2023/11/13 09:50:50'],
+        ['99905', 'newstar', '2023/11/13 09:41:30', '2023/11/13 09:50:50'],
+        ['90184', 'harbor point', '2023/11/13 10:00:00', '2023/11/13 11:00:03'],
+        ['91453', 'choas', '2023/11/13 10:10:05', '2023/11/13 10:18:55'],
+        ['90186', 'fastfood', '2023/11/13 10:20:08', '2023/11/13 10:30:04'],
+        ['99003', 'sm downtown', '2023/11/13 10:20:10', 'still login'],
+        ['95616', 'harbour point', '2023/11/13 10:59:59', '2023/11/13 12:10:10'],
+        ['92485', 'newstar', '2023/11/13 11:00:00', 'still login'],
+        ['98095', 'sm central', '2023/11/13 11:30:20', '2023/11/13 12:50:50'],
+        ['96626', 'harbor point', '2023/11/13 12:25:25', '2023/11/13 13:00:00'],
+        ['91635', 'sm downtown', '2023/11/13 12:25:25', '2023/11/13 14:10:29'],
+        ['98118', 'harbor point', '2023/11/13 12:25:27', 'still login'],
+        ['98241', 'choas', '2023/11/13 12:26:00', '2023/11/13 12:30:09'],
+        ['96989', 'harbor point', '2023/11/13 13:00:08', '2023/11/13 13:20:19'],
+        ['92843', 'harbor point', '2023/11/13 13:10:51', '2023/11/13 15:02:40'],
+        ['94188', 'newstar', '2023/11/13 14:20:49', '2023/11/13 16:22:35'],
+        ['98984', 'choas', '2023/11/13 15:10:01', '2023/11/13 17:40:45'],
+        ['96949', 'fastfood', '2023/11/13 16:10:12', '2023/11/13 18:00:09'],
+        ['91348', 'sm central', '2023/11/13 17:10:56', 'still login'],
+        ['99220', 'choas', '2023/11/13 18:10:05', '2023/11/13 19:00:34'],
+        ['94321', 'sm downtown', '2023/11/13 20:09:10', '2023/11/13 20:17:01'],
+        ['96288', 'fastfood', '2023/11/13 20:09:10', '2023/11/13 20:55:20'],
+        ['95363', 'harbor point', '2023/11/13 20:31:38', '2023/11/13 20:55:20'],
+        ['96338', 'harbor point', '2023/11/13 20:40:40', '2023/11/13 20:58:55'],
+    ]
+    return datas1
+
+    # for data in range(0 ,len(datas1)):
+    #     print(datas1[data])
+
+# entry id log-ins data
+def get_datas2():
+    datas2 =[
+        ['98994', 'fastfood', '2023/11/13 09:00:01', '2023/11/13 09:20:00'],
+        ['93941', 'fastfood', '2023/11/13 09:00:59', '2023/11/13 09:09:45'],
+        ['99959', 'sm downtown', '2023/11/13 09:10:09', '2023/11/13 09:20:55'],
+        ['91946', 'sm central', '2023/11/13 09:15:15', '2023/11/13 09:20:06'],
+        ['90134', 'choas', '2023/11/13 09:15:15', '2023/11/13 09:20:59'],
+        ['92463', 'harbour point', '2023/11/13 09:25:31', '2023/11/13 09:28:10'],
+        ['90250', 'newstar', '2023/11/13 09:40:21', '2023/11/13 09:50:50'],
+        ['99905', 'newstar', '2023/11/13 09:41:30', '2023/11/13 09:50:50'],
+        ['90184', 'harbor point', '2023/11/13 10:00:00', '2023/11/13 11:00:03'],
+        ['91453', 'choas', '2023/11/13 10:10:05', '2023/11/13 10:18:55'],
+        ['90186', 'fastfood', '2023/11/13 10:20:08', '2023/11/13 10:30:04'],
+        ['99003', 'sm downtown', '2023/11/13 10:20:10', '2023/11/13 10:50:58'],
+        ['95616', 'harbour point', '2023/11/13 10:59:59', '2023/11/13 12:10:10'],
+        ['92485', 'newstar', '2023/11/13 11:00:00', '2023/11/13 11:13:25'],
+        ['98095', 'sm central', '2023/11/13 11:30:20', '2023/11/13 12:50:50'],
+        ['96626', 'harbor point', '2023/11/13 12:25:25', '2023/11/13 13:00:00'],
+        ['91635', 'sm downtown', '2023/11/13 12:25:25', '2023/11/13 14:10:29'],
+        ['98118', 'harbor point', '2023/11/13 12:25:27', '2023/11/13 15:00:19'],
+        ['98241', 'choas', '2023/11/13 12:26:00', '2023/11/13 12:30:09'],
+        ['96989', 'harbor point', '2023/11/13 13:00:08', '2023/11/13 13:20:19'],
+        # ['92843', 'harbor point', '2023/11/13 13:10:51', '2023/11/13 15:02:40'],
+        # ['94188', 'newstar', '2023/11/13 14:20:49', '2023/11/13 16:22:35'],
+        # ['98984', 'choas', '2023/11/13 15:10:01', '2023/11/13 17:40:45'],
+        # ['96949', 'fastfood', '2023/11/13 16:10:12', '2023/11/13 18:00:09'],
+        # ['91348', 'sm central', '2023/11/13 17:10:56', '2023/11/13 17:48:06'],
+        # ['99220', 'choas', '2023/11/13 18:10:05', '2023/11/13 19:00:34'],
+        # ['94321', 'sm downtown', '2023/11/13 20:09:10', '2023/11/13 20:17:01'],
+        # ['96288', 'fastfood', '2023/11/13 20:09:10', '2023/11/13 20:55:20'],
+        # ['95363', 'harbor point', '2023/11/13 20:31:38', '2023/11/13 20:55:20'],
+        # ['96338', 'harbor point', '2023/11/13 20:40:40', '2023/11/13 20:58:55'],
+    ]
+    return datas2
+
+    # for data in range(0 ,len(datas2)):
+    #     print(datas2[data])
+
+# get_datas()
+# get_datas1()
+# get_datas2()
+# window.mainloop()
