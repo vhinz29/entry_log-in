@@ -1,0 +1,920 @@
+from tkinter import *
+import tkinter
+from tkinter import ttk
+import tkinter as tk
+from tkinter import messagebox
+from datetime import date
+import datetime
+from time import sleep
+import time
+import random
+import data_logins
+from operator import itemgetter
+import operator
+from PIL import Image, ImageTk, ImageFont, ImageDraw
+from openpyxl import Workbook, load_workbook
+from openpyxl.utils import get_column_letter
+
+
+wb = load_workbook("entry_login1.xlsx")
+
+ws = wb['entry_log']
+ws1 = wb['entry_log1']
+ws2 = wb['entry_log2']
+ws5 = wb['data_records']
+
+entry_login = ws
+entry_login1 = ws1
+entry_login2 = ws2
+entry_login5 = ws5
+
+
+global get_loc, win, idno, check_but_value
+# get select location of listbox
+check_but_value = ''
+get_loc = []
+idno = []
+# remove second window
+win = []
+
+global  testing_loop
+testing_loop = []
+
+datas=["sm downtown" ,"sm central" ,"harbour point", "newstar", "fastfood", "choas"]
+
+window = Tk()
+window.resizable(0,0)
+window.title('Entry I.D System')
+# window.geometry("400x400")
+app_width = 400
+app_height = 540
+screen_width = window.winfo_screenwidth()
+screen_height = window.winfo_screenheight()
+
+x = (screen_width / 2) - (app_width / 2)
+y = (screen_height / 2) - 50 - (app_height / 2)
+window.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+
+icon = PhotoImage(file= 'mevin_pics1.png')
+window.iconphoto(True,icon)
+# window['bg']='#F0F0F0'
+window['bg']='#d9d9d9'
+
+bg_color ='#d9d9d9'
+fg_color ='black'
+
+entry_bg = 'white'
+entry_fg = 'black'
+
+img = Image.open('button_icon.png')
+resize_img = img.resize((120,60))
+photo1 = ImageTk.PhotoImage(resize_img)
+
+img1 = Image.open('button_icon1.png')
+resize_img1 = img1.resize((120,50))
+photo2 = ImageTk.PhotoImage(resize_img1)
+
+img2 = Image.open('button_icon1.png')
+resize_img2 = img2.resize((85,40))
+photo3 = ImageTk.PhotoImage(resize_img2)
+
+global temp_data
+temp_data = []
+def view_locs():
+    global  get_loc, win, check_but_value, listbox
+    listbox = ''
+
+    get_loc = []
+    window1 = Toplevel()
+    win.append(window1)
+    window1.resizable(0, 0)
+    window1.title('Entry I.D System')
+    app_width = 300
+    app_height = 300
+    screen_width = window1.winfo_screenwidth()
+    screen_height = window1.winfo_screenheight()
+
+    x = (screen_width / 2) - 400 - (app_width / 2)
+    y = (screen_height / 2) - 50 - (app_height / 2)
+    window1.geometry('%dx%d+%d+%d' % (app_width, app_height, x, y))
+
+    label = Label(window1, text="Pick Location" ,font=('arial', 15))
+    label.place(x=82 ,y=10)
+
+    my_frame = Frame(window1)
+    scrollbar1 = Scrollbar(my_frame, orient=VERTICAL)
+    scrollbar1.pack(side=RIGHT, fill=Y)
+
+    scrollbar = Scrollbar(my_frame, orient=HORIZONTAL)
+    scrollbar.pack(side=BOTTOM, fill=X)
+
+    listbox = Listbox(my_frame, xscrollcommand=scrollbar.set,
+                     yscrollcommand=scrollbar1.set,
+                     font=('Consolas', 11, ''), fg='black', bg='white',
+                     activestyle="none", width=40, height=16)
+
+    listbox.insert(1, "Super Malls")
+    listbox.insert(2, "Fast Food")
+    listbox.insert(3, "Computer Shop")
+    # listbox.insert(4, "Fastfood")
+    # listbox.insert(5, "Choas")
+
+    listbox.pack(side=LEFT)
+    scrollbar1.config(command=listbox.yview, width=25)
+
+    listbox.pack(side=TOP)
+    scrollbar.config(command=listbox.xview, width=20)
+
+    my_frame.pack(padx= 10,pady=70)
+
+    listbox.bind('<ButtonRelease>', scroll_listbox)
+    get_loc.append(listbox)
+
+def scroll_listbox(e):
+    global get_loc, check_but_value, idno, listbox
+    delete_entry()
+    print('scroll listbox log-in')
+    tempo_login1 = []
+    tempo_login2 = []
+    tempo_login3 = []
+    # print('idno ',idno)
+    # print('list box ' ,listbox.get(listbox.curselection()))
+    # entry log-in super malls
+    current = datetime.datetime.today()
+    current = current.strftime("%d-%m-%Y")
+
+    # Super Malls
+    no_column = entry_login.max_column
+    print('max column ',no_column)
+    temp_column_no = 0
+    for data_log in range(1, entry_login.max_column + 1):
+        get_entry_date = entry_login.cell(1, data_log).value
+        if get_entry_date != None:
+            # print('get entry date column ',get_entry_date ,data_log)
+            temp_column_no = data_log
+    get_date = 0
+    if entry_login.cell(1, 1).value == None:
+        entry_login.cell(no_column, 1).value = current
+        entry_login.cell(no_column + 1, 1).value = 'ID Number'
+        entry_login.cell(no_column + 1, 2).value = 'Log-in'
+        entry_login.cell(no_column + 1, 3).value = 'Log-out'
+        get_date = current
+        temp_column_no = 1
+    else:
+        try:
+            get_entry_date = entry_login.cell(1, temp_column_no).value
+            # print('get entry dates ', get_entry_date)
+            get_date = get_entry_date.strftime("%d-%m-%Y")
+            # print('get entry dates ',get_date)
+            # temp_column_no =  no_column
+        except:
+            get_entry_date = entry_login.cell(1, temp_column_no).value
+            # print('get entry dates ', get_entry_date)
+            get_date = date(int(get_entry_date[6:11]), int(get_entry_date[3:5]), int(get_entry_date[0:2]))
+            # print('get entry dates ', get_entry_date)
+            get_date = get_date.strftime("%d-%m-%Y")
+            # temp_column_no = no_column
+
+    if get_date  != current:
+        for data_log in range(1, entry_login.max_column + 1):
+            get_entry_no = entry_login.cell(1, data_log).value
+            if get_entry_no != None:
+                # print('data log ',data_log)
+                entry_login.cell(1 , 1 + no_column ).value = current
+                entry_login.cell(2, 1 + no_column ).value = 'ID Number'
+                entry_login.cell(2, 2 + no_column ).value = 'Log-in'
+                entry_login.cell(2, 3 + no_column ).value = 'Log-out'
+                temp_column_no = 1 + no_column
+
+    for data_log in range(3, entry_login.max_row + 1):
+        get_entry_login = entry_login.cell(data_log, 1).value
+        tempo_login1.append(get_entry_login)
+    print('super malls id number count ', len(set(tempo_login1)))
+    # print(list(enumerate(tempo_login1, start=0)))
+
+    for data_log in range(2, entry_login1.max_row + 1):
+        get_entry_login = entry_login1.cell(data_log, 1).value
+        tempo_login2.append(get_entry_login)
+    # print('fast food id number count ', len(set(tempo_login2)))
+    # print(list(enumerate(tempo_login2, start=0)))
+
+    for data_log in range(2, entry_login2.max_row + 1):
+        get_entry_login = entry_login2.cell(data_log, 1).value
+        tempo_login3.append(get_entry_login)
+    # print('computer shop id number count ', len(set(tempo_login3)))
+    # print(list(enumerate(tempo_login3, start=0)))
+
+    if check_but_value not in ['login' ,'logout']:
+        # print('check_but_value if else')
+        messagebox.showinfo(title='i.d entry', message="Check Login, Logout and Closing Time")
+
+    elif check_but_value == 'login':
+        print('log-in')
+        for x in get_loc:
+            my_list_value = list(x.get(x.curselection()))
+        my_list_value =  ''.join(my_list_value)
+
+        if my_list_value == 'Super Malls':
+            print('Super Malls ',''.join(my_list_value))
+            # print('idno ',idno)
+            reset_datas()
+            login_location.insert(0, ''.join(my_list_value))
+
+            if len(idno) == 1:
+                value = 1
+            elif len(idno) == 2:
+                value = 2
+            else:
+                value = 3
+
+            # datas2 = full_data.copy()
+            # idno.clear()
+            # print('data of datas2 ',len(datas2) ,datas2)
+            # for data in range(0, len(datas2)):
+            #     idno.append(datas2[data][0])
+            print('id list ', len(idno), idno)
+            print('id list ', len(set(idno)), idno)
+
+            current = datetime.datetime.today()
+            current = current.strftime("%H:%M:%S")
+            random_num = random.randint(1, value)
+            value1 = random_num
+            # temp_excel = entry_login.max_row + 1
+
+            temp_row_no = 1
+            print('row and column ', temp_row_no ,temp_column_no)
+            for data_log in range(1, entry_login.max_row + 1):
+                get_entry_total = entry_login.cell(data_log, temp_column_no).value
+                if get_entry_total != None:
+                    # print('get entry total ',get_entry_total ,data_log)
+                    temp_row_no = data_log
+
+            temp_row_no += 1
+            temp_list = []
+            while random_num >= 1:
+                temp_id_no = random.choice(idno)
+                temp_list.append(temp_id_no)
+                # idno.remove(temp_id_no)
+                find = 'True'
+                count = 0
+                count_id = 0
+
+                if count_id == 0:
+                    entry_login.cell(temp_row_no, temp_column_no).value = temp_id_no
+                    # entry_login.cell(temp_excel, 2).value = ''.join(my_list_value)
+                    entry_login.cell(temp_row_no, temp_column_no + 1).value = current
+
+                    temp_row_no += 1
+                    random_num -= 1
+
+
+            if value1 == 1:
+                login_entry1.insert(0, temp_list[0])
+
+            elif value1 == 2:
+                login_entry1.insert(0, temp_list[0])
+                login_entry2.insert(0, temp_list[1])
+
+            elif value1 == 3:
+                login_entry1.insert(0, temp_list[0])
+                login_entry2.insert(0, temp_list[1])
+                login_entry3.insert(0, temp_list[2])
+
+            len_count = 0
+            for data_log in range(1, entry_login.max_row + 1):
+                get_entry_total = entry_login.cell(data_log, temp_column_no + 1).value
+                if get_entry_total != None:
+                    len_count += 1
+
+            login_times.insert(0, current)
+            login_count1.insert(0, len_count - 1)
+
+        elif my_list_value == 'Fast Food':
+            print('Fast Food')
+            reset_datas()
+            # entry_login1 = ws1
+            login_location.insert(0, ''.join(my_list_value))
+
+            if len(idno) == 1:
+                value = 1
+            elif len(idno) == 2:
+                value = 2
+            else:
+                value = 3
+
+            datas2 = full_data.copy()
+            idno.clear()
+            print('data of datas2 ', len(datas2), datas2)
+            for data in range(0, len(datas2)):
+                idno.append(datas2[data][0])
+            print('id list ', len(set(idno)), idno)
+
+            current = datetime.datetime.today()
+            current = current.strftime("%H:%M:%S %d/%m/%Y")
+            # print('lenght id no ',len(idno))
+            # if len(idno) != 0:
+            random_num = random.randint(1, value)
+            value1 = random_num
+            temp_excel = entry_login1.max_row + 1
+            temp_list = []
+            while random_num >= 1:
+                temp_id_no = random.choice(idno)
+                temp_list.append(temp_id_no)
+                idno.remove(temp_id_no)
+                find = 'True'
+                count = 0
+                count_id = 0
+                for data_log in range(2, entry_login1.max_row + 1):
+                    get_entry_login = entry_login1.cell(data_log, 1).value
+                    get_entry_timein = entry_login1.cell(data_log, 3).value
+                    get_entry_timeout = entry_login1.cell(data_log, 4).value
+
+                    if str(get_entry_login) == temp_id_no:
+                        count_id = 1
+                        while find == 'True':
+                            if get_entry_timein == None:
+                                get_entry_timein = entry_login1.cell(data_log, 3 + count).value = current
+                                entry_login1.cell(1, 3 + count).value = 'Log-in'
+                                entry_login1.cell(1, 4 + count).value = 'Log-out'
+                                find = 'False'
+                                # temp_excel += 1
+                                random_num -= 1
+
+                            else:
+                                count += 2
+                                get_entry_timein = entry_login1.cell(data_log, 3 + count).value
+                        data_log -= 1
+
+                print('random number ', ''.join(my_list_value), temp_id_no, current)
+                # print('random number ', len(idno))
+                # input value in excel files
+                if count_id == 0:
+                    entry_login1.cell(temp_excel, 1).value = temp_id_no
+                    entry_login1.cell(temp_excel, 2).value = ''.join(my_list_value)
+                    entry_login1.cell(temp_excel, 3).value = current
+
+                    temp_excel += 1
+                    random_num -= 1
+
+            if value1 == 1:
+                login_entry1.insert(0, temp_list[0])
+
+            elif value1 == 2:
+                login_entry1.insert(0, temp_list[0])
+                login_entry2.insert(0, temp_list[1])
+
+            elif value1 == 3:
+                login_entry1.insert(0, temp_list[0])
+                login_entry2.insert(0, temp_list[1])
+                login_entry3.insert(0, temp_list[2])
+
+            login_times.insert(0, current)
+            # tempo_login1 = []
+            # print('id list ',len(idno) ,idno)
+            # temp_column = entry_login.max_column
+            # print('temporary column ',temp_column)
+            # entry_login.cell(2, temp_column).value = 'vhinz'
+            login_count1.insert(0, entry_login1.max_row - 1)
+
+        elif my_list_value == 'Computer Shop':
+            print('Computer Shop')
+            # entry_login2 = ws2
+            reset_datas()
+            login_location.insert(0, ''.join(my_list_value))
+
+            if len(idno) == 1:
+                value = 1
+            elif len(idno) == 2:
+                value = 2
+            else:
+                value = 3
+
+            datas2 = full_data.copy()
+            idno.clear()
+            print('data of datas2 ', len(datas2), datas2)
+            for data in range(0, len(datas2)):
+                idno.append(datas2[data][0])
+            print('id list ', len(set(idno)), idno)
+
+            current = datetime.datetime.today()
+            current = current.strftime("%H:%M:%S %d/%m/%Y")
+            # print('lenght id no ',len(idno))
+            # if len(idno) != 0:
+            random_num = random.randint(1, value)
+            value1 = random_num
+            temp_excel = entry_login2.max_row + 1
+            temp_list = []
+            while random_num >= 1:
+                temp_id_no = random.choice(idno)
+                temp_list.append(temp_id_no)
+                idno.remove(temp_id_no)
+                find = 'True'
+                count = 0
+                count_id = 0
+                for data_log in range(2, entry_login2.max_row + 1):
+                    get_entry_login = entry_login2.cell(data_log, 1).value
+                    get_entry_timein = entry_login2.cell(data_log, 3).value
+                    get_entry_timeout = entry_login2.cell(data_log, 4).value
+
+                    if str(get_entry_login) == temp_id_no:
+                        count_id = 1
+                        while find == 'True':
+                            if get_entry_timein == None:
+                                get_entry_timein = entry_login2.cell(data_log, 3 + count).value = current
+                                entry_login2.cell(1, 3 + count).value = 'Log-in'
+                                entry_login2.cell(1, 4 + count).value = 'Log-out'
+                                find = 'False'
+                                # temp_excel += 1
+                                random_num -= 1
+
+                            else:
+                                count += 2
+                                get_entry_timein = entry_login2.cell(data_log, 3 + count).value
+                        data_log -= 1
+
+                print('random number ', ''.join(my_list_value), temp_id_no, current)
+                # print('random number ', len(idno))
+                # input value in excel files
+                if count_id == 0:
+                    entry_login2.cell(temp_excel, 1).value = temp_id_no
+                    entry_login2.cell(temp_excel, 2).value = ''.join(my_list_value)
+                    entry_login2.cell(temp_excel, 3).value = current
+
+                    temp_excel += 1
+                    random_num -= 1
+
+            if value1 == 1:
+                login_entry1.insert(0, temp_list[0])
+
+            elif value1 == 2:
+                login_entry1.insert(0, temp_list[0])
+                login_entry2.insert(0, temp_list[1])
+
+            elif value1 == 3:
+                login_entry1.insert(0, temp_list[0])
+                login_entry2.insert(0, temp_list[1])
+                login_entry3.insert(0, temp_list[2])
+
+            login_times.insert(0, current)
+            # tempo_login1 = []
+            # print('id list ',len(idno) ,idno)
+            # temp_column = entry_login.max_column
+            # print('temporary column ',temp_column)
+            # entry_login.cell(2, temp_column).value = 'vhinz'
+            login_count1.insert(0, entry_login2.max_row - 1)
+
+
+
+    for x in range(0, len(win)):
+        win[x].destroy()
+
+    # login_count1.insert(0, entry_login.max_row - 1)
+    wb.save('entry_login1.xlsx')
+
+def check_buttons(value):
+    global check_but_value
+
+    check_but_value = value
+    delete_entry()
+
+    current = datetime.datetime.today()
+    current = current.strftime("%d/%m/%Y %H:%M:%S ")
+
+    if current >= '25/11/2023 21:00:00' and current <= '25/11/2023 08:59:59':
+        print('location is closed')
+        check_but_value = ' '
+        reset_data.config(command=reset_datas1)
+
+    # elif '09:00:00 24/12/2023' <= current:
+#     print('location is now open')
+    elif check_but_value == 'login':
+        login_frame1.config(text='Entrance 1 ')
+        login_frame2.config(text='Entrance 2 ')
+        login_frame3.config(text='Entrance 3 ')
+        login_time.config(text='Log-in Time')
+
+        view_loc.place(x=45 ,y=140)
+        view_loc.config(text='Location', command=view_locs)
+
+        login_location.place(x=45, y=80)
+        login_location.config()
+
+        check_login.place(x=290, y=138)
+        check_login.config()
+
+        check_logout.place(x=290, y=168)
+        check_logout.config
+
+        login_count.place(x=210, y=138)
+        login_count.config(text='Count')
+        login_count1.place(x=210, y=160)
+        login_count1.config
+
+        login_count2.place_forget()
+        login_count3.place_forget()
+
+        login_count4.place_forget()
+        login_count5.place_forget()
+
+
+    elif check_but_value == 'logout':
+        login_frame1.config(text='Exit 1 ')
+        login_frame2.config(text='Exit 2 ')
+        login_frame3.config(text='Exit 3 ')
+        login_time.config(text='Log-out Time')
+
+        # button get id and location
+        # view_loc.place(x=230, y=135)
+        view_loc.config(text='Enter', command=scroll_listbox1)
+
+        # delete entry of log-ins
+        login_location.place_forget()
+
+        # checkin and checkout checkbox
+        # check_login.place(x=290, y=70)
+        check_login.config()
+        # check_logout.place(x=290, y=100)
+        check_logout.config
+
+        # count of people to the location
+        login_count.place(x=45, y=70)
+        login_count.config(text='Super Malls',font=('arial', 7))
+        login_count1.place(x=45, y=92)
+        login_count1.config()
+
+        login_count2.place(x=168, y=70)
+        login_count2.config()
+        login_count3.place(x=168, y=92)
+        login_count3.config()
+
+        login_count4.place(x=290, y=70)
+        login_count4.config()
+        login_count5.place(x=290, y=92)
+        login_count5.config()
+
+        # login_count2 = Label(window, text='F.F', font=('arial', 8), fg=fg_color, bg=bg_color)
+        #
+        # login_count3 = Entry(window, font=('arial', 15), bg=entry_bg, width=5, border=2)
+        #
+        # login_count4 = Label(window, text='C.S', font=('arial', 8), fg=fg_color, bg=bg_color)
+        #
+        # login_count5 = Entry(window, font=('arial', 15), bg=entry_bg, width=5, border=2)
+
+        # view_loc.place_forget()
+
+def scroll_listbox1():
+    global idno
+    print('scroll listbox1 log-out')
+    # print('log-out')
+    reset_datas()
+    # datas2 = full_data.copy()
+    # idno.clear()
+    # print('data of datas2 ', len(datas2), datas2)
+    # for data in range(0, len(datas2)):
+    #     idno.append(datas2[data][0])
+    # print('id list ', len(set(idno)), idno)
+    # for x in idno:
+    #     print(x)
+
+    current = datetime.datetime.today()
+    current = current.strftime("%d-%m-%Y")
+
+    random_num = random.randint(1, 3)
+    value1 = random_num
+    temp_list, temp_list1 = [], []
+
+    location = ['Super Malls' ,'Fast Food', 'Computer Shop']
+    print('random number ', random_num ,location)
+    stopper = 0
+    no_column = entry_login.max_column
+    temp_column_no = 0
+    temp_row_no = 0
+    for data_log in range(1, entry_login.max_column + 1):
+        get_entry_date = entry_login.cell(1, data_log).value
+        if get_entry_date != None:
+            # print('get entry date column ',get_entry_date ,data_log)
+            temp_column_no = data_log
+
+    temp_row_no += 1
+    print('get entry total ', temp_row_no, temp_column_no)
+    if entry_login.cell(1, 1).value == None:
+        entry_login.cell(1, 1).value = current
+        entry_login.cell(2, 1).value = 'ID Number'
+        entry_login.cell(2, 2).value = 'Log-in'
+        entry_login.cell(2, 3).value = 'Log-out'
+        get_date = current
+        temp_column_no = 1
+
+    else:
+        try:
+            get_entry_date = entry_login.cell(1, temp_column_no).value
+            # print('get entry dates ', get_entry_date)
+            get_date = get_entry_date.strftime("%d-%m-%Y")
+            # print('get entry dates ', get_date)
+            # temp_column_no =  no_column
+        except:
+            get_entry_date = entry_login.cell(1, temp_column_no).value
+            # print('get entry dates ', get_entry_date)
+            get_date = date(int(get_entry_date[6:11]), int(get_entry_date[3:5]), int(get_entry_date[0:2]))
+            # print('get entry dates ', get_entry_date)
+            get_date = get_date.strftime("%d-%m-%Y")
+            # temp_column_no = no_column
+
+    if get_date != current:
+        for data_log in range(1, entry_login.max_column + 1):
+            get_entry_no = entry_login.cell(1, data_log).value
+            if get_entry_no != None:
+                # print('data log ', data_log)
+                entry_login.cell(1, 1 + no_column).value = current
+                entry_login.cell(2, 1 + no_column).value = 'ID Number'
+                entry_login.cell(2, 2 + no_column).value = 'Log-in'
+                entry_login.cell(2, 3 + no_column).value = 'Log-out'
+                temp_column_no = 1 + no_column
+
+    temp_row_no = 0
+    print('row and column ', temp_row_no, temp_column_no)
+    for data_log in range(1, entry_login.max_row + 1):
+        get_entry_total = entry_login.cell(data_log, temp_column_no).value
+        if get_entry_total != None:
+            # print('get entry total ',get_entry_total ,data_log)
+            temp_row_no = data_log + 1
+
+    current = datetime.datetime.today()
+    current = current.strftime("%H:%M:%S")
+    while random_num >= 1:
+        temp_id_no = random.choice(idno)
+        temp_location = 'Super Malls'
+        # temp_location = random.choice(location)
+        # print('random id no and location ',temp_id_no ,temp_location)
+        temp_list1.append(temp_location)
+        temp_list.append(temp_id_no)
+        idno.remove(temp_id_no)
+        find = 'True'
+        count = 0
+        count_id_loc = 0
+
+        if temp_location == 'Super Malls':
+            print('Super Malls ',temp_id_no)
+            entry_login.cell(temp_row_no, temp_column_no).value = temp_id_no
+            entry_login.cell(temp_row_no, temp_column_no + 2).value = current
+            temp_row_no += 1
+            random_num -= 1
+
+        elif temp_location == 'Fast Food':
+            # print('Fast Food ',temp_id_no)
+            for data_log in range(2, entry_login1.max_row + 1):
+                get_entry_login = entry_login1.cell(data_log, 1).value
+                # get_entry_loc = entry_login1.cell(data_log, 2).value
+                get_entry_timein = entry_login1.cell(data_log, 3).value
+                get_entry_timeout = entry_login1.cell(data_log, 4).value
+                if str(get_entry_login) == str(temp_id_no):
+                    count_id = 1
+                    temp_count = 1
+                    count_id_loc = 1
+                    while find == 'True':
+                        if get_entry_timein != None and get_entry_timeout == None:
+                            print('get_entry_timein != None and get_entry_timeout == None: ')
+                            print('id & time-out', temp_id_no ,current ,temp_location ,temp_count)
+                            get_entry_timein = entry_login1.cell(data_log, 3 + count).value
+                            get_entry_timeout = entry_login1.cell(data_log, 4 + count).value = current
+                            entry_login1.cell(1, 4 + count).value = 'Log-out'
+                            find = 'False'
+                            # temp_excel += 1
+                            random_num -= 1
+
+                        elif get_entry_timein == None and get_entry_timeout == None:
+                            messagebox.showinfo(title='i.d log-out', message="No Time-in")
+                            idno.append(temp_list[-1])
+                            temp_list1.remove(temp_list1[-1])
+                            temp_list.remove(temp_list[-1])
+                            print('get_entry_timein == None and get_entry_timeout == None:')
+                            print('id & time-out', temp_id_no ,temp_location, temp_count)
+                            find = 'False'
+
+                        else:
+                            count += 2
+                            get_entry_timein = entry_login1.cell(data_log, 3 + count).value
+                            get_entry_timeout = entry_login1.cell(data_log, 4 + count).value
+                        temp_count += 1
+                    data_log -= 1
+
+            if count_id_loc == 0:
+                idno.append(temp_list[-1])
+                temp_list1.remove(temp_list1[-1])
+                temp_list.remove(temp_list[-1])
+
+        elif temp_location == 'Computer Shop':
+            # print('Computer Shop ',temp_id_no)
+            for data_log in range(2, entry_login2.max_row + 1):
+                get_entry_login = entry_login2.cell(data_log, 1).value
+                # get_entry_loc = entry_login2.cell(data_log, 2).value
+                get_entry_timein = entry_login2.cell(data_log, 3).value
+                get_entry_timeout = entry_login2.cell(data_log, 4).value
+                if str(get_entry_login) == str(temp_id_no):
+                    count_id = 1
+                    temp_count = 1
+                    count_id_loc = 1
+                    while find == 'True':
+                        if get_entry_timein != None and get_entry_timeout == None:
+                            print('get_entry_timein != None and get_entry_timeout == None: ')
+                            print('id & time-out', temp_id_no ,current ,temp_location ,temp_count)
+                            get_entry_timein = entry_login2.cell(data_log, 3 + count).value
+                            get_entry_timeout = entry_login2.cell(data_log, 4 + count).value = current
+                            entry_login2.cell(1, 4 + count).value = 'Log-out'
+                            find = 'False'
+                            # temp_excel += 1
+                            random_num -= 1
+
+                        elif get_entry_timein == None and get_entry_timeout == None:
+                            messagebox.showinfo(title='i.d log-out', message="No Time-in")
+                            idno.append(temp_list[-1])
+                            temp_list1.remove(temp_list1[-1])
+                            temp_list.remove(temp_list[-1])
+                            print('get_entry_timein == None and get_entry_timeout == None:')
+                            print('id & time-out', temp_id_no ,temp_location, temp_count )
+                            find = 'False'
+
+                        else:
+                            count += 2
+                            get_entry_timein = entry_login2.cell(data_log, 3 + count).value
+                            get_entry_timeout = entry_login2.cell(data_log, 4 + count).value
+                        temp_count += 1
+                    data_log -= 1
+
+            if count_id_loc == 0:
+                idno.append(temp_list[-1])
+                temp_list1.remove(temp_list1[-1])
+                temp_list.remove(temp_list[-1])
+
+        # print('stopper ',stopper)
+        # if stopper == 30:
+        #     value1 = 0
+        #     messagebox.showinfo(title='i.d log-out', message="check time-in and time-out records")
+        #     break
+        # stopper += 1
+
+    # print('temp list ',temp_list ,temp_list1)
+    if value1 == 1:
+        login_entry1.insert(0, temp_list[0] +', '+temp_list1[0])
+        login_location.insert(0, temp_list1[0] )
+
+    elif value1 == 2:
+        login_entry1.insert(0, temp_list[0] +', '+temp_list1[0] )
+        login_entry2.insert(0, temp_list[1] +', '+temp_list1[1])
+        # login_location.insert(0, temp_list1[0] +', '+ temp_list1[1])
+
+    elif value1 == 3:
+        login_entry1.insert(0, temp_list[0] +', '+temp_list1[0])
+        login_entry2.insert(0, temp_list[1] +', '+temp_list1[1])
+        login_entry3.insert(0, temp_list[2] +', '+temp_list1[2])
+        # login_location.insert(0, temp_list1[0] + ', ' + temp_list1[1] + ', '+ temp_list1[2])
+
+    tempo_login1 = []
+    tempo_login2 = []
+    tempo_login3 = []
+
+    for data_log in range(2, entry_login.max_row + 1):
+        get_entry_logout = entry_login.cell(data_log, temp_column_no + 2).value
+        if get_entry_logout != None:
+            tempo_login1.append(get_entry_logout)
+            # print('get entry log out ',get_entry_logout)
+    # print('super malls id number count ', len(tempo_login1))
+    # print(list(enumerate(tempo_login1, start=0)))
+
+    for data_log in range(2, entry_login1.max_row + 1):
+        get_entry_logout = entry_login1.cell(data_log, 4).value
+        if get_entry_logout != None:
+            tempo_login2.append(get_entry_logout)
+    # print('fast food id number count ', len(tempo_login2))
+    # print(list(enumerate(tempo_login2, start=0)))
+
+    for data_log in range(2, entry_login2.max_row + 1):
+        get_entry_logout = entry_login2.cell(data_log, 4).value
+        if get_entry_logout != None:
+            tempo_login3.append(get_entry_logout)
+    # print('computer shop id number count ', len(tempo_login3))
+    # print(list(enumerate(tempo_login3, start=0)))
+
+    login_times.insert(0, current)
+    login_count1.insert(0, len(tempo_login1) -1)
+    login_count3.insert(0, len(tempo_login2))
+    login_count5.insert(0, len(tempo_login3))
+    wb.save('entry_login1.xlsx')
+
+def delete_entry():
+    # print('delete entry')
+    login_entry1.delete(0, END)
+    login_entry2.delete(0, END)
+    login_entry3.delete(0, END)
+    login_times.delete(0, END)
+
+def reset_datas():
+    print('reset data')
+    login_entry1.delete(0, END)
+    login_entry2.delete(0, END)
+    login_entry3.delete(0, END)
+    login_times.delete(0, END)
+    login_count1.delete(0, END)
+    login_count3.delete(0, END)
+    login_count5.delete(0, END)
+    login_location.delete(0, END)
+
+def reset_datas1():
+    r.set(None)
+
+def exit_datas():
+    print('exit data')
+    exit()
+
+
+full_data = data_logins.get_datas2()
+datas2 = full_data.copy()
+for data_log in range(2, entry_login5.max_row + 1):
+    id_num = entry_login5.cell(data_log, 2).value
+    idno.append(id_num)
+    # print('id number' ,id_num)
+# for x in idno:
+#     print(x)
+print('idno number: ',idno)
+
+login_frame = Label(window, text='I.D Login',font=('arial', 16) ,fg=fg_color ,bg=bg_color)
+
+login_frame.place(x=20 ,y=15)
+# login_frame.pack(padx=20,pady=10,anchor='nw',expand = YES, fill = BOTH)
+
+login_location = Entry(window, font=('arial', 20),bg =entry_bg, width=20, border=2)
+login_location.place(x=45 ,y=80)
+
+# view_loc = Button(window, text='Pick Location ',font=('arial', 10), width=15 ,command=view_locs)
+view_loc = Button(window, image=photo2 ,text='Location',font=('arial', 9) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=view_locs)
+view_loc.place(x=45 ,y=140)
+
+r = StringVar()
+# r = IntVar()
+r.set(None)
+
+check_login = Radiobutton(window, text='log-in',font=('arial', 8), fg='black' ,bg=bg_color , activebackground= bg_color,
+                          variable=r ,value='login', command=lambda: check_buttons(r.get()))
+check_login.place(x=290 ,y=138)
+
+
+check_logout = Radiobutton(window, text='log-out', font=('arial', 8),fg='black' ,bg=bg_color , activebackground= bg_color,
+                           variable=r ,value='logout', command=lambda: check_buttons(r.get()))
+check_logout.place(x=290 ,y=168)
+
+
+login_count = Label(window, text='Count',font=('arial', 8) ,fg=fg_color ,bg=bg_color)
+login_count.place(x=210 ,y=138)
+
+login_count1 = Entry(window, font=('arial', 15) ,bg=entry_bg, width=5,border=2)
+login_count1.place(x=210 ,y=160)
+
+login_count2 = Label(window, text='Fast Food',font=('arial', 7) ,fg=fg_color ,bg=bg_color)
+
+login_count3 = Entry(window, font=('arial', 15) ,bg=entry_bg, width=5,border=2)
+
+login_count4 = Label(window, text='Computer S.',font=('arial', 7) ,fg=fg_color ,bg=bg_color)
+
+login_count5 = Entry(window, font=('arial', 15) ,bg=entry_bg, width=5,border=2)
+
+login_frame1 = Label(window, text='',font=('arial', 8) ,fg=fg_color ,bg=bg_color)
+login_frame1.place(x=45 ,y=200)
+
+login_entry1 = Entry(window, font=('arial', 20), bg=entry_bg, width=20 ,border=2)
+login_entry1.place(x=45 ,y=220)
+
+login_frame2 = Label(window, text='',font=('arial', 8) ,fg=fg_color ,bg=bg_color)
+login_frame2.place(x=45 ,y=280)
+
+login_entry2 = Entry(window, font=('arial', 20), bg =entry_bg, width=20 ,border=2)
+login_entry2.place(x=45 ,y=300)
+
+login_frame3 = Label(window, text='',font=('arial', 8) ,fg=fg_color ,bg=bg_color)
+login_frame3.place(x=45 ,y=360)
+
+login_entry3 = Entry(window, font=('arial', 20), bg =entry_bg, width=20 ,border=2)
+login_entry3.place(x=45 ,y=380)
+
+login_time = Label(window, text='',font=('arial', 8) ,fg=fg_color ,bg=bg_color)
+login_time.place(x=45 ,y=440)
+
+login_times = Entry(window, font=('arial', 15), width=20 ,border=2)
+login_times.place(x=45 ,y=460)
+
+# reset_data = Button(window, text='Clear ',font=('arial', 8), width=10 ,command=reset_datas)
+# reset_data.place(x=280, y=500)
+
+reset_data = Button(window, image=photo3 ,text='Clear',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=reset_datas)
+reset_data.place(x=40, y=490)
+
+exit_data = Button(window, image=photo3 ,text='exit',font=('arial', 8) ,bg =bg_color, activebackground= bg_color,
+                  borderwidth=0, compound='center', command=exit_datas)
+exit_data.place(x=265, y=490)
+
+window.mainloop()
+
+# if __name__ == '__main__':
+#     print('Melvin')
+
